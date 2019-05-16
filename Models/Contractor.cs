@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,7 +10,18 @@ namespace ais.Models
 {
     class Contractor
     {
-        public Contractor(string codeContractor, string nameContractor, string city, string street, string building, int porch, int office, string account, string email)
+
+        public string codeContractor;
+        public string nameContractor;
+        public string city;
+        public string street;
+        public string building;
+        public int porch;
+        public int office;
+        public string account;
+        public string email;
+
+        public Contractor(string codeContractor= "", string nameContractor="", string city="", string street="", string building="", int porch=0, int office=0, string account="", string email="")
         {
             CodeContractor = codeContractor;
             NameContractor = nameContractor;
@@ -21,15 +34,96 @@ namespace ais.Models
             Email = email;
         }
 
-        public string CodeContractor { get; set; }
-        public string NameContractor { get; set; }
-        public string City { get; set; }
-        public string Street { get; set; }
-        public string Building { get; set; }
-        public int Porch { get; set; }
-        public int Office { get; set; }
-        public string Account { get; set; }
-        public string Email { get; set; }
+        public string CodeContractor
+        {
+            get => codeContractor;
+            set
+            {
+                codeContractor = value;
+                OnPropertyChanged();
+            }
+        }
+        public string NameContractor
+        {
+            get => nameContractor;
+            set
+            {
+                nameContractor = value;
+                OnPropertyChanged();
+            }
+        }
+        public string City
+        {
+            get => city;
+            set
+            {
+                city = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Street
+        {
+            get => street;
+            set
+            {
+                street = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Building
+        {
+            get => building;
+            set
+            {
+                building = value;
+                OnPropertyChanged();
+            }
+        }
+        public int Porch
+        {
+            get => porch;
+            set
+            {
+                porch = value;
+                OnPropertyChanged();
+            }
+        }
+        public int Office
+        {
+            get => office;
+            set
+            {
+                office = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Account
+        {
+            get => account;
+            set
+            {
+                account = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Email
+        {
+            get => email;
+            set
+            {
+                email = value;
+                OnPropertyChanged();
+            }
+        }
 
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 }

@@ -24,7 +24,7 @@ namespace ais.Models
         private double priceOneCornice;
 
 
-        public Cornices(string ipn, string lastName, string name, string middleName, string city, string street, string building, int porch, int appartment, string accountCornice, string telNum, double priceOneCornice)
+        public Cornices(string ipn = "", string lastName = "", string name = "", string middleName = "", string city = "", string street = "", string building = "", int porch = 0, int appartment = 0, string accountCornice = "", string telNum = "", double priceOneCornice = 0)
         {
             Ipn = ipn;
             LastName = lastName;

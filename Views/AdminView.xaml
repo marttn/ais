@@ -88,7 +88,7 @@
             </Grid>
 
             <Grid  Name="something" HorizontalAlignment="Center" Height="330"  VerticalAlignment="Center" MinWidth="515">
-                <DataGrid Name="DataGrid" HorizontalAlignment="Stretch" Width="515" Background="Transparent" AutoGenerateColumns="True" SelectedItem="{Binding SelectedRow}" ItemsSource="{Binding Path=Table, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" Visibility="Hidden" IsReadOnly="True" BorderBrush="{x:Null}"/>
+                <DataGrid Name="DataGrid" HorizontalAlignment="Stretch" Width="515" Background="Transparent" AutoGenerateColumns="True" SelectedItem="{Binding SelectedRow}" ItemsSource="{Binding Path=Table, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" Visibility="Hidden" IsReadOnly="True" BorderBrush="{x:Null}"/>
             </Grid>
 
             <Grid  Name="buttons" Grid.Row="1" HorizontalAlignment="Center"  VerticalAlignment="Center"  Visibility="Hidden">

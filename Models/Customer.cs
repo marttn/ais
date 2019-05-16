@@ -16,7 +16,7 @@ namespace ais.Models
         private int appartment;
         private string email;
 
-        public Customer(string iD, string lastName, string name, string middleName, string city, string street, string building, int porch, int appartment, string email)
+        public Customer(string iD = "", string lastName = "", string name = "", string middleName = "", string city = "", string street = "", string building = "", int porch = 0, int appartment= 0, string email = "")
         {
             ID = iD;
             LastName = lastName;

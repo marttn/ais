@@ -749,42 +749,6 @@ namespace ais.Tools.DataStorage
             finally
             {
                 conn.Close();
-            } try
-            {
-                if (conn == null)
-                {
-                    throw new Exception("Connection String is Null");
-                }
-                conn.Open();
-                string id;
-                do
-                {
-                    id = RandomString(10);
-                    MessageBox.Show(id);
-                }
-                while (CustomersList.Any(u => u.ID.Equals(id)));
-                customer.ID = id;
-                SqlCommand query = new SqlCommand("INSERT INTO Customer VALUES (@ID, @last_name, @name_cust, @middle_name, @city, @street, @building, @porch, @appartment, @email)", conn);
-                query.Parameters.AddWithValue("@ID", customer.ID);
-                query.Parameters.AddWithValue("@last_name", customer.LastName);
-                query.Parameters.AddWithValue("@name_cust", customer.Name);
-                query.Parameters.AddWithValue("@middle_name", (object)customer.MiddleName?? DBNull.Value);
-                query.Parameters.AddWithValue("@city", customer.City);
-                query.Parameters.AddWithValue("@street", customer.Street);
-                query.Parameters.AddWithValue("@building", customer.Building);
-                query.Parameters.AddWithValue("@porch", customer.Porch);
-                query.Parameters.AddWithValue("@appartment", customer.Appartment);
-                query.Parameters.AddWithValue("@email", customer.Email);
-                query.ExecuteNonQuery();
-                CustomersList.Add(customer);
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
-            finally
-            {
-                conn.Close();
             }
         }
 

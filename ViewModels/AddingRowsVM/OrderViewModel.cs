@@ -20,15 +20,15 @@ namespace ais.ViewModels.AddingRowsVM
         //public Order CurrentOrder { get; }
 
         private RelayCommand<object> _addOrder;
-        private ObservableCollection<string> listCustomers = new ObservableCollection<string>();
-        private ObservableCollection<string> listWorkshops = new ObservableCollection<string>();
-        private ObservableCollection<string> listCornices = new ObservableCollection<string>();
+        public ObservableCollection<string> ListCustomers { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> ListWorkshops { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> ListCornices { get; } = new ObservableCollection<string>();
 
 
         private DateTime _dateOrd = DateTime.Now;
         private string _id;
-        private string _codeWorkshop = "";
-        private string _ipn = "";
+        private string _codeWorkshop;
+        private string _ipn;
 
         public OrderViewModel()
         {
@@ -133,34 +133,7 @@ namespace ais.ViewModels.AddingRowsVM
                 return _addOrder ?? (_addOrder = new RelayCommand<object>(AddOrderImplementation, CanExecute));
             }
         }
-
-        public ObservableCollection<string> ListCustomers
-        {
-            get => listCustomers;
-            set
-            {
-                listCustomers = value;
-                OnPropertyChanged();
-            }
-        }
-        public ObservableCollection<string> ListWorkshops
-        {
-            get => listWorkshops;
-            set
-            {
-                listWorkshops = value;
-                OnPropertyChanged();
-            }
-        }
-        public ObservableCollection<string> ListCornices
-        {
-            get => listCornices;
-            set
-            {
-                listCornices = value;
-                OnPropertyChanged();
-            }
-        }
+        
 
         private bool CanExecute(object obj)
         {

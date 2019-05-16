@@ -93,8 +93,18 @@
     <Compile Include="Tools\DataStorage\IDataStorage.cs" />
     <Compile Include="Tools\PasswordHelper.cs" />
     <Compile Include="Tools\Managers\StationManager.cs" />
+    <Compile Include="ViewModels\AddingRowsVM\ContractGoodsViewModel.cs" />
+    <Compile Include="ViewModels\AddingRowsVM\ContractorGoodsViewModel.cs" />
+    <Compile Include="ViewModels\AddingRowsVM\ContractorTelViewModel.cs" />
+    <Compile Include="ViewModels\AddingRowsVM\ContractorViewModel.cs" />
+    <Compile Include="ViewModels\AddingRowsVM\ContractViewModel.cs" />
+    <Compile Include="ViewModels\AddingRowsVM\CornicesViewModel.cs" />
     <Compile Include="ViewModels\AddingRowsVM\CustomerViewModel.cs" />
+    <Compile Include="ViewModels\AddingRowsVM\CustTelViewModel.cs" />
+    <Compile Include="ViewModels\AddingRowsVM\GoodsViewModel.cs" />
+    <Compile Include="ViewModels\AddingRowsVM\OrderGoodsViewModel.cs" />
     <Compile Include="ViewModels\AddingRowsVM\OrderViewModel.cs" />
+    <Compile Include="ViewModels\AddingRowsVM\WorkshopViewModel.cs" />
     <Compile Include="ViewModels\AdminViewModel.cs" />
     <Compile Include="ViewModels\SignInViewModel.cs" />
     <Compile Include="ViewModels\SignUpViewModel.cs" />
@@ -134,6 +144,12 @@
     <Compile Include="Views\AddingRows\NewWorkshopView.xaml.cs">
       <DependentUpon>NewWorkshopView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\AddingRows\SelectContractorTel.xaml.cs">
+      <DependentUpon>SelectContractorTel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddingRows\SelectCustTel.xaml.cs">
+      <DependentUpon>SelectCustTel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AdminView.xaml.cs">
       <DependentUpon>AdminView.xaml</DependentUpon>
     </Compile>
@@ -145,7 +161,6 @@
     <Compile Include="Tools\Navigation\INavigatable.cs" />
     <Compile Include="Tools\Navigation\INavigationModel.cs" />
     <Compile Include="Tools\Navigation\InitializationNavigationModel.cs" />
-    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Tools\Managers\NavigationManager.cs" />
     <Compile Include="Tools\RelayCommand.cs" />
     <Compile Include="Views\SignInView.xaml.cs">
@@ -153,9 +168,6 @@
     </Compile>
     <Compile Include="Views\SignUpView.xaml.cs">
       <DependentUpon>SignUpView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\AddingRows\CustTelView.xaml">
       <SubType>Designer</SubType>
@@ -205,6 +217,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AddingRows\SelectContractorTel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddingRows\SelectCustTel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AdminView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -230,10 +250,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SignUpView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Window1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

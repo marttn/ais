@@ -89,7 +89,7 @@ namespace ais.ViewModels
         public ObservableCollection<object> Table
         {
             get => _table;
-            set
+            /*private */set
             {
                 _table = value;
                 OnPropertyChanged("Table");
@@ -197,7 +197,10 @@ namespace ais.ViewModels
                     Table = new ObservableCollection<object>(StationManager.DataStorage.CustomersList);
                     SelectedRow = null;
                     break;
+                case "Cust_Tel":
+                    break;
             }
+            
         }
 
         private void AddRowImplementation(object obj)
@@ -214,6 +217,8 @@ namespace ais.ViewModels
                     Table = new ObservableCollection<object>(StationManager.DataStorage.CustomersList);
                     break;
                 case "Cust_Tel":
+                    NavigationManager.Instance.Navigate(ViewType.NewCustTel);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.CustTelsList);
                     break;
                 case "Cornices":
                     break;

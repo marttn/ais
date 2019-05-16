@@ -31,9 +31,20 @@ namespace ais.Views
             something.Children.Add(DataGrid);
             DataGrid.Visibility = Visibility.Visible;
             DataGrid.HeadersVisibility = DataGridHeadersVisibility.Column;
+            //if (btn.CommandParameter.Equals("Contractor_Tel") || btn.CommandParameter.Equals("Cust_Tel"))
+            //    buttons_tel.Visibility = Visibility.Visible;
+            //else
             buttons.Visibility = Visibility.Visible;
         }
 
-        
+        //private void Button_Click_2(object sender, RoutedEventArgs e)
+        //{
+        //    something.Children.Clear();
+        //    var btn = sender as Button;
+        //    btn.Command.Execute(btn.CommandParameter);
+        //    something.Children.Add(DataGrid);
+        //    DataGrid.Visibility = Visibility.Visible;
+        //    DataGrid.HeadersVisibility = DataGridHeadersVisibility.Column;
+        //}
     }
 }

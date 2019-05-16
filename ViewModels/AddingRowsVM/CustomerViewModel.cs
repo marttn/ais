@@ -2,6 +2,7 @@
 using ais.Tools;
 using ais.Tools.Managers;
 using ais.Tools.Navigation;
+using System;
 using System.Windows;
 
 namespace ais.ViewModels.AddingRowsVM
@@ -9,12 +10,13 @@ namespace ais.ViewModels.AddingRowsVM
     class CustomerViewModel
     {
         private RelayCommand<object> addCust;
+        private RelayCommand<object> addTel;
 
-        public Customer CurrentCustomer { get; set; }
+        public Customer CurrentCustomer { get; /*set;*/ }
 
         public CustomerViewModel()
         {
-            CurrentCustomer = new Customer("", "", "", "", "", "", "", 0, 0, "");
+            CurrentCustomer = new Customer();
             StationManager.CurrentCustomer = CurrentCustomer;
         }
 
@@ -39,8 +41,24 @@ namespace ais.ViewModels.AddingRowsVM
         {
             StationManager.DataStorage.AddCustomer(StationManager.CurrentCustomer);
             MessageBox.Show("row added");
-            ///*StationManager.*/CurrentCustomer = new Customer("", "", "", "", "", "", "", 0, 0, "");
-            NavigationManager.Instance.Navigate(ViewType.Admin);
+            NavigationManager.Instance.Navigate(ViewType.NewCustTel);
+        }
+
+        public RelayCommand<object> AddTel
+        {
+            get => addTel ?? (addTel = new RelayCommand<object>(AddCustTel, CanAddTel));
+        }
+
+        private bool CanAddTel(object obj)
+        {
+            return !string.IsNullOrWhiteSpace(CurrentCustomer.LastName) &&
+                   !string.IsNullOrWhiteSpace(CurrentCustomer.Name);
+        }
+
+        private void AddCustTel(object obj)
+        {
+            NavigationManager.Instance.Navigate(ViewType.NewCustTel);
+            //StationManager.DataStorage.AddCustTel
         }
     }
 }
