@@ -789,6 +789,13 @@ namespace ais.Tools.DataStorage
                     throw new Exception("Connection String is Null");
                 }
                 conn.Open();
+                string art;
+                do
+                {
+                    art = RandomString(10);
+                }
+                while (GoodsList.Any(u => u.Articul.Equals(art)));
+                goods.Articul = art;
                 SqlCommand query = new SqlCommand("INSERT INTO Goods VALUES (@Articul, @name_g, @type, @material, @characteristics)", conn);
                 query.Parameters.AddWithValue("@Articul", goods.Articul);
                 query.Parameters.AddWithValue("@name_g", goods.Name);

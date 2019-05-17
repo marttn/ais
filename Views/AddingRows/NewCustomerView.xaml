@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ais.Views.AddingRows"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="780">
     <Grid Background="#0CCADCF9" Height="420" VerticalAlignment="Top">
@@ -29,11 +30,11 @@
         <Label Content="Street" Grid.Column="0" Grid.Row="4" Margin="175,0,0,0" Width="70" HorizontalAlignment="Left" FontFamily="Verdana" FontSize="18" VerticalContentAlignment="Center" />
         <TextBox HorizontalAlignment="Left" Margin="245, 0" Height="20" Grid.ColumnSpan="2" Grid.Row="4" Text="{Binding CurrentCustomer.Street, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="110"/>
         <Label Content="Building" Grid.Column="1" HorizontalAlignment="Left" Margin="85,0,0,0" Grid.Row="4" VerticalAlignment="Center" FontFamily="Verdana" FontSize="18"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="170,0,0,0" Grid.Row="4"  TextWrapping="Wrap" Text="{Binding CurrentCustomer.Building, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="40"/>
+        <xctk:IntegerUpDown Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="170,0,0,0" Minimum="0" Height="20" Width="40" Value="{Binding CurrentCustomer.Building}"/>
         <Label Content="Porch" Grid.Column="1" HorizontalAlignment="Left" Margin="215,0,0,0" Grid.Row="4" VerticalAlignment="Center" FontFamily="Verdana" FontSize="18" RenderTransformOrigin="0.358,0.469" Width="65"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="280,0,0,0" Grid.Row="4" Text="{Binding CurrentCustomer.Porch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="30"/>
+        <xctk:IntegerUpDown Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="275,0,0,0" Minimum="0" Height="20" Width="35" Value="{Binding CurrentCustomer.Porch}"/>
         <Label Content="Appartment" Grid.Column="1" HorizontalAlignment="Left" Margin="315,0,0,0" Grid.Row="4" VerticalAlignment="Center" FontFamily="Verdana" FontSize="18" />
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="435,0,0,0" Grid.Row="4" Text="{Binding CurrentCustomer.Appartment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="45"/>
+        <xctk:IntegerUpDown Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="435,0,0,0" Minimum="0" Height="20" Width="45" Value="{Binding CurrentCustomer.Appartment}"/>
         <Label Content="E-mail" Grid.Column="0" Grid.Row="5" Margin="20,0,0,0" Width="70" HorizontalAlignment="Left" FontFamily="Verdana" FontSize="18" VerticalContentAlignment="Center" />
         <Button Content="Add" Grid.Column="1" HorizontalAlignment="Left" Margin="65,0,0,0" Grid.Row="6" VerticalAlignment="Center" Width="105" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="14" FontFamily="Verdana" Command="{Binding AddCust}"/>
         <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="35,0,0,0" Height="23" Grid.Row="2" Text="{Binding CurrentCustomer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="380"/>

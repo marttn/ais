@@ -28,11 +28,11 @@ namespace ais.ViewModels.AddingRowsVM
 
         private bool CanAdd(object obj)
         {
-            return !string.IsNullOrWhiteSpace(CurrentGoods.Articul) &&
-                   !string.IsNullOrWhiteSpace(CurrentGoods.Name) &&
+            return !string.IsNullOrWhiteSpace(CurrentGoods.Name) &&
                    !string.IsNullOrWhiteSpace(CurrentGoods.Type) &&
                    !string.IsNullOrWhiteSpace(CurrentGoods.Material) &&
-                   !string.IsNullOrWhiteSpace(CurrentGoods.Characteristics);
+                   !string.IsNullOrWhiteSpace(CurrentGoods.Characteristics) 
+                   && CurrentGoods.Characteristics.Length <= 255;
         }
 
         private void AddGoodsImpl(object obj)

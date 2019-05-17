@@ -18,12 +18,14 @@ namespace ais.Tools.Navigation
         NewWorkshop,
         NewContractor,
         NewContractorTel,
+        NewSelContractorTel,
         NewGoods,
         NewContractorGoods,
         NewOrderGoods,
         NewContract,
         NewContractGoods,
-        NewCustTel
+        NewCustTel,
+        NewSelCustTel
     }
 
     interface INavigationModel

@@ -22,14 +22,14 @@ namespace ais.ViewModels.AddingRowsVM
 
         private bool CanAdd(object obj)
         {
-            return !string.IsNullOrWhiteSpace(CurrentContractor.CodeContractor) &&
+            return !string.IsNullOrWhiteSpace(CurrentContractor.CodeContractor) && CurrentContractor.CodeContractor.Length == 8 &&
                    !string.IsNullOrWhiteSpace(CurrentContractor.NameContractor) &&
                    !string.IsNullOrWhiteSpace(CurrentContractor.City) &&
                    !string.IsNullOrWhiteSpace(CurrentContractor.Street) &&
                    !string.IsNullOrWhiteSpace(CurrentContractor.Building) &&
                    !string.IsNullOrWhiteSpace(CurrentContractor.Porch.ToString()) &&
                    !string.IsNullOrWhiteSpace(CurrentContractor.Office.ToString()) &&
-                   !string.IsNullOrWhiteSpace(CurrentContractor.Account) &&
+                   !string.IsNullOrWhiteSpace(CurrentContractor.Account) && CurrentContractor.Account.Length == 16 &&
                    !string.IsNullOrWhiteSpace(CurrentContractor.Email);
         }
 

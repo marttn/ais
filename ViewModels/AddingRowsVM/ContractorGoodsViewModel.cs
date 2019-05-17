@@ -17,9 +17,18 @@ namespace ais.ViewModels.AddingRowsVM
 {
     class ContractorGoodsViewModel
     {
-        private string nameGoods;
+        public ObservableCollection<string> ListContractors { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> ListCurtains { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> ListCornices { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> ListAccs { get; } = new ObservableCollection<string>();
+
         private string nameContractor;
-        private double priceOneProduct;
+        private string nameCurtain;
+        private string nameCornice;
+        private string nameAccessories;
+        private int curtPrice;
+        private int cornPrice;
+        private int accPrice;
 
         private RelayCommand<object> addContractorGoods;
         SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
@@ -46,13 +55,27 @@ namespace ais.ViewModels.AddingRowsVM
                     ListContractors.Add(select["Name_contr"].ToString().Trim(' '));
                 }
                 select.Close();
-                query = new SqlCommand("SELECT name_g FROM Goods", conn);
-                SqlDataReader reader = query.ExecuteReader();
-                while (reader.Read())
+                query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('стелеві карнизи', 'настінні карнизи') ", conn);
+                SqlDataReader sql1 = query.ExecuteReader(), sql2, sql3;
+                while (sql1.Read())
                 {
-                    ListGoods.Add(reader["name_g"].ToString().Trim(' '));
+                    ListCornices.Add(sql1["name_g"].ToString().Trim(' '));
                 }
-                reader.Close();
+                sql1.Close();
+                query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('тюль', 'портьєрні', 'водовідштовхувальні', 'рулонні', 'жалюзі')", conn);
+                sql2 = query.ExecuteReader();
+                while (sql2.Read())
+                {
+                    ListCurtains.Add(sql2["name_g"].ToString().Trim(' '));
+                }
+                sql2.Close();
+                query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('китиці', 'бахрома', 'люверси', 'тесьма')", conn);
+                sql3 = query.ExecuteReader();
+                while (sql3.Read())
+                {
+                    ListAccs.Add(sql3["name_g"].ToString().Trim(' '));
+                }
+                sql3.Close();
             }
             catch (Exception exc)
             {
@@ -64,18 +87,7 @@ namespace ais.ViewModels.AddingRowsVM
             }
         }
 
-        public ObservableCollection<string> ListContractors { get; } = new ObservableCollection<string>();
-        public ObservableCollection<string> ListGoods { get; } = new ObservableCollection<string>();
 
-        public string NameGoods
-        {
-            get => nameGoods;
-            set
-            {
-                nameGoods = value;
-                OnPropertyChanged();
-            }
-        }
         public string NameContractor
         {
             get => nameContractor;
@@ -85,15 +97,53 @@ namespace ais.ViewModels.AddingRowsVM
                 OnPropertyChanged();
             }
         }
-        public double PriceOneProduct
+
+
+        public string NameCurtain
         {
-            get => priceOneProduct;
+            get => nameCurtain;
             set
             {
-                priceOneProduct = value;
+                nameCurtain = value;
                 OnPropertyChanged();
             }
         }
+        public string NameCornice
+        {
+            get => nameCornice;
+            set
+            {
+                nameCornice = value;
+                OnPropertyChanged();
+            }
+        }
+        public string NameAccessories
+        {
+            get => nameAccessories;
+            set
+            {
+                nameAccessories = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int CurtPrice
+        {
+            get => curtPrice;
+            set { curtPrice = value; OnPropertyChanged(); }
+        }
+        public int CornPrice
+        {
+            get => cornPrice;
+            set { cornPrice = value; OnPropertyChanged(); }
+        }
+        public int AccPrice
+        {
+            get => accPrice;
+            set { accPrice = value; OnPropertyChanged(); }
+        }
+
+
         public RelayCommand<object> AddContractorGoods
         {
             get => addContractorGoods ?? (addContractorGoods = new RelayCommand<object>(AddImpl, CanAdd));
@@ -101,9 +151,13 @@ namespace ais.ViewModels.AddingRowsVM
 
         private bool CanAdd(object obj)
         {
-            return !string.IsNullOrWhiteSpace(NameGoods) &&
+            return (!string.IsNullOrWhiteSpace(NameAccessories) ||
+                   !string.IsNullOrWhiteSpace(NameCurtain) ||
+                   !string.IsNullOrWhiteSpace(NameCornice)) &&
                    !string.IsNullOrWhiteSpace(NameContractor) &&
-                   !string.IsNullOrWhiteSpace(PriceOneProduct.ToString());
+                   ((!string.IsNullOrWhiteSpace(CornPrice.ToString()) && CornPrice > 0) ||
+                   (!string.IsNullOrWhiteSpace(CurtPrice.ToString()) && CurtPrice > 0) ||
+                   (!string.IsNullOrWhiteSpace(AccPrice.ToString()) && AccPrice > 0));
         }
 
         private void AddImpl(object obj)
@@ -111,31 +165,68 @@ namespace ais.ViewModels.AddingRowsVM
             try
             {
                 string articul = null, code = null;
-                SqlDataReader reader, reader1;
+                SqlDataReader reader1, reader2, reader3, reader4;
                 SqlCommand query;
                 if (conn == null)
                 {
                     throw new Exception("Connection String is Null");
                 }
                 conn.Open();
-
-                query = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameGoods + "'", conn);
-                reader = query.ExecuteReader();
-
-                while (reader.Read())
+                //contractor
+                query = new SqlCommand("SELECT Code_contractor FROM Contractor WHERE Name_contr = '" + NameContractor + "'", conn);
+                reader4 = query.ExecuteReader();
+                while (reader4.Read())
                 {
-                    articul = reader["Articul"].ToString();
+                    code = reader4["Code_contractor"].ToString();
                 }
-                reader.Close();
-                query = new SqlCommand("SELECT Code_contractor FROM Contractor WHERE Name_contr = '" + NameContractor+ "'", conn);
-                reader1 = query.ExecuteReader();
-                while(reader1.Read())
+                reader4.Close();
+                //curtain
+                if (!string.IsNullOrWhiteSpace(NameCurtain))
                 {
-                    code = reader1["Code_contractor"].ToString();
+                    query = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameCurtain + "'", conn);
+                    reader1 = query.ExecuteReader();
+
+                    while (reader1.Read())
+                    {
+                        articul = reader1["Articul"].ToString();
+                    }
+                    reader1.Close();
+
+                    StationManager.CurrentContractorGoods = new Contractor_Goods(articul, code, CurtPrice);
+                    StationManager.DataStorage.AddContractorGoods(StationManager.CurrentContractorGoods);
+                    MessageBox.Show("row added");
                 }
-                StationManager.CurrentContractorGoods = new Contractor_Goods(articul, code, PriceOneProduct);
-                StationManager.DataStorage.AddContractorGoods(StationManager.CurrentContractorGoods);
-                MessageBox.Show("row added");
+                //cornices
+                if (!string.IsNullOrWhiteSpace(NameCornice))
+                {
+                    query = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameCornice + "'", conn);
+                    reader2 = query.ExecuteReader();
+
+                    while (reader2.Read())
+                    {
+                        articul = reader2["Articul"].ToString();
+                    }
+                    reader2.Close();
+
+                    StationManager.CurrentContractorGoods = new Contractor_Goods(articul, code, CornPrice);
+                    StationManager.DataStorage.AddContractorGoods(StationManager.CurrentContractorGoods);
+                    MessageBox.Show("row added");
+                }
+                //accessories
+                if (!string.IsNullOrWhiteSpace(NameAccessories))
+                {
+                    query = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameAccessories + "'", conn);
+                    reader1 = query.ExecuteReader();
+
+                    while (reader1.Read())
+                    {
+                        articul = reader1["Articul"].ToString();
+                    }
+                    reader1.Close();
+                    StationManager.CurrentContractorGoods = new Contractor_Goods(articul, code, AccPrice);
+                    StationManager.DataStorage.AddContractorGoods(StationManager.CurrentContractorGoods);
+                    MessageBox.Show("row added");
+                }
             }
             catch (Exception exc)
             {

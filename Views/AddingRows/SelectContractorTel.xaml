@@ -22,6 +22,6 @@
         <ComboBox  Grid.Row="1" Grid.Column="1"  Width="200" Height="30" IsReadOnly="False" IsEditable="False" ItemsSource="{Binding ContractorsList}" SelectedItem= "{Binding SelectedName, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Verdana"/>
         <TextBlock Grid.Row="2" Margin="40, 0,0,0" Text= "Number"  VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Verdana" FontSize="26"/>
         <TextBox Grid.Row="2" Grid.Column="1" Margin="25" Height="33" VerticalAlignment="Center" Text="{Binding Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Grid.Row="3" Content="Add" Grid.ColumnSpan="2" VerticalAlignment="Center" Width="135" Height="50" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="22" FontFamily="Verdana" Command="{Binding AddTel}"/>
+        <Button Grid.Row="3" Content="Add" Grid.ColumnSpan="2" VerticalAlignment="Center" Width="135" Height="50" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="22" FontFamily="Verdana" Command="{Binding AddTelSelected}"/>
     </Grid>
 </UserControl>

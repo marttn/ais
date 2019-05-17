@@ -4,9 +4,37 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ais.Views.AddingRows"
+            xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+            d:DesignHeight="450" d:DesignWidth="780">
+    <Grid Background="#0CCADCF9" Height="420">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.3*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Content="New contractor" FontFamily="Verdana" FontSize="38"/>
+        <Label Grid.Row="1" Content="Code" Margin="20, 0,0,0" FontFamily="Verdana" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBox Grid.Row="1" Margin="100,0,0,0" Height="30" Text="{Binding CurrentContractor.CodeContractor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="250"/>
+        <Label Grid.Row="1" Content="Name" Margin="375, 0,0,0" FontFamily="Verdana" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBox Grid.Row="1" Margin="465,0,0,0" Height="30" Text="{Binding CurrentContractor.NameContractor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="270"/>
+        <Label Grid.Row="2" Content="City" Margin="20, 0,0,0" FontFamily="Verdana" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBox Grid.Row="2" Margin="70,0,0,0" Height="30" Text="{Binding CurrentContractor.City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100"/>
+        <Label Grid.Row="2" Content="Street" Margin="175,18.2,0,17" FontFamily="Verdana" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBox Grid.Row="2" Margin="246,0,0,0" Height="30" Text="{Binding CurrentContractor.Street, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="124"/>
+        <Label Grid.Row="2" Content="Building" Margin="375,17.2,0,18" FontFamily="Verdana" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <xctk:IntegerUpDown Grid.Row="2" Margin="465,0,0,0" Height="30" HorizontalAlignment="Left"  Minimum="0" VerticalAlignment="Center"  Width="50" Value="{Binding CurrentContractor.Building}"/>
+        <Label Grid.Row="2" Content="Porch" Margin="525,17.2,0,18" FontFamily="Verdana" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <xctk:IntegerUpDown Grid.Row="2" Margin="589,0,0,0" Height="30" HorizontalAlignment="Left"  Minimum="0" VerticalAlignment="Center"  Width="46" Value="{Binding CurrentContractor.Porch}"/>
+        <Label Grid.Row="2" Content="Office" Margin="640,18.2,0,19" FontFamily="Verdana" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left" Width="65"/>
+        <xctk:IntegerUpDown Grid.Row="2" Margin="705,0,0,0" Height="30" HorizontalAlignment="Left"  Minimum="0" VerticalAlignment="Center"  Width="50" Value="{Binding CurrentContractor.Office}"/>
+        <Label Grid.Row="3" Content="Bank account" Margin="20, 0,0,0" FontFamily="Verdana" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBox Grid.Row="3" Width="380" Margin="180,0,0,0" Height="30" Text="{Binding CurrentContractor.Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <Label Grid.Row="4" Content="E-mail" Margin="20, 0,0,0" FontFamily="Verdana" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBox Grid.Row="4" Width="380" Margin="180,0,0,0" Height="30" Text="{Binding CurrentContractor.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <Button Grid.Row="5" Content="Add" VerticalAlignment="Center" HorizontalAlignment="Center" Width="105" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="14" FontFamily="Verdana" Command="{Binding AddContractor}"/>
     </Grid>
 </UserControl>

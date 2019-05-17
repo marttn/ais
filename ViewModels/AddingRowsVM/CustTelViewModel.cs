@@ -21,11 +21,12 @@ namespace ais.ViewModels.AddingRowsVM
         private string tel;
         private string selectedName;
         private RelayCommand<object> addTel;
+        private RelayCommand<object> addSelTel;
         
 
         public CustTelViewModel()
         {
-            SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
+            
             try
             {
                 if (conn == null)
@@ -52,7 +53,7 @@ namespace ais.ViewModels.AddingRowsVM
         }
 
         public ObservableCollection<string> CustomersList { get; } = new ObservableCollection<string>();
-      
+        SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
 
         public string Name
         {
@@ -89,10 +90,57 @@ namespace ais.ViewModels.AddingRowsVM
         {
             get => addTel ?? (addTel = new RelayCommand<object>(AddTelImpl, CanAdd));
         }
+        public RelayCommand<object> AddSelTel
+        {
+            get => addSelTel ?? (addSelTel = new RelayCommand<object>(AddSelected, CanAddSelected));
+        }
+
+        private bool CanAddSelected(object obj)
+        {
+            return !string.IsNullOrWhiteSpace(Tel) && (Tel.Length == 10)
+                && !string.IsNullOrWhiteSpace(SelectedName);
+        }
+
+        private void AddSelected(object obj)
+        {
+            
+            try
+            {
+                string id = "";
+                SqlDataReader reader1;
+                SqlCommand query;
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                
+                query = new SqlCommand("Select ID FROM Customer WHERE last_name = '" + SelectedName.Split(' ')[1] + "'", conn);
+                reader1 = query.ExecuteReader();
+                while (reader1.Read())
+                {
+                    id = reader1["ID"].ToString();
+                }
+                reader1.Close();
+                StationManager.CurrentCustTel = new Cust_Tel(Tel, id);
+                StationManager.DataStorage.AddCustTel(StationManager.CurrentCustTel);
+                MessageBox.Show("row added");
+
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            NavigationManager.Instance.Navigate(ViewType.Admin);
+        }
 
         private void AddTelImpl(object obj)
         {
-            SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
+            
             try
             {
                 if (conn == null)

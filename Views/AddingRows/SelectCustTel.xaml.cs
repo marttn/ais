@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ais.Tools.Navigation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace ais.Views.AddingRows
     /// <summary>
     /// Логика взаимодействия для SelectCustTel.xaml
     /// </summary>
-    public partial class SelectCustTel : UserControl
+    public partial class SelectCustTel : UserControl, INavigatable
     {
         public SelectCustTel()
         {

@@ -14,13 +14,22 @@ namespace ais.ViewModels.AddingRowsVM
     class ContractGoodsViewModel
     {
         private RelayCommand<object> addContractGoods;
-        public ObservableCollection<string> ListGoods { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> ListContracts { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> ListCurtains { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> ListCornices { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> ListAccs { get; } = new ObservableCollection<string>();
 
         private string numContract;
-        private string name;
-        private int quantity;
+        private string nameCurtain;
+        private string nameCornice;
+        private string nameAccessories;
+        private int curtAmount;
+        private int cornAmount;
+        private int accAmount;
 
-        SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
+        
+
+    SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
 
         public ContractGoodsViewModel()
         {
@@ -32,13 +41,34 @@ namespace ais.ViewModels.AddingRowsVM
                 }
                 conn.Open();
 
-                SqlCommand query = new SqlCommand("SELECT name_g FROM Goods", conn);
-                SqlDataReader select = query.ExecuteReader();
+                SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('стелеві карнизи', 'настінні карнизи') ", conn);
+                SqlDataReader select = query.ExecuteReader(), sql1, sql2, sql3;
                 while (select.Read())
                 {
-                    ListGoods.Add(select["name_g"].ToString().Trim(' '));
+                    ListCornices.Add(select["name_g"].ToString().Trim(' '));
                 }
                 select.Close();
+                query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('тюль', 'портьєрні', 'водовідштовхувальні', 'рулонні', 'жалюзі')", conn);
+                sql1 = query.ExecuteReader();
+                while (sql1.Read())
+                {
+                    ListCurtains.Add(sql1["name_g"].ToString().Trim(' '));
+                }
+                sql1.Close();
+                query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('китиці', 'бахрома', 'люверси', 'тесьма')", conn);
+                sql2 = query.ExecuteReader();
+                while (sql2.Read())
+                {
+                    ListAccs.Add(sql2["name_g"].ToString().Trim(' '));
+                }
+                sql2.Close();
+                query = new SqlCommand("SELECT Num_contract FROM Contract", conn);
+                sql3 = query.ExecuteReader();
+                while (sql3.Read())
+                {
+                    ListContracts.Add(sql1["Num_contract"].ToString().Trim(' '));
+                }
+                sql3.Close();
             }
             catch (Exception exc)
             {
@@ -59,56 +89,112 @@ namespace ais.ViewModels.AddingRowsVM
                 OnPropertyChanged();
             }
         }
-        public string Name
+
+        public string NameCurtain
         {
-            get => name;
+            get => nameCurtain;
             set
             {
-                name = value;
+                nameCurtain = value;
                 OnPropertyChanged();
             }
         }
-        public int Quantity
+        public string NameCornice
         {
-            get => quantity;
+            get => nameCornice;
             set
             {
-                quantity = value;
+                nameCornice = value;
                 OnPropertyChanged();
             }
         }
-        
+        public string NameAccessories
+        {
+            get => nameAccessories;
+            set
+            {
+                nameAccessories = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int CurtAmount
+        {
+            get => curtAmount;
+            set { curtAmount = value; OnPropertyChanged(); }
+        }
+        public int CornAmount
+        {
+            get => cornAmount;
+            set { cornAmount = value; OnPropertyChanged(); }
+        }
+        public int AccAmount
+        {
+            get => accAmount;
+            set { accAmount = value; OnPropertyChanged(); }
+        }
+
 
         public RelayCommand<object> AddContractGoods
         {
             get => addContractGoods ??(addContractGoods = new RelayCommand<object>(AddImpl, CanAdd));
         }
+        
 
         private void AddImpl(object obj)
         {
+            string articul = null;
+            SqlDataReader reader1, reader2, reader3;
+            SqlCommand query1, query2, query3;
             try
             {
-                string articul = null;
-                SqlDataReader reader;
-                SqlCommand query;
                 if (conn == null)
                 {
                     throw new Exception("Connection String is Null");
                 }
                 conn.Open();
-
-                query = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + Name + "'", conn);
-                reader = query.ExecuteReader();
-
-                while (reader.Read())
+                if (!string.IsNullOrWhiteSpace(NameCurtain))
                 {
-                    articul = reader["Articul"].ToString();
-                }
-                reader.Close();
+                    query1 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameCurtain + "'", conn);
+                    reader1 = query1.ExecuteReader();
 
-                StationManager.CurrentContractGoods = new Contract_Goods(NumContract, articul, Quantity);
-                StationManager.DataStorage.AddContractGoods(StationManager.CurrentContractGoods);
-                MessageBox.Show("row added");
+                    while (reader1.Read())
+                    {
+                        articul = reader1["Articul"].ToString();
+                    }
+                    reader1.Close();
+                    StationManager.CurrentContractGoods = new Contract_Goods(NumContract, articul, CurtAmount);
+                    StationManager.DataStorage.AddContractGoods(StationManager.CurrentContractGoods);
+                    MessageBox.Show("row added");
+                }
+                if (!string.IsNullOrWhiteSpace(NameCornice))
+                {
+                    query2 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameCornice + "'", conn);
+                    reader2 = query2.ExecuteReader();
+
+                    while (reader2.Read())
+                    {
+                        articul = reader2["Articul"].ToString();
+                    }
+                    reader2.Close();
+                    StationManager.CurrentContractGoods = new Contract_Goods(NumContract, articul, CornAmount);
+                    StationManager.DataStorage.AddContractGoods(StationManager.CurrentContractGoods);
+                    MessageBox.Show("row added");
+                }
+                if (!string.IsNullOrWhiteSpace(NameAccessories))
+                {
+                    query3 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameAccessories + "'", conn);
+                    reader3 = query3.ExecuteReader();
+
+                    while (reader3.Read())
+                    {
+                        articul = reader3["Articul"].ToString();
+                    }
+                    reader3.Close();
+                    StationManager.CurrentContractGoods = new Contract_Goods(NumContract, articul, AccAmount);
+                    StationManager.DataStorage.AddContractGoods(StationManager.CurrentContractGoods);
+                    MessageBox.Show("row added");
+                }
             }
             catch (Exception exc)
             {
@@ -124,8 +210,12 @@ namespace ais.ViewModels.AddingRowsVM
         private bool CanAdd(object obj)
         {
             return !string.IsNullOrWhiteSpace(NumContract) &&
-                   !string.IsNullOrWhiteSpace(Name) &&
-                   !string.IsNullOrWhiteSpace(Quantity.ToString());
+                   (!string.IsNullOrWhiteSpace(NameCornice) ||
+                   !string.IsNullOrWhiteSpace(NameCurtain) ||
+                   !string.IsNullOrWhiteSpace(NameAccessories)) &&
+                   (!string.IsNullOrWhiteSpace(CurtAmount.ToString()) ||
+                   !string.IsNullOrWhiteSpace(CornAmount.ToString()) ||
+                   !string.IsNullOrWhiteSpace(AccAmount.ToString()));
         }
 
 
