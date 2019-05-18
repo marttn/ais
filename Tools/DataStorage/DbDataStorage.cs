@@ -853,9 +853,9 @@ namespace ais.Tools.DataStorage
                 }
                 conn.Open();
                 SqlCommand query = new SqlCommand("INSERT INTO Order_Goods VALUES (@Num_ord, @Articul, @quantity_goods)", conn);
-                query.Parameters.AddWithValue("@Num_ord", order_Goods);
-                query.Parameters.AddWithValue("@Articul", order_Goods);
-                query.Parameters.AddWithValue("@quantity_goods", order_Goods);
+                query.Parameters.AddWithValue("@Num_ord", order_Goods.NumOrd);
+                query.Parameters.AddWithValue("@Articul", order_Goods.Articul);
+                query.Parameters.AddWithValue("@quantity_goods", order_Goods.QuantityGoods);
                 query.ExecuteNonQuery();
                 OrderGoodsList.Add(order_Goods);
             }

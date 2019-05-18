@@ -191,10 +191,18 @@ namespace ais.ViewModels.AddingRowsVM
                         articul = reader1["Articul"].ToString();
                     }
                     reader1.Close();
-
-                    StationManager.CurrentContractorGoods = new Contractor_Goods(articul, code, CurtPrice);
-                    StationManager.DataStorage.AddContractorGoods(StationManager.CurrentContractorGoods);
-                    MessageBox.Show("row added");
+                    if (StationManager.DataStorage.ContractorGoodsList.Exists(u => u.CodeContractor.Trim(' ').Equals(code) &&                    
+                    u.Articul.Trim(' ').Equals(articul)))
+                    {
+                        MessageBox.Show("Price for "+NameCurtain+ " is already set by " + NameContractor);
+                    }
+                    else
+                    {
+                        StationManager.CurrentContractorGoods = new Contractor_Goods(articul, code, CurtPrice);
+                        StationManager.DataStorage.AddContractorGoods(StationManager.CurrentContractorGoods);
+                        MessageBox.Show("row added");
+                    }
+                    
                 }
                 //cornices
                 if (!string.IsNullOrWhiteSpace(NameCornice))
@@ -207,25 +215,40 @@ namespace ais.ViewModels.AddingRowsVM
                         articul = reader2["Articul"].ToString();
                     }
                     reader2.Close();
-
-                    StationManager.CurrentContractorGoods = new Contractor_Goods(articul, code, CornPrice);
-                    StationManager.DataStorage.AddContractorGoods(StationManager.CurrentContractorGoods);
-                    MessageBox.Show("row added");
+                    if (StationManager.DataStorage.ContractorGoodsList.Exists(u => u.CodeContractor.Trim(' ').Equals(code) &&
+                    u.Articul.Trim(' ').Equals(articul)))
+                    {
+                        MessageBox.Show("Price for " + NameCornice + " is already set by " + NameContractor);
+                    }
+                    else
+                    {
+                        StationManager.CurrentContractorGoods = new Contractor_Goods(articul, code, CornPrice);
+                        StationManager.DataStorage.AddContractorGoods(StationManager.CurrentContractorGoods);
+                        MessageBox.Show("row added");
+                    }
                 }
                 //accessories
                 if (!string.IsNullOrWhiteSpace(NameAccessories))
                 {
                     query = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameAccessories + "'", conn);
-                    reader1 = query.ExecuteReader();
+                    reader3 = query.ExecuteReader();
 
-                    while (reader1.Read())
+                    while (reader3.Read())
                     {
-                        articul = reader1["Articul"].ToString();
+                        articul = reader3["Articul"].ToString();
                     }
-                    reader1.Close();
-                    StationManager.CurrentContractorGoods = new Contractor_Goods(articul, code, AccPrice);
-                    StationManager.DataStorage.AddContractorGoods(StationManager.CurrentContractorGoods);
-                    MessageBox.Show("row added");
+                    reader3.Close();
+                    if (StationManager.DataStorage.ContractorGoodsList.Exists(u => u.CodeContractor.Trim(' ').Equals(code) &&
+                    u.Articul.Trim(' ').Equals(articul)))
+                    {
+                        MessageBox.Show("Price for " + NameAccessories+ " is already set by " + NameContractor);
+                    }
+                    else
+                    {
+                        StationManager.CurrentContractorGoods = new Contractor_Goods(articul, code, AccPrice);
+                        StationManager.DataStorage.AddContractorGoods(StationManager.CurrentContractorGoods);
+                        MessageBox.Show("row added");
+                    }
                 }
             }
             catch (Exception exc)

@@ -198,6 +198,63 @@ namespace ais.ViewModels
                     SelectedRow = null;
                     break;
                 case "Cust_Tel":
+                    StationManager.CurrentCustTel = (Cust_Tel)SelectedRow;
+                    StationManager.DataStorage.RemoveCustTel(StationManager.CurrentCustTel);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.CustTelsList);
+                    SelectedRow = null;
+                    break;
+                case "Cornices":
+                    StationManager.CurrentCornices = (Cornices)SelectedRow;
+                    StationManager.DataStorage.RemoveCornices(StationManager.CurrentCornices);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.CornicesList);
+                    SelectedRow = null;
+                    break;
+                case "Workshop":
+                    StationManager.CurrentWorkshop = (Workshop)SelectedRow;
+                    StationManager.DataStorage.RemoveWorkshop(StationManager.CurrentWorkshop);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.WorkshopsList);
+                    SelectedRow = null;
+                    break;
+                case "Contractor":
+                    StationManager.CurrentContractor = (Contractor)SelectedRow;
+                    StationManager.DataStorage.RemoveContractor(StationManager.CurrentContractor);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorsList);
+                    SelectedRow = null;
+                    break;
+                case "Contractor_Tel":
+                    StationManager.CurrentContractorTel = (Contractor_Tel)SelectedRow;
+                    StationManager.DataStorage.RemoveContractorTel(StationManager.CurrentContractorTel);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorTelList);
+                    SelectedRow = null;
+                    break;
+                case "Goods":
+                    StationManager.CurrentGoods = (Goods)SelectedRow;
+                    StationManager.DataStorage.RemoveGoods(StationManager.CurrentGoods);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.GoodsList);
+                    SelectedRow = null;
+                    break;
+                case "Contractor_Goods":
+                    StationManager.CurrentContractorGoods = (Contractor_Goods)SelectedRow;
+                    StationManager.DataStorage.RemoveContractorGoods(StationManager.CurrentContractorGoods);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorGoodsList);
+                    SelectedRow = null;
+                    break;
+                case "Order_Goods":
+                    StationManager.CurrentOrderGoods = (Order_Goods)SelectedRow;
+                    StationManager.DataStorage.RemoveOrderGoods(StationManager.CurrentOrderGoods);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.OrderGoodsList);
+                    SelectedRow = null;
+                    break;
+                case "Contract":
+                    StationManager.CurrentContract = (Contract)SelectedRow;
+                    StationManager.DataStorage.RemoveContract(StationManager.CurrentContract);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractsList);
+                    SelectedRow = null;
+                    break;
+                case "Contract_Goods":
+                    NavigationManager.Instance.Navigate(ViewType.NewContractGoods);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractGoodsList);
+                    SelectedRow = null;
                     break;
             }
             
@@ -217,26 +274,44 @@ namespace ais.ViewModels
                     Table = new ObservableCollection<object>(StationManager.DataStorage.CustomersList);
                     break;
                 case "Cust_Tel":
-                    NavigationManager.Instance.Navigate(ViewType.NewCustTel);
+                    NavigationManager.Instance.Navigate(ViewType.NewSelCustTel);
                     Table = new ObservableCollection<object>(StationManager.DataStorage.CustTelsList);
                     break;
                 case "Cornices":
+                    NavigationManager.Instance.Navigate(ViewType.NewCornices);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.CornicesList);
                     break;
                 case "Workshop":
+                    NavigationManager.Instance.Navigate(ViewType.NewWorkshop);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.WorkshopsList);
                     break;
                 case "Contractor":
+                    NavigationManager.Instance.Navigate(ViewType.NewContractor);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorsList);
                     break;
                 case "Contractor_Tel":
+                    NavigationManager.Instance.Navigate(ViewType.NewSelContractorTel);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorTelList);
                     break;
                 case "Goods":
+                    NavigationManager.Instance.Navigate(ViewType.NewGoods);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.GoodsList);
                     break;
                 case "Contractor_Goods":
+                    NavigationManager.Instance.Navigate(ViewType.NewContractorGoods);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorGoodsList);
                     break;
                 case "Order_Goods":
+                    NavigationManager.Instance.Navigate(ViewType.NewOrderGoods);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.OrderGoodsList);
                     break;
                 case "Contract":
+                    NavigationManager.Instance.Navigate(ViewType.NewContract);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractsList);
                     break;
                 case "Contract_Goods":
+                    NavigationManager.Instance.Navigate(ViewType.NewContractGoods);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractGoodsList);
                     break;
             }
         }

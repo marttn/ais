@@ -1,4 +1,5 @@
 ﻿using ais.Tools.Navigation;
+using ais.ViewModels.AddingRowsVM;
 using System.Windows.Controls;
 
 namespace ais.Views.AddingRows
@@ -11,6 +12,7 @@ namespace ais.Views.AddingRows
         public NewContractorGoodsView()
         {
             InitializeComponent();
+            DataContext = new ContractorGoodsViewModel();
         }
     }
 }

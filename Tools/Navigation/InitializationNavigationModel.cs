@@ -71,7 +71,7 @@ namespace ais.Tools.Navigation
                     ViewsDictionary.Add(viewType, new SelectCustTel());
                     break;
                 case ViewType.NewSelContractorTel:
-                    ViewsDictionary.Add(viewType, new SelectContractorTel));
+                    ViewsDictionary.Add(viewType, new SelectContractorTel());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(viewType), viewType, null);

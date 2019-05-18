@@ -187,9 +187,17 @@ namespace ais.ViewModels.AddingRowsVM
                     articul = reader1["Articul"].ToString();
                 }
                 reader1.Close();
-                StationManager.CurrentOrderGoods= new Order_Goods(NumOrd, articul, CurtAmount);
-                StationManager.DataStorage.AddOrderGoods(StationManager.CurrentOrderGoods);
-                MessageBox.Show("row added");
+                if (StationManager.DataStorage.OrderGoodsList.Exists(u => u.NumOrd.Trim(' ').Equals(NumOrd) &&
+                u.Articul.Trim(' ').Equals(articul)))
+                {
+                    MessageBox.Show("Item "+ NameCurtain+" is already added in order №" + NumOrd);
+                }
+                else
+                {
+                    StationManager.CurrentOrderGoods = new Order_Goods(NumOrd, articul, CurtAmount);
+                    StationManager.DataStorage.AddOrderGoods(StationManager.CurrentOrderGoods);
+                    MessageBox.Show("row added");
+                }
                 //cornice
                 if (!string.IsNullOrWhiteSpace(NameCornice))
                 {
@@ -201,9 +209,17 @@ namespace ais.ViewModels.AddingRowsVM
                         articul = reader2["Articul"].ToString();
                     }
                     reader2.Close();
-                    StationManager.CurrentOrderGoods = new Order_Goods(NumOrd, articul, CornAmount);
-                    StationManager.DataStorage.AddOrderGoods(StationManager.CurrentOrderGoods);
-                    MessageBox.Show("row added");
+                    if (StationManager.DataStorage.OrderGoodsList.Exists(u => u.NumOrd.Trim(' ').Equals(NumOrd) &&
+                        u.Articul.Trim(' ').Equals(articul)))
+                    {
+                        MessageBox.Show("Item " + NameCornice + " is already added in order №" + NumOrd);
+                    }
+                    else
+                    {
+                        StationManager.CurrentOrderGoods = new Order_Goods(NumOrd, articul, CornAmount);
+                        StationManager.DataStorage.AddOrderGoods(StationManager.CurrentOrderGoods);
+                        MessageBox.Show("row added");
+                    }
                 }
                 //accessories 
                 if (!string.IsNullOrWhiteSpace(NameAccessories))
@@ -216,9 +232,17 @@ namespace ais.ViewModels.AddingRowsVM
                         articul = reader3["Articul"].ToString();
                     }
                     reader3.Close();
-                    StationManager.CurrentOrderGoods = new Order_Goods(NumOrd, articul, AccAmount);
-                    StationManager.DataStorage.AddOrderGoods(StationManager.CurrentOrderGoods);
-                    MessageBox.Show("row added");
+                    if (StationManager.DataStorage.OrderGoodsList.Exists(u => u.NumOrd.Trim(' ').Equals(NumOrd) &&
+                     u.Articul.Trim(' ').Equals(articul)))
+                    {
+                        MessageBox.Show("Item " + NameAccessories + " is already added in order №" + NumOrd);
+                    }
+                    else
+                    {
+                        StationManager.CurrentOrderGoods = new Order_Goods(NumOrd, articul, AccAmount);
+                        StationManager.DataStorage.AddOrderGoods(StationManager.CurrentOrderGoods);
+                        MessageBox.Show("row added");
+                    }
                 }
             }
             catch (Exception exc)
