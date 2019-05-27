@@ -3,14 +3,9 @@ using ais.Tools;
 using ais.Tools.Managers;
 using ais.Tools.Navigation;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
 using System.Runtime.CompilerServices;
-using System.Windows;
 
 namespace ais.ViewModels
 {
@@ -27,6 +22,7 @@ namespace ais.ViewModels
         private RelayCommand<object> _showTable;
         private RelayCommand<object> _closeCommand;
         private RelayCommand<object> _addCommand;
+        private RelayCommand<object> _updateCommand;
         private RelayCommand<object> _deleteCommand;
 
         public Users CurrentUser { get; } = StationManager.CurrentUser;
@@ -122,7 +118,7 @@ namespace ais.ViewModels
         {
             StationManager.CurrentTableType = $"{obj}";
            
-            if (obj.Equals("Customer"))
+                if (obj.Equals("Customer"))
                 {
                 Table = new ObservableCollection<object>(StationManager.DataStorage.CustomersList);
                 }
@@ -176,6 +172,8 @@ namespace ais.ViewModels
         }
 
         public RelayCommand<object> AddCommand => _addCommand ?? (_addCommand = new RelayCommand<object>(AddRowImplementation));
+
+        public RelayCommand<object> UpdateCommand => _updateCommand ?? (_updateCommand = new RelayCommand<object>(UpdateRowImplementation, CanDeleteRow));
 
         public RelayCommand<object> DeleteCommand => _deleteCommand ?? (_deleteCommand = new RelayCommand<object>(DeleteRowImplementation, CanDeleteRow));
 
@@ -252,12 +250,81 @@ namespace ais.ViewModels
                     SelectedRow = null;
                     break;
                 case "Contract_Goods":
+                    StationManager.CurrentContractGoods = (Contract_Goods)SelectedRow;
                     NavigationManager.Instance.Navigate(ViewType.NewContractGoods);
                     Table = new ObservableCollection<object>(StationManager.DataStorage.ContractGoodsList);
                     SelectedRow = null;
                     break;
             }
             
+        }
+
+        private void UpdateRowImplementation(object obj)
+        {
+            switch (StationManager.CurrentTableType)
+            {
+                case "Order":
+                    NavigationManager.Instance.Navigate(ViewType.NewOrder);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.OrdersList);
+                    SelectedRow = null;
+                    break;
+                case "Customer":
+                    NavigationManager.Instance.Navigate(ViewType.NewCustomer);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.CustomersList);
+                    SelectedRow = null;
+                    break;
+                case "Cust_Tel":
+                    NavigationManager.Instance.Navigate(ViewType.NewSelCustTel);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.CustTelsList);
+                    SelectedRow = null;
+                    break;
+                case "Cornices":
+                    NavigationManager.Instance.Navigate(ViewType.NewCornices);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.CornicesList);
+                    SelectedRow = null;
+                    break;
+                case "Workshop":
+                    NavigationManager.Instance.Navigate(ViewType.NewWorkshop);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.WorkshopsList);
+                    SelectedRow = null;
+                    break;
+                case "Contractor":
+                    NavigationManager.Instance.Navigate(ViewType.NewContractor);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorsList);
+                    SelectedRow = null;
+                    break;
+                case "Contractor_Tel":
+                    NavigationManager.Instance.Navigate(ViewType.NewSelContractorTel);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorTelList);
+                    SelectedRow = null;
+                    break;
+                case "Goods":
+                    NavigationManager.Instance.Navigate(ViewType.NewGoods);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.GoodsList);
+                    SelectedRow = null;
+                    break;
+                case "Contractor_Goods":
+                    NavigationManager.Instance.Navigate(ViewType.NewContractorGoods);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorGoodsList);
+                    SelectedRow = null;
+                    break;
+                case "Order_Goods":
+                    NavigationManager.Instance.Navigate(ViewType.NewOrderGoods);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.OrderGoodsList);
+                    SelectedRow = null;
+                    break;
+                case "Contract":
+                    NavigationManager.Instance.Navigate(ViewType.NewContract);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractsList);
+                    SelectedRow = null;
+                    break;
+                case "Contract_Goods":
+                    StationManager.CurrentContractGoods = (Contract_Goods)SelectedRow;
+                    NavigationManager.Instance.Navigate(ViewType.UpdContractGoods);
+                    Table = new ObservableCollection<object>(StationManager.DataStorage.ContractGoodsList);
+                    SelectedRow = null;
+                    break;
+            }
         }
 
         private void AddRowImplementation(object obj)

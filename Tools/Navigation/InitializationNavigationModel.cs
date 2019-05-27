@@ -1,5 +1,6 @@
 ﻿using ais.Views;
 using ais.Views.AddingRows;
+using ais.Views.UpdatingRows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +73,42 @@ namespace ais.Tools.Navigation
                     break;
                 case ViewType.NewSelContractorTel:
                     ViewsDictionary.Add(viewType, new SelectContractorTel());
+                    break;
+                case ViewType.UpdOrder:
+                    ViewsDictionary.Add(viewType, new UpdOrderView());
+                    break;
+                case ViewType.UpdCustomer:
+                    ViewsDictionary.Add(viewType, new UpdCustomerView());
+                    break;
+                case ViewType.UpdCornices:
+                    ViewsDictionary.Add(viewType, new UpdCornicesView());
+                    break;
+                case ViewType.UpdWorkshop:
+                    ViewsDictionary.Add(viewType, new UpdWorkshopView());
+                    break;
+                case ViewType.UpdContractor:
+                    ViewsDictionary.Add(viewType, new UpdContractorView());
+                    break;
+                case ViewType.UpdContractorTel:
+                    ViewsDictionary.Add(viewType, new UpdContractorTel());
+                    break;
+                case ViewType.UpdGoods:
+                    ViewsDictionary.Add(viewType, new UpdGoodsView());
+                    break;
+                case ViewType.UpdContractorGoods:
+                    ViewsDictionary.Add(viewType, new UpdContractorGoodsView());
+                    break;
+                case ViewType.UpdOrderGoods:
+                    ViewsDictionary.Add(viewType, new UpdOrderGoodsView());
+                    break;
+                case ViewType.UpdContract:
+                    ViewsDictionary.Add(viewType, new UpdContractView());
+                    break;
+                case ViewType.UpdContractGoods:
+                    ViewsDictionary.Add(viewType, new UpdContractGoodsView());
+                    break;
+                case ViewType.UpdCustTel:
+                    ViewsDictionary.Add(viewType, new UpdCustTel());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(viewType), viewType, null);

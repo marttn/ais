@@ -108,6 +108,9 @@
     <Compile Include="ViewModels\AdminViewModel.cs" />
     <Compile Include="ViewModels\SignInViewModel.cs" />
     <Compile Include="ViewModels\SignUpViewModel.cs" />
+    <Compile Include="ViewModels\UpdatingRowsVM\UpdContractGoodsVM.cs" />
+    <Compile Include="ViewModels\UpdatingRowsVM\UpdContractorGoodsVM.cs" />
+    <Compile Include="ViewModels\UpdatingRowsVM\UpdContractorTelVM.cs" />
     <Compile Include="Views\AddingRows\CustTelView.xaml.cs">
       <DependentUpon>CustTelView.xaml</DependentUpon>
     </Compile>
@@ -168,6 +171,42 @@
     </Compile>
     <Compile Include="Views\SignUpView.xaml.cs">
       <DependentUpon>SignUpView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdatingRows\UpdContractGoodsView.xaml.cs">
+      <DependentUpon>UpdContractGoodsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdatingRows\UpdContractorGoodsView.xaml.cs">
+      <DependentUpon>UpdContractorGoodsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdatingRows\UpdContractorTel.xaml.cs">
+      <DependentUpon>UpdContractorTel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdatingRows\UpdContractorView.xaml.cs">
+      <DependentUpon>UpdContractorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdatingRows\UpdContractView.xaml.cs">
+      <DependentUpon>UpdContractView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdatingRows\UpdCornicesView.xaml.cs">
+      <DependentUpon>UpdCornicesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdatingRows\UpdCustomerView.xaml.cs">
+      <DependentUpon>UpdCustomerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdatingRows\UpdCustTelView.xaml.cs">
+      <DependentUpon>UpdCustTelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdatingRows\UpdGoodsView.xaml.cs">
+      <DependentUpon>UpdGoodsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdatingRows\UpdOrderGoodsView.xaml.cs">
+      <DependentUpon>UpdOrderGoodsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdatingRows\UpdOrderView.xaml.cs">
+      <DependentUpon>UpdOrderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdatingRows\UpdWorkshopView.xaml.cs">
+      <DependentUpon>UpdWorkshopView.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\AddingRows\CustTelView.xaml">
       <SubType>Designer</SubType>
@@ -253,6 +292,54 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\UpdatingRows\UpdContractGoodsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UpdatingRows\UpdContractorGoodsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UpdatingRows\UpdContractorTel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UpdatingRows\UpdContractorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UpdatingRows\UpdContractView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UpdatingRows\UpdCornicesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UpdatingRows\UpdCustomerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UpdatingRows\UpdCustTelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UpdatingRows\UpdGoodsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UpdatingRows\UpdOrderGoodsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UpdatingRows\UpdOrderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UpdatingRows\UpdWorkshopView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -305,5 +392,6 @@
   <ItemGroup>
     <Resource Include="Views\power.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

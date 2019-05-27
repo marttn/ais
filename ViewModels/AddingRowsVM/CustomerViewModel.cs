@@ -12,7 +12,7 @@ namespace ais.ViewModels.AddingRowsVM
         private RelayCommand<object> addCust;
         private RelayCommand<object> addTel;
 
-        public Customer CurrentCustomer { get; /*set;*/ }
+        public Customer CurrentCustomer { get; }
 
         public CustomerViewModel()
         {

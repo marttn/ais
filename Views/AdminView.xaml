@@ -98,7 +98,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Button Content="Add" HorizontalAlignment="Left" Margin="15, 0" VerticalAlignment="Center" Width="115" Height="35" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Grid.Column="0" Command="{Binding AddCommand}"/>
-                <Button Content="Update" HorizontalAlignment="Center" Margin="15, 0" VerticalAlignment="Center" Width="115" Height="35" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Grid.Column="1" />
+                <Button Content="Update" HorizontalAlignment="Center" Margin="15, 0" VerticalAlignment="Center" Width="115" Height="35" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Grid.Column="1" Command="{Binding UpdateCommand}"/>
                 <Button Content="Delete" HorizontalAlignment="Right" Margin="15, 0" VerticalAlignment="Center" Width="115" Height="35" BorderBrush="{x:Null}" Background="#FF9999FF" FontFamily="Verdana" FontSize="14" Foreground="White" Grid.Column="2" Command="{Binding DeleteCommand}"/>
             </Grid>
         </Grid>

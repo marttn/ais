@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using ais.Models;
 using ais.Tools.Managers;
@@ -517,31 +515,7 @@ namespace ais.Tools.DataStorage
             }
         }
 
-        public void UpdateContract(int index, Contract contract)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateContractGoods(int index, Contract_Goods contrgoods)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateContractor(int index, Contractor contractor)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateContractorTel(int index, Contractor_Tel contrtel)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateOrder(int index, Order order)
-        {
-            throw new NotImplementedException();
-        }
-
+       
         public void AddContractorGoods(Contractor_Goods contractorgoods)
         {
             try
@@ -591,10 +565,7 @@ namespace ais.Tools.DataStorage
             }
         }
 
-        public void UpdateContractorGoods(int index, Contractor_Goods contractorgoods)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public void AddCornices(Cornices cornices)
         {
@@ -654,10 +625,7 @@ namespace ais.Tools.DataStorage
             }
         }
 
-        public void UpdateCornices(int index, Cornices cornices)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public void AddCustTel(Cust_Tel cust_Tel)
         {
@@ -707,10 +675,7 @@ namespace ais.Tools.DataStorage
             }
         }
 
-        public void UpdateCustTel(int index, Cust_Tel cust_Tel)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public void AddCustomer(Customer customer)
         {
@@ -775,10 +740,7 @@ namespace ais.Tools.DataStorage
             }
         }
 
-        public void UpdateCustomer(int index, Customer customer)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public void AddGoods(Goods goods)
         {
@@ -838,10 +800,7 @@ namespace ais.Tools.DataStorage
             }
         }
 
-        public void UpdateGoods(int index, Goods goods)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public void AddOrderGoods(Order_Goods order_Goods)
         {
@@ -892,10 +851,7 @@ namespace ais.Tools.DataStorage
             }
         }
 
-        public void UpdateOrderGoods(int index, Order_Goods order_Goods)
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public void AddWorkshop(Workshop workshop)
         {
@@ -952,11 +908,7 @@ namespace ais.Tools.DataStorage
                 conn.Close();
             }
         }
-
-        public void UpdateWorkshop(int index, Workshop workshop)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         
         public static string RandomString(int length)
@@ -971,6 +923,148 @@ namespace ais.Tools.DataStorage
             }
 
             return new string(stringChars);
+        }
+
+
+
+        public void UpdateOrder(Order order, Order newOrder)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateContract(Contract contract, Contract newContract)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateContractGoods(Contract_Goods contrgoods, Contract_Goods newContract_Goods)
+        {
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("UPDATE Contract_goods SET quantity_contract = @quantity_contract WHERE Num_contract = '" + contrgoods.NumContract + "' AND Articul = '" + contrgoods.Articul+"'", conn);
+                query.Parameters.AddWithValue("@quantity_contract", newContract_Goods.Quantity);
+                query.ExecuteNonQuery(); 
+                var obj = ContractGoodsList.FirstOrDefault(x => x.Articul == contrgoods.Articul && x.NumContract == contrgoods.NumContract);
+                obj.Quantity = newContract_Goods.Quantity;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public void UpdateContractor(Contractor contractor, Contractor newContractor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateContractorTel(Contractor_Tel contrtel, Contractor_Tel newContractor_Tel)
+        {
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("UPDATE Contractor_Tel SET Tel_num = @Tel_num WHERE Tel_num = '" + contrtel.TelNum + "'", conn);
+                query.Parameters.AddWithValue("@Tel_num", newContractor_Tel.TelNum);
+                query.ExecuteNonQuery();
+                var obj = ContractorTelList.FirstOrDefault(x => x.TelNum == contrtel.TelNum);
+                obj.TelNum = newContractor_Tel.TelNum;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public void UpdateContractorGoods(Contractor_Goods contractorgoods, Contractor_Goods newContractor_Goods)
+        {
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("UPDATE Contractor_Goods SET price_1_product = @price_1_product WHERE Code_contractor = '" + contractorgoods.CodeContractor + "' AND Articul = '" + contractorgoods.Articul + "'", conn);
+                query.Parameters.AddWithValue("@price_1_product", newContractor_Goods.PriceOneProduct);
+                query.ExecuteNonQuery();
+                var obj = ContractorGoodsList.FirstOrDefault(x => x.Articul == contractorgoods.Articul && x.CodeContractor == contractorgoods.CodeContractor);
+                obj.PriceOneProduct = newContractor_Goods.PriceOneProduct;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public void UpdateCornices(Cornices cornices, Cornices newCornices)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateCustTel(Cust_Tel cust_Tel, Cust_Tel newCust_Tel)
+        {
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("UPDATE Cust_Tel SET Tel_num = @Tel_num WHERE Tel_num = '" + cust_Tel.TelNum +"'", conn);
+                query.Parameters.AddWithValue("@Tel_num", newCust_Tel.TelNum);
+                query.ExecuteNonQuery();
+                var obj = ContractorTelList.FirstOrDefault(x => x.TelNum == cust_Tel.TelNum);
+                obj.TelNum = newCust_Tel.TelNum;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public void UpdateCustomer(Customer customer, Customer Customer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateGoods(Goods goods, Goods newGoods)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateOrderGoods(Order_Goods order_Goods, Order_Goods newOrder_Goods)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateWorkshop(Workshop workshop, Workshop newWorkshop)
+        {
+            throw new NotImplementedException();
         }
     }
 }

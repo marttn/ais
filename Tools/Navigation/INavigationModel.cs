@@ -25,7 +25,19 @@ namespace ais.Tools.Navigation
         NewContract,
         NewContractGoods,
         NewCustTel,
-        NewSelCustTel
+        NewSelCustTel,
+        UpdOrder,
+        UpdCustomer,
+        UpdCornices,
+        UpdWorkshop,
+        UpdContractor,
+        UpdContractorTel,
+        UpdCustTel,
+        UpdGoods,
+        UpdContractorGoods,
+        UpdOrderGoods,
+        UpdContract,
+        UpdContractGoods
     }
 
     interface INavigationModel
