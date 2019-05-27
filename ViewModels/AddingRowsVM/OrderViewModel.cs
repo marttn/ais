@@ -3,14 +3,10 @@ using ais.Tools;
 using ais.Tools.Managers;
 using ais.Tools.Navigation;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ais.ViewModels.AddingRowsVM
@@ -92,7 +88,6 @@ namespace ais.ViewModels.AddingRowsVM
                 while (select.Read())
                 {
                     ListWorkshops.Add(select["name_shop"].ToString().Trim(' '));
-                    //MessageBox.Show(select["name_shop"].ToString());
                 }
                 select.Close();
                 SqlCommand query1 = new SqlCommand("SELECT last_name, name_cust FROM Customer", conn);
@@ -118,7 +113,6 @@ namespace ais.ViewModels.AddingRowsVM
             {
                 conn.Close();
             }
-           // MessageBox.Show("end load");
         }
 
         
@@ -137,7 +131,7 @@ namespace ais.ViewModels.AddingRowsVM
 
         private bool CanExecute(object obj)
         {
-            return !string.IsNullOrWhiteSpace(ID); 
+            return !string.IsNullOrWhiteSpace(ID) && DateOrd <= DateTime.Now; 
         }
 
         private void AddOrderImplementation(object obj)

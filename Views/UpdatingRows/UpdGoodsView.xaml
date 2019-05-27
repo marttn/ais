@@ -25,21 +25,9 @@
         <Label Content="Material" Grid.Row="3" Grid.Column="0" Margin="20,0,0,0" FontFamily="Verdana" FontSize="22" VerticalContentAlignment="Center"/>
         <Label Content="Characteristics" Grid.Row="4" Grid.Column="0" Margin="20,10,0,0" FontFamily="Verdana" FontSize="22" VerticalContentAlignment="Top"/>
         <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="35,0,0,0" Height="27" Text="{Binding CurrentGoods.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="400"/>
-        <ComboBox Grid.Column="1" HorizontalAlignment="Left" Margin="35,0,0,0" IsReadOnly="False" IsEditable="False" SelectedItem="{Binding CurrentGoods.Type, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Grid.Row="2"  Width="400">
-            <ComboBoxItem Content="тюль"/>
-            <ComboBoxItem Content="портьєрні"/>
-            <ComboBoxItem Content="водовідштовхувальні"/>
-            <ComboBoxItem Content="рулонні"/>
-            <ComboBoxItem Content="жалюзі"/>
-            <ComboBoxItem Content="китиці"/>
-            <ComboBoxItem Content="бахрома"/>
-            <ComboBoxItem Content="люверси"/>
-            <ComboBoxItem Content="тесьма"/>
-            <ComboBoxItem Content="стелеві карнизи"/>
-            <ComboBoxItem Content="настінні карнизи"/>
-        </ComboBox>
-        <TextBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="35,0,0,0" Height="27" Text="{Binding CurrentGoods.Material, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="400"/>
+        <TextBlock Grid.Column="1" Height="27" HorizontalAlignment="Left" Margin="35,0,0,0" Text="{Binding CurrentGoods.Type, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Grid.Row="2"  Width="400"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="35,0,0,0" Height="27" Text="{Binding CurrentGoods.Material, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="400"/>
         <TextBox Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="35,15,0,0" Height="100" Text="{Binding CurrentGoods.Characteristics, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="400"/>
-        <Button Content="Update" Grid.ColumnSpan="2" Command="{Binding AddGoods}"  HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Width="95" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="14" FontFamily="Verdana"/>
+        <Button Content="Update" Grid.ColumnSpan="2" Command="{Binding UpdateGoods}"  HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Width="95" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="14" FontFamily="Verdana"/>
     </Grid>
 </UserControl>

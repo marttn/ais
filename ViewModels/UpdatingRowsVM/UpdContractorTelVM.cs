@@ -1,6 +1,7 @@
 ﻿using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
+using ais.Tools.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -17,7 +18,7 @@ namespace ais.ViewModels.UpdatingRowsVM
 
         private RelayCommand<object> updateContractorTel;
 
-        public string NameContractor { get; }
+        public string NameContractor { get; set; }
         public Contractor_Tel CurrentContractorTel = StationManager.CurrentContractorTel;
 
         public UpdContractorTelVM()
@@ -26,14 +27,13 @@ namespace ais.ViewModels.UpdatingRowsVM
             {
                 conn.Open();
 
-                SqlCommand query = new SqlCommand("SELECT Name_contr FROM Goods WHERE Code_contractor = '" + CurrentContractorTel.Articul + "'", conn);
+                SqlCommand query = new SqlCommand("SELECT Name_contr FROM Goods WHERE Code_contractor = '" + CurrentContractorTel.CodeContractor+ "'", conn);
                 SqlDataReader select = query.ExecuteReader();
                 while (select.Read())
                 {
-                    NameGoods = select["name_g"].ToString().Trim(' ');
+                    NameContractor = select["Name_contr"].ToString().Trim(' ');
                 }
                 select.Close();
-                query = new SqlCommand("SELECT Name_contr FROM Goods WHERE Code_contractor = '" + CurrentContractorGoods.CodeContractor + "'", conn);
                 
             }
             catch (Exception exc)
@@ -53,12 +53,14 @@ namespace ais.ViewModels.UpdatingRowsVM
 
         private bool CanUpd(object obj)
         {
-            throw new NotImplementedException();
+            return CurrentContractorTel.TelNum.Length == 10;
         }
 
         private void UpdImpl(object obj)
         {
-            throw new NotImplementedException();
+            StationManager.DataStorage.UpdateContractorTel(StationManager.CurrentContractorTel, CurrentContractorTel);
+            StationManager.CurrentContractorTel = CurrentContractorTel;
+            NavigationManager.Instance.Navigate(ViewType.Admin);
         }
 
         

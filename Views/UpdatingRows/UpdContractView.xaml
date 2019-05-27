@@ -23,9 +23,9 @@
         <Label Grid.Row="1" Content="Contract number" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Verdana" FontSize="18"/>
         <Label Grid.Row="2" Content="Date" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Verdana" FontSize="18"/>
         <Label Grid.Row="3" Content="Contractor's name" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Verdana" FontSize="18"/>
-        <TextBox Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Left" Margin="35,0,0,0" Height="25" Text="{Binding NumContract, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="250"/>
-        <DatePicker Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" Margin="35,0,0,0" SelectedDate="{Binding DateContract, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged, StringFormat = 'yyy/MM/dd'}" SelectedDateFormat="Short" VerticalAlignment="Center" Height="35" Width="250"/>
-        <TextBlock Grid.Column="1" Margin="35,0,0,0" Text="{Binding NameContr, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Center" Height="25" Width="250"/>
-        <Button Content="Update" Command="{Binding AddContract}" Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Width="95" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="14" FontFamily="Verdana"/>
+        <TextBlock  FontFamily="Verdana" FontSize="18" Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Left" Margin="35,0,0,0" Height="25" Text="{Binding CurrentContract.NumContract, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="250"/>
+        <DatePicker Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" Margin="35,0,0,0" SelectedDate="{Binding CurrentContract.DateContract, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged, StringFormat = 'yyy/MM/dd'}" SelectedDateFormat="Short" VerticalAlignment="Center" Height="35" Width="250"/>
+        <TextBlock Grid.Column="1"  FontFamily="Verdana" FontSize="18" Margin="35,0,0,0" Text="{Binding NameContr, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Center" Height="25" Width="250"/>
+        <Button Content="Update" Command="{Binding UpdateContract}" Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Width="95" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="14" FontFamily="Verdana"/>
     </Grid>
 </UserControl>

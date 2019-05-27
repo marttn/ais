@@ -35,6 +35,6 @@
         <TextBox Grid.Row="3" Width="380" Margin="180,0,0,0" Height="30" Text="{Binding CurrentContractor.Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
         <Label Grid.Row="4" Content="E-mail" Margin="20, 0,0,0" FontFamily="Verdana" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
         <TextBox Grid.Row="4" Width="380" Margin="180,0,0,0" Height="30" Text="{Binding CurrentContractor.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-        <Button Grid.Row="5" Content="Add" VerticalAlignment="Center" HorizontalAlignment="Center" Width="105" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="14" FontFamily="Verdana" Command="{Binding AddContractor}"/>
+        <Button Grid.Row="5" Content="Update" VerticalAlignment="Center" HorizontalAlignment="Center" Width="105" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="14" FontFamily="Verdana" Command="{Binding UpdateContractor}"/>
     </Grid>
 </UserControl>

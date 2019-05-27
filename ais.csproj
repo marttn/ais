@@ -111,6 +111,15 @@
     <Compile Include="ViewModels\UpdatingRowsVM\UpdContractGoodsVM.cs" />
     <Compile Include="ViewModels\UpdatingRowsVM\UpdContractorGoodsVM.cs" />
     <Compile Include="ViewModels\UpdatingRowsVM\UpdContractorTelVM.cs" />
+    <Compile Include="ViewModels\UpdatingRowsVM\UpdContractorVM.cs" />
+    <Compile Include="ViewModels\UpdatingRowsVM\UpdContractVM.cs" />
+    <Compile Include="ViewModels\UpdatingRowsVM\UpdCornicesVM.cs" />
+    <Compile Include="ViewModels\UpdatingRowsVM\UpdCustomerVM.cs" />
+    <Compile Include="ViewModels\UpdatingRowsVM\UpdCustTelVM.cs" />
+    <Compile Include="ViewModels\UpdatingRowsVM\UpdGoodsVM.cs" />
+    <Compile Include="ViewModels\UpdatingRowsVM\UpdOrderGoodsVM.cs" />
+    <Compile Include="ViewModels\UpdatingRowsVM\UpdOrderVM.cs" />
+    <Compile Include="ViewModels\UpdatingRowsVM\UpdWorkshopVM.cs" />
     <Compile Include="Views\AddingRows\CustTelView.xaml.cs">
       <DependentUpon>CustTelView.xaml</DependentUpon>
     </Compile>

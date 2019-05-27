@@ -43,6 +43,6 @@
         <xctk:IntegerUpDown Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="255,0,0,0" Minimum="0" Height="23" Width="55" Value="{Binding CurrentWorkshop.Porch}"/>
         <xctk:IntegerUpDown Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="390,0,0,0" Minimum="0" Height="23" Width="55" Value="{Binding CurrentWorkshop.Office}"/>
         <xctk:IntegerUpDown Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" Margin="30,0,0,0" Minimum="0" FormatString="C0" Height="25" Width="110" Value="{Binding CurrentWorkshop.PriceOneCurtain}"/>
-        <Button Content="Update" Grid.ColumnSpan="2" HorizontalAlignment="Center"  Grid.Row="7" VerticalAlignment="Center" Width="105" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="15" FontFamily="Verdana" Command="{Binding AddWorkshop}"/>
+        <Button Content="Update" Grid.ColumnSpan="2" HorizontalAlignment="Center"  Grid.Row="7" VerticalAlignment="Center" Width="105" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="15" FontFamily="Verdana" Command="{Binding UpdateWorkshop}"/>
     </Grid>
 </UserControl>

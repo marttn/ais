@@ -21,14 +21,14 @@
         </Grid.RowDefinitions>
         <Label Content="Update order" Grid.ColumnSpan="2" Grid.Row="0" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" Height="50" Width="310" FontFamily="Verdana" FontSize="30"/>
         <Label Grid.Row="1" Grid.Column="0" Margin="10, 0, 0, 0" Content="Choose date:" FontFamily="Verdana" FontSize="18" VerticalContentAlignment="Center"/>
-        <DatePicker Grid.Column="1" HorizontalAlignment="Center" SelectedDate="{Binding DateOrd, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged, StringFormat = 'yyy/MM/dd'}" SelectedDateFormat="Short" Grid.Row="1" VerticalAlignment="Center" Height="50" Width="260"/>
+        <DatePicker Grid.Column="1" HorizontalAlignment="Center" SelectedDate="{Binding CurrentOrder.DateOrd, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged, StringFormat = 'yyy/MM/dd'}" SelectedDateFormat="Short" Grid.Row="1" VerticalAlignment="Center" Height="50" Width="260"/>
         <Label Grid.Row="2" Grid.Column="0" Margin="10, 0, 0, 0" Content="Choose a customer:" FontFamily="Verdana" FontSize="18" VerticalContentAlignment="Center" />
         <Label Grid.Row="3" Grid.Column="0" Margin="10, 0, 0, 0" Content="Choose a workshop:" FontFamily="Verdana" FontSize="18" VerticalContentAlignment="Center" />
         <Label Grid.Row="4" Grid.Column="0" Margin="10, 0, 0, 0" Content="Choose a cornice installer:" FontFamily="Verdana" FontSize="18" VerticalContentAlignment="Center" />
         <TextBlock Name="cust" Grid.Column="1" Height="25" Text="{Binding ID, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Width="220"/>
         <ComboBox Name="work" Grid.Column="1" IsReadOnly="False" IsEditable="False" ItemsSource="{Binding ListWorkshops}" SelectedItem="{Binding CodeWorkshop, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged, TargetNullValue='Choose a workshop...'}" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="220"/>
         <ComboBox Name="cornice" Grid.Column="1" IsReadOnly="False" IsEditable="False" ItemsSource="{Binding ListCornices}"  SelectedItem="{Binding Ipn, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged, TargetNullValue='Choose an installer...'}" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Width="220"/>
-        <Button Content="Update" Command="{Binding AddOrder}" Grid.Column="1" HorizontalAlignment="Left" Margin="30,0,0,0" Grid.Row="5" VerticalAlignment="Center" Width="95" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="14" FontFamily="Verdana"/>
+        <Button Content="Update" Command="{Binding UpdateOrder}" Grid.Column="1" HorizontalAlignment="Left" Margin="30,0,0,0" Grid.Row="5" VerticalAlignment="Center" Width="95" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="14" FontFamily="Verdana"/>
     </Grid>
 </UserControl>
 

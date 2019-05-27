@@ -1,4 +1,5 @@
 ﻿using ais.Tools.Navigation;
+using ais.ViewModels.UpdatingRowsVM;
 using System.Windows.Controls;
 
 namespace ais.Views.UpdatingRows
@@ -11,6 +12,7 @@ namespace ais.Views.UpdatingRows
         public UpdOrderGoodsView()
         {
             InitializeComponent();
+            DataContext = new UpdOrderGoodsVM();
         }
     }
 }

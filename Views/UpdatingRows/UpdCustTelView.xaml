@@ -19,9 +19,9 @@
         </Grid.ColumnDefinitions>
         <Label Grid.Row="0" VerticalAlignment="Center" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="Update customer's number" FontSize="30" FontFamily="Verdana" />
         <TextBlock Grid.Row="1" Margin="40, 0,0,0" Text= "Customer"  VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Verdana" FontSize="26"/>
-        <TextBlock Name="CurrentUser" Grid.Row="1" Grid.Column="1" Margin="25, 0,0,0" Text= "{Binding Name, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Verdana" FontSize="33" Visibility="Visible"/>
+        <TextBlock Width="220" Grid.Row="1" Grid.Column="1" Margin="25, 0,0,0" Text= "{Binding Name, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Verdana" FontSize="33" Visibility="Visible"/>
         <TextBlock Grid.Row="2" Margin="40, 0,0,0" Text= "Number"  VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Verdana" FontSize="26"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Margin="25" Height="33" VerticalAlignment="Center" Text="{Binding Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Grid.Row="3" Content="Update" Grid.ColumnSpan="2" VerticalAlignment="Center" Width="135" Height="50" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="22" FontFamily="Verdana" Command="{Binding AddTel}"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="25" Height="33" VerticalAlignment="Center" Text="{Binding CurrentCustTel.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Grid.Row="3" Content="Update" Grid.ColumnSpan="2" VerticalAlignment="Center" Width="135" Height="50" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="22" FontFamily="Verdana" Command="{Binding UpdTel}"/>
     </Grid>
 </UserControl>
