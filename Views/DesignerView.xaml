@@ -42,7 +42,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Button Content="Orders" HorizontalContentAlignment="Left" Padding="10" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="14" Click="Button_Click"/>
+                <Button Content="Orders" HorizontalContentAlignment="Left" Padding="10" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="14"/>
                 <Button Content="Customers" HorizontalContentAlignment="Left" Padding="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="14"/>
                 <Button Content="Cornice installers" HorizontalContentAlignment="Left" Padding="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="14"/>
                 <Button Content="Workshops" HorizontalContentAlignment="Left" Padding="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="3"  BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="14"/>
