@@ -27,14 +27,14 @@ namespace ais.ViewModels.UpdatingRowsVM
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Street) &&
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Building) &&
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Porch.ToString()) &&
-                   !string.IsNullOrWhiteSpace(CurrentCustomer.Appartment.ToString()) &&
+                   !string.IsNullOrWhiteSpace(CurrentCustomer.Apartment.ToString()) &&
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Email);
         }
 
         private void UpdImpl(object obj)
         {
             StationManager.DataStorage.UpdateCustomer(StationManager.CurrentCustomer, CurrentCustomer);
-            StationManager.CurrentCustomer = CurrentCustomer;
+           // StationManager.CurrentCustomer = CurrentCustomer;
             NavigationManager.Instance.Navigate(Tools.Navigation.ViewType.Admin);
         }
     }

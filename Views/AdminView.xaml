@@ -87,7 +87,7 @@
                 <Button Content="Contract_Goods" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="11" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="Button_Click_1" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
             </Grid>
 
-            <Grid  Name="something" HorizontalAlignment="Center" Height="330"  VerticalAlignment="Center" MinWidth="515">
+            <Grid Grid.Row="0" Name="something" HorizontalAlignment="Center" Height="330"  VerticalAlignment="Center" MinWidth="515">
                 <DataGrid Name="DataGrid" HorizontalAlignment="Stretch" Width="515" Background="Transparent" AutoGenerateColumns="True" SelectedItem="{Binding SelectedRow}" ItemsSource="{Binding Path=Table, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" Visibility="Hidden" IsReadOnly="True" BorderBrush="{x:Null}"/>
             </Grid>
 

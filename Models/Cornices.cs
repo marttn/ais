@@ -18,13 +18,13 @@ namespace ais.Models
         private string street;
         private string building;
         private int porch;
-        private int appartment;
+        private int _apartment;
         private string accountCornice;
         private string telNum;
         private double priceOneCornice;
 
 
-        public Cornices(string ipn = "", string lastName = "", string name = "", string middleName = "", string city = "", string street = "", string building = "", int porch = 0, int appartment = 0, string accountCornice = "", string telNum = "", double priceOneCornice = 0)
+        public Cornices(string ipn = "", string lastName = "", string name = "", string middleName = "", string city = "", string street = "", string building = "", int porch = 0, int apartment = 0, string accountCornice = "", string telNum = "", double priceOneCornice = 0)
         {
             Ipn = ipn;
             LastName = lastName;
@@ -34,7 +34,7 @@ namespace ais.Models
             Street = street;
             Building = building;
             Porch = porch;
-            Appartment = appartment;
+            Apartment = apartment;
             AccountCornice = accountCornice;
             TelNum = telNum;
             PriceOneCornice = priceOneCornice;
@@ -112,12 +112,12 @@ namespace ais.Models
                 OnPropertyChanged();
             }
         }
-        public int Appartment
+        public int Apartment
         {
-            get => appartment;
+            get => _apartment;
             set
             {
-                appartment = value;
+                _apartment = value;
                 OnPropertyChanged();
             }
         }

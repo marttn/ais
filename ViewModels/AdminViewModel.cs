@@ -17,6 +17,7 @@ namespace ais.ViewModels
         private string _type;
         private object _selectedRow;
 
+       // public ObservableCollection<Cust_Tel> Aaa { get; set; } = new ObservableCollection<Cust_Tel>(StationManager.DataStorage.CustTelsList);
         private ObservableCollection<object> _table/* = new ObservableCollection<object>()*/;
 
         private RelayCommand<object> _showTable;
@@ -78,7 +79,7 @@ namespace ais.ViewModels
             set
             {
                 _selectedRow = value;
-                OnPropertyChanged();
+                OnPropertyChanged("SelectedRow");
             }
         }
 
@@ -88,7 +89,7 @@ namespace ais.ViewModels
             /*private */set
             {
                 _table = value;
-                OnPropertyChanged("Table");
+               // OnPropertyChanged("Table");
             }
 }
 
@@ -251,7 +252,6 @@ namespace ais.ViewModels
                     break;
                 case "Contract_Goods":
                     StationManager.CurrentContractGoods = (Contract_Goods)SelectedRow;
-                    NavigationManager.Instance.Navigate(ViewType.NewContractGoods);
                     Table = new ObservableCollection<object>(StationManager.DataStorage.ContractGoodsList);
                     SelectedRow = null;
                     break;
@@ -273,12 +273,14 @@ namespace ais.ViewModels
                     StationManager.CurrentCustomer = (Customer)SelectedRow;
                     NavigationManager.Instance.Navigate(ViewType.UpdCustomer);
                     Table = new ObservableCollection<object>(StationManager.DataStorage.CustomersList);
+                   // StationManager.CurrentCustomer = new Customer();
                     SelectedRow = null;
                     break;
                 case "Cust_Tel":
                     StationManager.CurrentCustTel = (Cust_Tel)SelectedRow;
                     NavigationManager.Instance.Navigate(ViewType.UpdCustTel);
                     Table = new ObservableCollection<object>(StationManager.DataStorage.CustTelsList);
+
                     SelectedRow = null;
                     break;
                 case "Cornices":

@@ -9,10 +9,10 @@ namespace ais.ViewModels.AddingRowsVM
 {
     class CustomerViewModel
     {
-        private RelayCommand<object> addCust;
-        private RelayCommand<object> addTel;
+        private RelayCommand<object> _addCust;
+        private RelayCommand<object> _addTel;
 
-        public Customer CurrentCustomer { get; }
+        public Customer CurrentCustomer { get; set; }
 
         public CustomerViewModel()
         {
@@ -20,10 +20,7 @@ namespace ais.ViewModels.AddingRowsVM
             StationManager.CurrentCustomer = CurrentCustomer;
         }
 
-        public RelayCommand<object> AddCust
-        {
-            get => addCust ?? (addCust = new RelayCommand<object>(AddCustomerImplementation, CanAdd));
-        }
+        public RelayCommand<object> AddCust => _addCust ?? (_addCust = new RelayCommand<object>(AddCustomerImplementation, CanAdd));
 
         private bool CanAdd(object obj)
         {
@@ -33,20 +30,21 @@ namespace ais.ViewModels.AddingRowsVM
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Street) &&
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Building) &&
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Porch.ToString()) &&
-                   !string.IsNullOrWhiteSpace(CurrentCustomer.Appartment.ToString()) &&
+                   !string.IsNullOrWhiteSpace(CurrentCustomer.Apartment.ToString()) &&
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Email);
         }
 
         private void AddCustomerImplementation(object obj)
         {
             StationManager.DataStorage.AddCustomer(StationManager.CurrentCustomer);
+            //CurrentCustomer = new Customer();
             MessageBox.Show("row added");
             NavigationManager.Instance.Navigate(ViewType.NewCustTel);
         }
 
         public RelayCommand<object> AddTel
         {
-            get => addTel ?? (addTel = new RelayCommand<object>(AddCustTel, CanAddTel));
+            get => _addTel ?? (_addTel = new RelayCommand<object>(AddCustTel, CanAddTel));
         }
 
         private bool CanAddTel(object obj)

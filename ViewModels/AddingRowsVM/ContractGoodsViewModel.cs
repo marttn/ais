@@ -66,7 +66,7 @@ namespace ais.ViewModels.AddingRowsVM
                 sql3 = query.ExecuteReader();
                 while (sql3.Read())
                 {
-                    ListContracts.Add(sql1["Num_contract"].ToString().Trim(' '));
+                    ListContracts.Add(sql3["Num_contract"].ToString().Trim(' '));
                 }
                 sql3.Close();
             }
@@ -155,7 +155,8 @@ namespace ais.ViewModels.AddingRowsVM
                 conn.Open();
                 if (!string.IsNullOrWhiteSpace(NameCurtain))
                 {
-                    query1 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameCurtain + "'", conn);
+                    query1 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = @name_g", conn);
+                    query1.Parameters.AddWithValue("@name_g", NameCurtain);
                     reader1 = query1.ExecuteReader();
 
                     while (reader1.Read())
@@ -169,7 +170,8 @@ namespace ais.ViewModels.AddingRowsVM
                 }
                 if (!string.IsNullOrWhiteSpace(NameCornice))
                 {
-                    query2 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameCornice + "'", conn);
+                    query2 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = @name_g", conn);
+                    query2.Parameters.AddWithValue("@name_g", NameCornice);
                     reader2 = query2.ExecuteReader();
 
                     while (reader2.Read())
@@ -183,7 +185,8 @@ namespace ais.ViewModels.AddingRowsVM
                 }
                 if (!string.IsNullOrWhiteSpace(NameAccessories))
                 {
-                    query3 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameAccessories + "'", conn);
+                    query3 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = @name_g", conn);
+                    query3.Parameters.AddWithValue("@name_g", NameAccessories);
                     reader3 = query3.ExecuteReader();
 
                     while (reader3.Read())

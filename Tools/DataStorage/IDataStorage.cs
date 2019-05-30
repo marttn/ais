@@ -39,7 +39,7 @@ namespace ais.Tools.DataStorage
 
         void AddCustomer(Customer customer);
         void RemoveCustomer(Customer customer);
-        void UpdateCustomer(Customer customer, Customer Customer);
+        void UpdateCustomer(Customer customer, Customer newCustomer);
 
         void AddGoods(Goods goods);
         void RemoveGoods(Goods goods);

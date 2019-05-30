@@ -5,9 +5,211 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ais"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    
-    <Grid>
-        
+              d:DesignHeight="450" d:DesignWidth="780">
+    <Grid HorizontalAlignment="Stretch" Height="420" VerticalAlignment="Center" Width="780" Margin="0,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.25*"/>
+            <ColumnDefinition Width="0.8*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"  Background="#9999ff" Opacity="0.85" Panel.ZIndex="100" Grid.ColumnSpan="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="0.7*"/>
+                <RowDefinition Height="0.05*"/>
+            </Grid.RowDefinitions>
+            <Ellipse Grid.Row="1" HorizontalAlignment="Center" Grid.ColumnSpan="2" Height="95"  VerticalAlignment="Center" Width="95" OpacityMask="White" RenderTransformOrigin="0.579,0.469">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="idea.png"/>
+                </Ellipse.Fill>
+            </Ellipse>
+            <TextBlock Grid.Row="2" TextAlignment="Right" Padding="0, 0, 5, 0" Grid.Column="0"  TextWrapping="Wrap" Text= "{Binding Name, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Stretch" FontFamily="Verdana" FontSize="13"/>
+            <TextBlock Grid.Row="2" TextAlignment="Left" Padding="5, 0, 0, 0" Grid.Column="1" TextWrapping="Wrap" Text="{Binding LastName, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Stretch"  FontFamily="Verdana" FontSize="13"/>
+            <TextBlock Grid.Row="3" HorizontalAlignment="Center" Padding="0, 5, 0, 0" Grid.ColumnSpan="2"  TextWrapping="Wrap" Text="{Binding Login, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Stretch"  FontFamily="Verdana" FontSize="13"/>
+            <TextBlock Grid.Row="4" HorizontalAlignment="Center" Padding="0, 5, 0, 0" Grid.ColumnSpan="2"  TextWrapping="Wrap" Text="{Binding Type, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Stretch" FontFamily="Verdana" FontSize="13"/>
+            <Grid  Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center"  Margin="0, 0, 0, 5" VerticalAlignment="Center" Background="#FFA9B9E7" Opacity="0.9" MinWidth="130">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Content="Orders" HorizontalContentAlignment="Left" Padding="10" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="14" Click="Button_Click"/>
+                <Button Content="Customers" HorizontalContentAlignment="Left" Padding="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="14"/>
+                <Button Content="Cornice installers" HorizontalContentAlignment="Left" Padding="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="14"/>
+                <Button Content="Workshops" HorizontalContentAlignment="Left" Padding="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="3"  BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="14"/>
+                <Button Content="Contractors' prices" HorizontalContentAlignment="Left" Padding="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="4" BorderBrush="{x:Null}" Background="{x:Null}"  Foreground="White" FontFamily="Verdana" FontSize="14"/>
+            </Grid>
+            <Button HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0" Margin="10,10,0,10" VerticalAlignment="Stretch" Width="20" Height="20" BorderBrush="{x:Null}" Command="{Binding CloseCommand}">
+                <Button.Background>
+                    <ImageBrush ImageSource="power.png"/>
+                </Button.Background>
+            </Button>
+
+        </Grid>
+        <Grid Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Background="White"  >
+           <Grid Name="Orders" Visibility="Hidden">
+               <Grid.RowDefinitions>
+                   <RowDefinition Height="0.85*"/>
+                   <RowDefinition Height="0.15*"/>
+               </Grid.RowDefinitions>
+                <DataGrid Background="Transparent" SelectedItem="{Binding SelectedOrder}" ItemsSource="{Binding Orders, Mode=OneWay}" IsReadOnly="True" SelectionMode="Single"  AutoGenerateColumns="False" Grid.Row="0" Margin="10, 15">
+                   <DataGrid.Columns>
+                       <DataGridTextColumn Header="Num" Binding="{Binding NumOrd, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Date" Binding="{Binding DateOrd, StringFormat='dd/MM/yyyy',  Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Customer's ID" Binding="{Binding ID, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Workshop's code" Binding="{Binding CodeWorkshop, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Installer's code" Binding="{Binding Ipn, Mode=TwoWay}"/>
+                       <DataGridTextColumn Header="Charge for sewing"/>
+                       <DataGridTextColumn Header="Installation costs"/>
+                       <DataGridTextColumn Header="Price of goods"/>
+                       <DataGridTextColumn Header="Total cost"/>
+                    </DataGrid.Columns>
+               </DataGrid>
+               <Grid Row="1">
+                   <Grid.ColumnDefinitions>
+                       <ColumnDefinition Width="*"/>
+                       <ColumnDefinition Width="*"/>
+                       <ColumnDefinition Width="*"/>
+                       <ColumnDefinition Width="*"/>
+                   </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Margin="15" Content="Add" Command="{Binding AddCommand}"/>
+                    <Button Grid.Column="1" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Margin="15" Content="Update" Command="{Binding UpdateCommand}"/>
+                    <Button Grid.Column="2" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Margin="15" Content="Delete" Command="{Binding DeleteCommand}"/>
+                    <Button Grid.Column="3" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Margin="16" Content="Add items" Command="{Binding AddGoodsCommand}"/>
+
+                </Grid>
+           </Grid>
+
+            <Grid Name="Customers" Visibility="Hidden">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.85*"/>
+                    <RowDefinition Height="0.15*"/>
+                </Grid.RowDefinitions>
+                <DataGrid Background="Transparent" SelectedItem="{Binding SelectedCustomer}" ItemsSource="{Binding Customers, Mode=OneWay}" IsReadOnly="True" SelectionMode="Single"  AutoGenerateColumns="False" Grid.Row="0" Margin="10, 15">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding ID, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Last name" Binding="{Binding LastName,  Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Patronymic" Binding="{Binding MiddleName, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="City" Binding="{Binding City, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Street" Binding="{Binding Street, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Bldg" Binding="{Binding Building, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Porch" Binding="{Binding Porch, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Apt" Binding="{Binding Apartment, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email, Mode=TwoWay}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Margin="15" Content="Add" Command="{Binding AddCommand}"/>
+                    <Button Grid.Column="1" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Margin="15" Content="Update" Command="{Binding UpdateCommand}"/>
+                    <Button Grid.Column="2" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Margin="15" Content="Delete" Command="{Binding DeleteCommand}"/>
+                    <Button Grid.Column="3" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Margin="15" Content="Add num" Command="{Binding AddNumCommand}"/>
+                </Grid>
+            </Grid>
+
+            <Grid Name="Cornices" Visibility="Hidden">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.85*"/>
+                    <RowDefinition Height="0.15*"/>
+                </Grid.RowDefinitions>
+                <DataGrid Background="Transparent" SelectedItem="{Binding SelectedCornice}" ItemsSource="{Binding Cornices, Mode=OneWay}" IsReadOnly="True" SelectionMode="Single"  AutoGenerateColumns="False" Grid.Row="0" Margin="10, 15">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Code" Binding="{Binding Ipn, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Last name" Binding="{Binding LastName,  Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Patronymic" Binding="{Binding MiddleName, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="City" Binding="{Binding City, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Street" Binding="{Binding Street, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Bldg" Binding="{Binding Building, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Porch" Binding="{Binding Porch, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Apt" Binding="{Binding Apartment, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Account" Binding="{Binding AccountCornice, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Num" Binding="{Binding TelNum, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Price" Binding="{Binding PriceOneCornice, Mode=TwoWay}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Margin="15" Content="Add" Command="{Binding AddCommand}"/>
+                    <Button Grid.Column="1" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Margin="15" Content="Update" Command="{Binding UpdateCommand}"/>
+                    <Button Grid.Column="2" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Margin="15" Content="Delete" Command="{Binding DeleteCommand}"/>
+
+                </Grid>
+            </Grid>
+            <Grid Name="Workshops" Visibility="Hidden">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.85*"/>
+                    <RowDefinition Height="0.15*"/>
+                </Grid.RowDefinitions>
+                <DataGrid Background="Transparent" SelectedItem="{Binding SelectedWorkshop}" ItemsSource="{Binding Workshops, Mode=OneWay}" IsReadOnly="True" SelectionMode="Single"  AutoGenerateColumns="False" Grid.Row="0" Margin="10, 15">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Code" Binding="{Binding CodeWorkshop, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Num" Binding="{Binding TelNum, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="City" Binding="{Binding City, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Street" Binding="{Binding Street, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Bldg" Binding="{Binding Building, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Porch" Binding="{Binding Porch, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Office" Binding="{Binding Office, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Account" Binding="{Binding AccountShop, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Price" Binding="{Binding PriceOneCurtain, Mode=TwoWay}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Margin="15" Content="Add" Command="{Binding AddCommand}"/>
+                    <Button Grid.Column="1" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Margin="15" Content="Update" Command="{Binding UpdateCommand}"/>
+                    <Button Grid.Column="2" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Margin="15" Content="Delete" Command="{Binding DeleteCommand}"/>
+
+                </Grid>
+            </Grid>
+            <Grid Name="Prices" Visibility="Hidden">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.15*"/> 
+                    <RowDefinition Height="0.85*"/> 
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.65*"/>
+                    <ColumnDefinition Width="0.35*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Choose a contractor to find out prices" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Verdana" FontSize="16"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" Margin="15, 20" SelectedItem="{Binding SelectedContractor}" IsReadOnly="False" IsEditable="False" ItemsSource="{Binding ListContractors}"/>
+                <DataGrid Grid.Row="1" Grid.ColumnSpan="2" Margin="15" Background="Transparent">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Article" Binding="{Binding Articul, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Material" Binding="{Binding Material, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Characteristics" Binding="{Binding Characteristics, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Price"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+           
+        </Grid>
+
     </Grid>
 </UserControl>

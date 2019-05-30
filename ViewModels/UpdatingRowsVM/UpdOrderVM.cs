@@ -15,8 +15,8 @@ namespace ais.ViewModels.UpdatingRowsVM
         private RelayCommand<object> updateOrder;
 
         private string _id;
-        private string _codeWorkshop;
-        private string _ipn;
+        private string _codeWorkshop = "";
+        private string _ipn = "";
 
         SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
 
@@ -125,13 +125,9 @@ namespace ais.ViewModels.UpdatingRowsVM
                     ListWorkshops.Add(select["name_shop"].ToString().Trim(' '));
                 }
                 select.Close();
-                SqlCommand query1 = new SqlCommand("SELECT last_name, name_cust FROM Customer WHERE ID = '" + CurrentOrder.ID+ "'", conn);
-                SqlDataReader select1 = query1.ExecuteReader();
-                while (select1.Read())
-                {
-                    ID = select1["name_cust"].ToString().Trim(' ') + " " + select1["last_name"].ToString().Trim(' ');
-                }
-                select1.Close();
+
+               
+
                 SqlCommand query2 = new SqlCommand("SELECT last_name, name_c FROM Cornices", conn);
                 SqlDataReader select2 = query2.ExecuteReader();
                 while (select2.Read())
@@ -139,6 +135,36 @@ namespace ais.ViewModels.UpdatingRowsVM
                     ListCornices.Add(select2["name_c"].ToString().Trim(' ') + " " + select2["last_name"].ToString().Trim(' '));
                 }
                 select2.Close();
+
+                //id, ipn, code
+
+                SqlCommand query1 = new SqlCommand("SELECT last_name, name_cust FROM Customer WHERE ID = '" + CurrentOrder.ID + "'", conn);
+                SqlDataReader select1 = query1.ExecuteReader();
+                while (select1.Read())
+                {
+                    ID = select1["name_cust"].ToString().Trim(' ') + " " + select1["last_name"].ToString().Trim(' ');
+                }
+                select1.Close();
+
+                SqlCommand query3 = new SqlCommand("SELECT name_shop FROM Workshop WHERE Code_workshop = '" + CurrentOrder.CodeWorkshop + "'", conn);
+                SqlDataReader select3 = query3.ExecuteReader();
+                while (select3.Read())
+                {
+                    if (select3["name_shop"] == DBNull.Value)
+                        CodeWorkshop = "";
+                    CodeWorkshop = select3["name_shop"].ToString().Trim(' ');
+                }
+                select3.Close();
+
+                SqlCommand query4 = new SqlCommand("SELECT last_name, name_c FROM Cornices WHERE Ipn = '" + CurrentOrder.Ipn + "'", conn);
+                SqlDataReader select4 = query4.ExecuteReader();
+                while (select4.Read())
+                {
+                    if (select4["name_c"] == DBNull.Value)
+                        Ipn = "";
+                    Ipn = select4["name_c"].ToString().Trim(' ') + " " + select4["last_name"].ToString().Trim(' ');
+                }
+                select4.Close();
             }
             catch (Exception exc)
             {

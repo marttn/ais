@@ -33,7 +33,7 @@
         <xctk:IntegerUpDown Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="170,0,0,0" Minimum="0" Height="20" Width="40" Value="{Binding CurrentCustomer.Building}"/>
         <Label Content="Porch" Grid.Column="1" HorizontalAlignment="Left" Margin="215,0,0,0" Grid.Row="4" VerticalAlignment="Center" FontFamily="Verdana" FontSize="18" RenderTransformOrigin="0.358,0.469" Width="65"/>
         <xctk:IntegerUpDown Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="275,0,0,0" Minimum="0" Height="20" Width="35" Value="{Binding CurrentCustomer.Porch}"/>
-        <Label Content="Appartment" Grid.Column="1" HorizontalAlignment="Left" Margin="315,0,0,0" Grid.Row="4" VerticalAlignment="Center" FontFamily="Verdana" FontSize="18" />
+        <Label Content="Apartment" Grid.Column="1" HorizontalAlignment="Left" Margin="315,0,0,0" Grid.Row="4" VerticalAlignment="Center" FontFamily="Verdana" FontSize="18" />
         <xctk:IntegerUpDown Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="435,0,0,0" Minimum="0" Height="20" Width="45" Value="{Binding CurrentCustomer.Appartment}"/>
         <Label Content="E-mail" Grid.Column="0" Grid.Row="5" Margin="20,0,0,0" Width="70" HorizontalAlignment="Left" FontFamily="Verdana" FontSize="18" VerticalContentAlignment="Center" />
         <Button Content="Add" Grid.Column="1" HorizontalAlignment="Left" Margin="65,0,0,0" Grid.Row="6" VerticalAlignment="Center" Width="105" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="14" FontFamily="Verdana" Command="{Binding AddCust}"/>

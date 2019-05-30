@@ -33,7 +33,7 @@
         <Label Content="Street" Width="70" Grid.Column="0" Grid.Row="5" Margin="80,0,0,0" FontFamily="Verdana" FontSize="18" VerticalAlignment="Center"/>
         <Label Content="Building" Width="85" Grid.Column="1" Grid.Row="5" Margin="35,0,0,0" FontFamily="Verdana" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <Label Content="Porch" Width="60" Grid.Column="1" Grid.Row="5" Margin="175,0,0,0" HorizontalAlignment="Left" FontFamily="Verdana" FontSize="18" VerticalAlignment="Center"/>
-        <Label Content="Appartment" Width="120" Grid.Column="1" Grid.Row="5" Margin="215,0,0,0" FontFamily="Verdana" FontSize="18" VerticalAlignment="Center"/>
+        <Label Content="Apartment" Width="120" Grid.Column="1" Grid.Row="5" Margin="215,0,0,0" FontFamily="Verdana" FontSize="18" VerticalAlignment="Center"/>
         <Label Content="Bank account" Grid.Column="0" Grid.Row="6" Margin="20, 0, 0, 0"  FontFamily="Verdana" FontSize="18" VerticalAlignment="Center"/>
         <Label Content="Tel. number" Grid.Column="0" Grid.Row="7" Margin="20, 0, 0, 0"  FontFamily="Verdana" FontSize="18" VerticalAlignment="Center"/>
         <Label Content="Price" Grid.Column="0" Grid.Row="8" Margin="20, 0, 0, 0"  FontFamily="Verdana" FontSize="18" VerticalAlignment="Center"/>

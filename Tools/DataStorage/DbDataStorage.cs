@@ -11,20 +11,20 @@ namespace ais.Tools.DataStorage
 {
     class DbDataStorage : IDataStorage
     {
-        public List<Workshop> workshopsList;
-        public List<Order> ordersList;
-        public List<Contract> contractsList;
-        public List<Contract_Goods> contractGoodsList;
-        public List<Contractor> contractorsList;
-        public List<Contractor_Goods> contractorGoodsList;
-        public List<Contractor_Tel> contractorTelList;
-        public List<Cornices> cornicesList;
-        public List<Cust_Tel> custTelsList;
-        public List<Customer> customersList;
-        public List<Goods> goodsList;
-        public List<Order_Goods> orderGoodsList;
+        private List<Workshop> workshopsList;
+        private List<Order> ordersList;
+        private List<Contract> contractsList;
+        private List<Contract_Goods> contractGoodsList;
+        private List<Contractor> contractorsList;
+        private List<Contractor_Goods> contractorGoodsList;
+        private List<Contractor_Tel> contractorTelList;
+        private List<Cornices> cornicesList;
+        private List<Cust_Tel> custTelsList;
+        private List<Customer> customersList;
+        private List<Goods> _goodsList;
+        private List<Order_Goods> _orderGoodsList;
 
-        SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
+        readonly SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
 
         public List<Order> OrdersList { get => ordersList; }
         public List<Contract> ContractsList { get => contractsList; }
@@ -35,8 +35,8 @@ namespace ais.Tools.DataStorage
         public List<Cornices> CornicesList { get => cornicesList; }
         public List<Cust_Tel> CustTelsList { get => custTelsList; }
         public List<Customer> CustomersList { get => customersList; }
-        public List<Goods> GoodsList { get => goodsList; }
-        public List<Order_Goods> OrderGoodsList { get => orderGoodsList; }
+        public List<Goods> GoodsList { get => _goodsList; }
+        public List<Order_Goods> OrderGoodsList { get => _orderGoodsList; }
         public List<Workshop> WorkshopsList { get => workshopsList; }
 
         public DbDataStorage()
@@ -52,8 +52,8 @@ namespace ais.Tools.DataStorage
             cornicesList = new List<Cornices>();
             custTelsList = new List<Cust_Tel>();
             customersList = new List<Customer>();
-            goodsList = new List<Goods>();
-            orderGoodsList = new List<Order_Goods>();
+            _goodsList = new List<Goods>();
+            _orderGoodsList = new List<Order_Goods>();
             try
             {
                 if (conn == null)
@@ -189,7 +189,7 @@ namespace ais.Tools.DataStorage
                 da8.Fill(dataTable8);
                 for (int i = 0; i < dataTable8.Rows.Count; ++i)
                 {
-                        goodsList.Add(new Goods(
+                        _goodsList.Add(new Goods(
                             dataTable8.Rows[i][0].ToString() ?? "",
                             dataTable8.Rows[i][1].ToString() ?? "",
                             dataTable8.Rows[i][2].ToString() ?? "",
@@ -215,7 +215,7 @@ namespace ais.Tools.DataStorage
                 da10.Fill(dataTable10);
                 for (int i = 0; i < dataTable10.Rows.Count; ++i)
                 {
-                        orderGoodsList.Add(new Order_Goods(
+                        _orderGoodsList.Add(new Order_Goods(
                             dataTable10.Rows[i][0].ToString() ?? "",
                             dataTable10.Rows[i][1].ToString() ?? "",
                             Convert.ToInt32(dataTable10.Rows[i][2])));
@@ -412,6 +412,7 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("DELETE FROM Contract WHERE Num_contract = '" + contract.NumContract + "'", conn);
                 query.ExecuteNonQuery();
                 ContractsList.Remove(contract);
+                ContractGoodsList.RemoveAll(x => x.NumContract == contract.NumContract);
             }
             catch (Exception exc)
             {
@@ -458,6 +459,9 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("DELETE FROM Contractor WHERE Code_contractor = '" + contractor.CodeContractor + "'", conn);
                 query.ExecuteNonQuery();
                 ContractorsList.Remove(contractor);
+                ContractorTelList.RemoveAll(x => x.CodeContractor == contractor.CodeContractor);
+                ContractsList.RemoveAll(x => x.CodeContractor == contractor.CodeContractor);
+                ContractorGoodsList.RemoveAll(x => x.CodeContractor == contractor.CodeContractor);
             }
             catch (Exception exc)
             {
@@ -503,7 +507,8 @@ namespace ais.Tools.DataStorage
                 conn.Open();
                 SqlCommand query = new SqlCommand("DELETE FROM [Order] WHERE Num_ord = '" + order.NumOrd +  "'", conn);
                 query.ExecuteNonQuery();
-                ordersList.Remove(order);
+                OrdersList.Remove(order);
+                OrderGoodsList.RemoveAll(x => x.NumOrd == order.NumOrd);
             }
             catch (Exception exc)
             {
@@ -576,7 +581,7 @@ namespace ais.Tools.DataStorage
                     throw new Exception("Connection String is Null");
                 }
                 conn.Open();
-                SqlCommand query = new SqlCommand("INSERT INTO Cornices VALUES (@Ipn, @last_name, @name_c, @middle_name, @city, @street, @building, @porch, @appartment, @account_cornice, @tel_num, price_1_cornice)", conn);
+                SqlCommand query = new SqlCommand("INSERT INTO Cornices VALUES (@Ipn, @last_name, @name_c, @middle_name, @city, @street, @building, @porch, @apartment, @account_cornice, @tel_num, @price_1_cornice)", conn);
                 query.Parameters.AddWithValue("@Ipn", cornices.Ipn);
                 query.Parameters.AddWithValue("@last_name", cornices.LastName);
                 query.Parameters.AddWithValue("@name_c", cornices.Name);
@@ -585,12 +590,13 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@street", (object)cornices.Street ?? DBNull.Value);
                 query.Parameters.AddWithValue("@building", (object)cornices.Building ?? DBNull.Value);
                 query.Parameters.AddWithValue("@porch", (object)cornices.Porch ?? DBNull.Value);
-                query.Parameters.AddWithValue("@appartment", (object)cornices.Appartment ?? DBNull.Value);
+                query.Parameters.AddWithValue("@apartment", (object)cornices.Apartment ?? DBNull.Value);
                 query.Parameters.AddWithValue("@account_cornice", cornices.AccountCornice);
                 query.Parameters.AddWithValue("@tel_num", cornices.TelNum);
                 query.Parameters.AddWithValue("@price_1_cornice", cornices.PriceOneCornice);
                 query.ExecuteNonQuery();
-                CornicesList.Add(cornices);
+                if (!CornicesList.Any(x => x.Ipn == cornices.Ipn))
+                    CornicesList.Add(cornices);
             }
             catch (Exception exc)
             {
@@ -614,6 +620,7 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("DELETE FROM Cornices WHERE Ipn = '" + cornices.Ipn + "'", conn);
                 query.ExecuteNonQuery();
                 CornicesList.Remove(cornices);
+                OrdersList.RemoveAll(x => x.Ipn == cornices.Ipn);
             }
             catch (Exception exc)
             {
@@ -693,7 +700,7 @@ namespace ais.Tools.DataStorage
                 }
                 while (CustomersList.Any(u => u.ID.Equals(id)));
                 customer.ID = id;
-                SqlCommand query = new SqlCommand("INSERT INTO Customer VALUES (@ID, @last_name, @name_cust, @middle_name, @city, @street, @building, @porch, @appartment, @email)", conn);
+                SqlCommand query = new SqlCommand("INSERT INTO Customer VALUES (@ID, @last_name, @name_cust, @middle_name, @city, @street, @building, @porch, @apartment, @email)", conn);
                 query.Parameters.AddWithValue("@ID", customer.ID);
                 query.Parameters.AddWithValue("@last_name", customer.LastName);
                 query.Parameters.AddWithValue("@name_cust", customer.Name);
@@ -702,7 +709,7 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@street", customer.Street);
                 query.Parameters.AddWithValue("@building", customer.Building);
                 query.Parameters.AddWithValue("@porch", customer.Porch);
-                query.Parameters.AddWithValue("@appartment", customer.Appartment);
+                query.Parameters.AddWithValue("@apartment", customer.Apartment);
                 query.Parameters.AddWithValue("@email", customer.Email);
                 query.ExecuteNonQuery();
                 CustomersList.Add(customer);
@@ -729,6 +736,8 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("DELETE FROM Customer WHERE ID = '" + customer.ID + "'", conn);
                 query.ExecuteNonQuery();
                 CustomersList.Remove(customer);
+                CustTelsList.RemoveAll(x => x.ID == customer.ID);
+                OrdersList.RemoveAll(x => x.ID == customer.ID);
             }
             catch (Exception exc)
             {
@@ -789,6 +798,9 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("DELETE FROM Goods WHERE Articul = '" + goods.Articul + "'", conn);
                 query.ExecuteNonQuery();
                 GoodsList.Remove(goods);
+                OrderGoodsList.RemoveAll(x => x.Articul == goods.Articul);
+                ContractGoodsList.RemoveAll(x => x.Articul == goods.Articul);
+                ContractorGoodsList.RemoveAll(x => x.Articul == goods.Articul);
             }
             catch (Exception exc)
             {
@@ -898,6 +910,8 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("DELETE FROM Workshop WHERE Code_workshop = '" + workshop.CodeWorkshop+ "'", conn);
                 query.ExecuteNonQuery();
                 WorkshopsList.Remove(workshop);
+                OrdersList.RemoveAll(x => x.CodeWorkshop == workshop.CodeWorkshop);
+                OrdersList.RemoveAll(x => x.CodeWorkshop == workshop.CodeWorkshop);
             }
             catch (Exception exc)
             {
@@ -929,12 +943,56 @@ namespace ais.Tools.DataStorage
 
         public void UpdateOrder(Order order, Order newOrder)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("UPDATE [Order] SET date_ord = @date_ord, Code_workshop = @Code_workshop, Ipn = @Ipn WHERE Num_ord = '" + order.NumOrd + "'", conn);
+                query.Parameters.AddWithValue("@date_ord",  newOrder.DateOrd);
+                query.Parameters.AddWithValue("@Code_workshop", (object) newOrder.CodeWorkshop ?? DBNull.Value);
+                query.Parameters.AddWithValue("@Ipn", (object)newOrder.Ipn ?? DBNull.Value);
+                query.ExecuteNonQuery();
+                var obj = OrdersList.FirstOrDefault(x => x.NumOrd == order.NumOrd);
+                obj.DateOrd = newOrder.DateOrd;
+                obj.CodeWorkshop = newOrder.CodeWorkshop ?? "";
+                obj.Ipn= newOrder.Ipn ?? "";
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         public void UpdateContract(Contract contract, Contract newContract)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("UPDATE Contract SET date_contract = @date_contract WHERE Num_contract = '" + contract.NumContract + "'", conn);
+                query.Parameters.AddWithValue("@date_contract", newContract.DateContract);
+                query.ExecuteNonQuery();
+                var obj = ContractsList.FirstOrDefault(x => x.NumContract == contract.NumContract);
+                obj.DateContract = newContract.DateContract;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         public void UpdateContractGoods(Contract_Goods contrgoods, Contract_Goods newContract_Goods)
@@ -964,7 +1022,41 @@ namespace ais.Tools.DataStorage
 
         public void UpdateContractor(Contractor contractor, Contractor newContractor)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("UPDATE Contractor SET Name_contr = @Name_contr, city = @city, street = @street, building = @building, porch = @porch, office = @office, account_contr = @account_contr, email = @email WHERE Code_contractor = '" + contractor.CodeContractor + "'", conn);
+                query.Parameters.AddWithValue("@Name_contr", newContractor.NameContractor);
+                query.Parameters.AddWithValue("@city", newContractor.City);
+                query.Parameters.AddWithValue("@street", newContractor.Street);
+                query.Parameters.AddWithValue("@building", newContractor.Building);
+                query.Parameters.AddWithValue("@porch", newContractor.Porch);
+                query.Parameters.AddWithValue("@office", newContractor.Office);
+                query.Parameters.AddWithValue("@account_contr", newContractor.Account);
+                query.Parameters.AddWithValue("@email", newContractor.Email);
+                query.ExecuteNonQuery();
+                var obj = ContractorsList.FirstOrDefault(x => x.CodeContractor == contractor.CodeContractor);
+                obj.NameContractor = newContractor.NameContractor;
+                obj.City = newContractor.City;
+                obj.Street = newContractor.Street;
+                obj.Building = newContractor.Building;
+                obj.Porch = newContractor.Porch;
+                obj.Office = newContractor.Office;
+                obj.Account = newContractor.Account;
+                obj.Email = newContractor.Email;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         public void UpdateContractorTel(Contractor_Tel contrtel, Contractor_Tel newContractor_Tel)
@@ -1019,7 +1111,47 @@ namespace ais.Tools.DataStorage
 
         public void UpdateCornices(Cornices cornices, Cornices newCornices)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("UPDATE Cornices SET last_name = @last_name, name_c = @name_c, middle_name = @middle_name, city = @city, street = @street, building = @building, porch = @porch, apartment = @apartment, account_cornice = @account_cornice, tel_num = @tel_num, price_1_cornice = @price_1_cornice WHERE Ipn = '" + cornices.Ipn + "'", conn);
+                query.Parameters.AddWithValue("@last_name", newCornices.LastName);
+                query.Parameters.AddWithValue("@name_c", newCornices.Name);
+                query.Parameters.AddWithValue("@middle_name", (object) newCornices.MiddleName ?? DBNull.Value);
+                query.Parameters.AddWithValue("@city", (object) newCornices.City ?? DBNull.Value);
+                query.Parameters.AddWithValue("@street", (object)newCornices.Street ?? DBNull.Value);
+                query.Parameters.AddWithValue("@building", (object)newCornices.Building ?? DBNull.Value);
+                query.Parameters.AddWithValue("@porch", (object)newCornices.Porch ?? DBNull.Value);
+                query.Parameters.AddWithValue("@apartment", (object)newCornices.Apartment ?? DBNull.Value);
+                query.Parameters.AddWithValue("@account_cornice", newCornices.AccountCornice);
+                query.Parameters.AddWithValue("@tel_num", newCornices.TelNum);
+                query.Parameters.AddWithValue("@price_1_cornice", newCornices.PriceOneCornice);
+                query.ExecuteNonQuery();
+                var obj = CornicesList.FirstOrDefault(x => x.Ipn == cornices.Ipn);
+                obj.LastName = newCornices.LastName;
+                obj.Name = newCornices.Name;
+                obj.MiddleName = newCornices.MiddleName ?? "";
+                obj.City = newCornices.City ?? "";
+                obj.Street = newCornices.Street ?? "";
+                obj.Building = newCornices.Building ?? "";
+                obj.Porch = newCornices.Porch;// ?? ""
+                obj.Apartment = newCornices.Apartment;// ?? ""
+                obj.AccountCornice = newCornices.AccountCornice;
+                obj.TelNum = newCornices.TelNum;
+                obj.PriceOneCornice = newCornices.PriceOneCornice;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         public void UpdateCustTel(Cust_Tel cust_Tel, Cust_Tel newCust_Tel)
@@ -1047,24 +1179,138 @@ namespace ais.Tools.DataStorage
             }
         }
 
-        public void UpdateCustomer(Customer customer, Customer Customer)
+        public void UpdateCustomer(Customer customer, Customer newCustomer)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("UPDATE Customer SET last_name = @last_name, name_cust = @name_cust, middle_name = @middle_name, city = @city, street = @street, building = @building, porch = @porch, apartment = @apartment, email = @email WHERE [ID] = '" + customer.ID + "'", conn);
+                query.Parameters.AddWithValue("@last_name", newCustomer.LastName);
+                query.Parameters.AddWithValue("@name_cust", newCustomer.Name);
+                query.Parameters.AddWithValue("@middle_name", (object)newCustomer.MiddleName ?? DBNull.Value);
+                query.Parameters.AddWithValue("@city", newCustomer.City);
+                query.Parameters.AddWithValue("@street", newCustomer.Street);
+                query.Parameters.AddWithValue("@building", newCustomer.Building);
+                query.Parameters.AddWithValue("@porch", newCustomer.Porch);
+                query.Parameters.AddWithValue("@apartment", newCustomer.Apartment);
+                query.Parameters.AddWithValue("@email", newCustomer.Email);
+                query.ExecuteNonQuery();
+                var obj = CustomersList.FirstOrDefault(x => x.ID == customer.ID);
+                obj.LastName = newCustomer.LastName;
+                obj.Name = newCustomer.Name;
+                obj.MiddleName = newCustomer.MiddleName ?? "";
+                obj.City = newCustomer.City;
+                obj.Street = newCustomer.Street;
+                obj.Building = newCustomer.Building;
+                obj.Porch = newCustomer.Porch;
+                obj.Apartment = newCustomer.Apartment;
+                obj.Email = newCustomer.Email;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         public void UpdateGoods(Goods goods, Goods newGoods)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("UPDATE Goods SET name_g = @name_g, characteristics = @characteristics WHERE Articul = '" + goods.Articul + "'", conn);
+                query.Parameters.AddWithValue("@name_g", newGoods.Name);
+                query.Parameters.AddWithValue("@characteristics", newGoods.Characteristics);
+                query.ExecuteNonQuery();
+                var obj = GoodsList.FirstOrDefault(x => x.Articul == goods.Articul);
+                obj.Name = newGoods.Name;
+                obj.Characteristics = newGoods.Characteristics;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         public void UpdateOrderGoods(Order_Goods order_Goods, Order_Goods newOrder_Goods)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("UPDATE Order_Goods SET quantity_goods = @quantity_goods WHERE Articul = '" + order_Goods.Articul + "' AND Num_ord = '" + order_Goods.NumOrd + "'", conn);
+                query.Parameters.AddWithValue("@quantity_goods", newOrder_Goods.QuantityGoods);
+                query.ExecuteNonQuery();
+                var obj = OrderGoodsList.FirstOrDefault(x => x.NumOrd == order_Goods.NumOrd && x.Articul == order_Goods.Articul);
+                obj.QuantityGoods = newOrder_Goods.QuantityGoods;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         public void UpdateWorkshop(Workshop workshop, Workshop newWorkshop)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("UPDATE Workshop SET name_shop = @name_shop, tel_num = @tel_num, city = @city, street = @street, building = @building, porch = @porch, office = @office, account_shop = @account_shop, price_1_curtain = @price_1_curtain WHERE Code_workshop = '" + workshop.CodeWorkshop + "'", conn);
+                query.Parameters.AddWithValue("@name_shop", newWorkshop.Name);
+                query.Parameters.AddWithValue("@tel_num", newWorkshop.TelNum);
+                query.Parameters.AddWithValue("@city", newWorkshop.City);
+                query.Parameters.AddWithValue("@street",newWorkshop.Street);
+                query.Parameters.AddWithValue("@building", newWorkshop.Building);
+                query.Parameters.AddWithValue("@porch", (object)newWorkshop.Porch ?? DBNull.Value);
+                query.Parameters.AddWithValue("@office", newWorkshop.Office);
+                query.Parameters.AddWithValue("@account_shop", newWorkshop.AccountShop);
+                query.Parameters.AddWithValue("@price_1_curtain", newWorkshop.PriceOneCurtain);
+                query.ExecuteNonQuery();
+                var obj = WorkshopsList.FirstOrDefault(x => x.CodeWorkshop == workshop.CodeWorkshop);
+                obj.Name = newWorkshop.Name;
+                obj.TelNum = newWorkshop.TelNum;
+                obj.City = newWorkshop.City;
+                obj.Street = newWorkshop.Street;
+                obj.Building = newWorkshop.Building;
+                obj.Porch = newWorkshop.Porch;
+                obj.Office = newWorkshop.Office;
+                obj.AccountShop = newWorkshop.AccountShop;
+                obj.PriceOneCurtain = newWorkshop.PriceOneCurtain;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
     }
 }

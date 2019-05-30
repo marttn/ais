@@ -13,10 +13,10 @@ namespace ais.Models
         private string street;
         private string building;
         private int porch;
-        private int appartment;
+        private int _apartment;
         private string email;
 
-        public Customer(string iD = "", string lastName = "", string name = "", string middleName = "", string city = "", string street = "", string building = "", int porch = 0, int appartment= 0, string email = "")
+        public Customer(string iD = "", string lastName = "", string name = "", string middleName = "", string city = "", string street = "", string building = "", int porch = 0, int apartment= 0, string email = "")
         {
             ID = iD;
             LastName = lastName;
@@ -26,7 +26,7 @@ namespace ais.Models
             Street = street;
             Building = building;
             Porch = porch;
-            Appartment = appartment;
+            Apartment = apartment;
             Email = email;
         }
 
@@ -105,12 +105,12 @@ namespace ais.Models
                 OnPropertyChanged();
             }
         }
-        public int Appartment
+        public int Apartment
         {
-            get => appartment;
+            get => _apartment;
             set
             {
-                appartment = value;
+                _apartment = value;
                 OnPropertyChanged();
             }
         }
