@@ -65,5 +65,10 @@ namespace ais.Tools.DataStorage
         List<Goods> GoodsList { get; }
         List<Order_Goods> OrderGoodsList { get; }
         List<Workshop> WorkshopsList { get; }
+
+        List<string> NameList { get; }
+        List<string> NameContractors();
+        List<string> PricesList { get; }
+        List<string> LoadList();
     }
 }

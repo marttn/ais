@@ -104,14 +104,7 @@ namespace ais.ViewModels
                     MessageBox.Show("Success");
                    // MessageBox.Show(name+" "+ type);
                     StationManager.CurrentUser = new Users(name, lastname, login, type);
-                    if (type.Equals("Admin"))
-                    {
-                        NavigationManager.Instance.Navigate(ViewType.Admin);
-                    }
-                    else
-                    {
-                        NavigationManager.Instance.Navigate(ViewType.Designer);
-                    }
+                    NavigationManager.Instance.Navigate(type.Equals("Admin") ? ViewType.Admin : ViewType.Designer);
                 }
                 else
                 {

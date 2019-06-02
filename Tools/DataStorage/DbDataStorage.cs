@@ -39,9 +39,77 @@ namespace ais.Tools.DataStorage
         public List<Order_Goods> OrderGoodsList { get => _orderGoodsList; }
         public List<Workshop> WorkshopsList { get => workshopsList; }
 
+        public List<string> NameList { get; } = new List<string>();
+
+        public List<string> NameContractors()
+        {
+                try
+                {
+                    NameList.Clear();
+                    conn.Open();
+
+                    SqlCommand query = new SqlCommand("SELECT Name_contr FROM Contractor", conn);
+                    SqlDataReader reader = query.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        NameList.Add(reader["Name_contr"].ToString().Trim(' '));
+                    }
+                    reader.Close();
+                }
+                catch (Exception exc)
+                {
+                    MessageBox.Show(exc.Message);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+
+                return NameList;
+        }
+
+        public List<string> PricesList { get; } = new List<string>();
+        public List<string> LoadList()
+        {
+            try
+            {
+                PricesList.Clear();
+                conn.Open();
+
+                SqlCommand query = new SqlCommand("select Articul, [01234984], [09473433], [11111111], [12345098], [23801858], [28853090], [45800125], [73540129], [78012753], [88412345], [94820123] from Contractor_Goods pivot (sum(Contractor_Goods.price_1_product) for Code_contractor in ([01234984], [09473433], [11111111], [12345098], [23801858], [28853090], [45800125], [73540129], [78012753], [88412345], [94820123])) as aaa", conn);
+                SqlDataReader reader = query.ExecuteReader();
+                while (reader.Read())
+                {
+                    PricesList.Add(reader.GetString(0) + 
+                                   reader.GetString(1) + 
+                                   reader.GetString(2) + 
+                                   reader.GetString(3) +
+                                   reader.GetString(4) +
+                                   reader.GetString(5) +
+                                   reader.GetString(6) +
+                                   reader.GetString(7) +
+                                   reader.GetString(8) +
+                                   reader.GetString(9) +
+                                   reader.GetString(10) 
+                                   );
+                }
+                reader.Close();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return PricesList;
+        }
+
+
         public DbDataStorage()
         {
-            // SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
             workshopsList = new List<Workshop>();
             ordersList = new List<Order>();
             contractsList = new List<Contract>();
@@ -54,6 +122,7 @@ namespace ais.Tools.DataStorage
             customersList = new List<Customer>();
             _goodsList = new List<Goods>();
             _orderGoodsList = new List<Order_Goods>();
+            
             try
             {
                 if (conn == null)
