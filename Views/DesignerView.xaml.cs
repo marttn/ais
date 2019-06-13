@@ -39,6 +39,7 @@ namespace ais.Views
             Cornices.Visibility = Visibility.Hidden;
             Workshops.Visibility = Visibility.Hidden;
             Prices.Visibility = Visibility.Hidden;
+            Reports.Visibility = Visibility.Hidden;
             Orders.Visibility = Visibility.Visible;
             StationManager.CurrentTableType = "Order";
         }
@@ -49,6 +50,7 @@ namespace ais.Views
             Workshops.Visibility = Visibility.Hidden;
             Prices.Visibility = Visibility.Hidden;
             Orders.Visibility = Visibility.Hidden;
+            Reports.Visibility = Visibility.Hidden;
             Customers.Visibility = Visibility.Visible;
             StationManager.CurrentTableType = "Customer";
         }
@@ -59,6 +61,7 @@ namespace ais.Views
             Prices.Visibility = Visibility.Hidden;
             Orders.Visibility = Visibility.Hidden;
             Customers.Visibility = Visibility.Hidden;
+            Reports.Visibility = Visibility.Hidden;
             Cornices.Visibility = Visibility.Visible;
             StationManager.CurrentTableType = "Cornices";
         }
@@ -69,6 +72,7 @@ namespace ais.Views
             Orders.Visibility = Visibility.Hidden;
             Customers.Visibility = Visibility.Hidden;
             Cornices.Visibility = Visibility.Hidden;
+            Reports.Visibility = Visibility.Hidden;
             Workshops.Visibility = Visibility.Visible;
             StationManager.CurrentTableType = "Workshop";
         }
@@ -79,13 +83,19 @@ namespace ais.Views
             Customers.Visibility = Visibility.Hidden;
             Cornices.Visibility = Visibility.Hidden;
             Workshops.Visibility = Visibility.Hidden;
+            Reports.Visibility = Visibility.Hidden;
             Prices.Visibility = Visibility.Visible;
             StationManager.CurrentTableType = "Goods";
         }
 
         private void ReportsClick(object sender, RoutedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            Orders.Visibility = Visibility.Hidden;
+            Customers.Visibility = Visibility.Hidden;
+            Cornices.Visibility = Visibility.Hidden;
+            Workshops.Visibility = Visibility.Hidden;
+            Prices.Visibility = Visibility.Hidden;
+            Reports.Visibility = Visibility.Visible;
         }
 
         

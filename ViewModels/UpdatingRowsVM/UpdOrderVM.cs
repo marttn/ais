@@ -1,18 +1,18 @@
-﻿using ais.Models;
+﻿using System;
+using System.Collections.ObjectModel;
+using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using System;
-using System.Collections.ObjectModel;
+using System.Windows;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Runtime.CompilerServices;
-using System.Windows;
 
 namespace ais.ViewModels.UpdatingRowsVM
 {
     class UpdOrderVM
     {
-        private RelayCommand<object> updateOrder;
+        private RelayCommand<Window> updateOrder;
 
         private string _id;
         private string _codeWorkshop = "";
@@ -29,17 +29,17 @@ namespace ais.ViewModels.UpdatingRowsVM
         public ObservableCollection<string> ListWorkshops { get; } = new ObservableCollection<string>();
         public ObservableCollection<string> ListCornices { get; } = new ObservableCollection<string>();
 
-        public RelayCommand<object> UpdateOrder
+        public RelayCommand<Window> UpdateOrder
         {
-            get => updateOrder ?? (updateOrder = new RelayCommand<object>(UpdImpl, CanUpd));
+            get => updateOrder ?? (updateOrder = new RelayCommand<Window>(UpdImpl, CanUpd));
         }
 
-        private bool CanUpd(object obj)
+        private bool CanUpd(Window obj)
         {
             return CurrentOrder.DateOrd <= DateTime.Now;
         }
 
-        private void UpdImpl(object obj)
+        private void UpdImpl(Window obj)
         {
             string code = null, ipn = null;
             SqlDataReader reader, reader2;
@@ -76,7 +76,7 @@ namespace ais.ViewModels.UpdatingRowsVM
             CurrentOrder.Ipn = ipn;
             StationManager.DataStorage.UpdateOrder(StationManager.CurrentOrder, CurrentOrder);
             StationManager.CurrentOrder = CurrentOrder;
-            NavigationManager.Instance.Navigate(Tools.Navigation.ViewType.Admin);
+            obj.Close();
         }
 
         public string ID

@@ -1,0 +1,13 @@
+﻿<Window x:Class="ais.Views.Print" SizeToContent="WidthAndHeight"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ais.Views"
+        mc:Ignorable="d"
+        Title="Print selected table" Height="450" Width="800">
+    <Grid >
+        <DataGrid Name="Table" Margin="25,25,25, 60" Background="Transparent" AutoGenerateColumns="True"  ItemsSource="{Binding Path=SelectedTable, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" IsReadOnly="True"/>
+        <Button Height="35" Width="120" Margin="10" VerticalAlignment="Bottom" Content="Print" Background="#CC435DED" Foreground="White" FontFamily="Verdana" FontSize="16" Click="PrintClick"/>
+    </Grid>
+</Window>

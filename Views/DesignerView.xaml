@@ -24,7 +24,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="0.7*"/>
-                <RowDefinition Height="0.05*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Ellipse Grid.Row="1" HorizontalAlignment="Center" Grid.ColumnSpan="2" Height="95"  VerticalAlignment="Center" Width="95" OpacityMask="White" RenderTransformOrigin="0.579,0.469">
                 <Ellipse.Fill>
@@ -56,7 +56,11 @@
                     <ImageBrush ImageSource="power.png"/>
                 </Button.Background>
             </Button>
-
+            <Button HorizontalAlignment="Left" Grid.Row="6" Grid.Column="0" Margin="10, 5" VerticalAlignment="Stretch" Width="20" Height="20" BorderBrush="{x:Null}" Command="{Binding HomeCommand}">
+                <Button.Background>
+                    <ImageBrush ImageSource="homepage.png"/>
+                </Button.Background>
+            </Button>
         </Grid>
         <Grid Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Background="White"  >
            <Grid Name="Orders" Visibility="Hidden">
@@ -204,8 +208,39 @@
                           Margin="15" Background="Transparent" ItemsSource="{Binding}" HeadersVisibility="All">
                 </DataGrid>
             </Grid>
-           
+           <Grid Name="Reports" Visibility="Hidden">
+                <Label Content="Display orders" VerticalAlignment="Top" Margin="0,20" FontFamily="Verdana" Height="40" FontSize="22" Width="180"/>
+                <DatePicker Height="30" Width="150" Margin="50,80,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedDate="{Binding StartDate, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"/>
+                <DatePicker Height="30" Width="150" Margin="0,80,190,0" HorizontalAlignment="Right" VerticalAlignment="Top" SelectedDate="{Binding EndDate, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Height="30" Width="100" Margin="0,80,55,0" HorizontalAlignment="Right" VerticalAlignment="Top" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Content="Show" Command="{Binding ShowOrders}"/>
+                
+               <Label Content="Calculate the total income and net profit" VerticalAlignment="Top" HorizontalAlignment="Left" Height="30"  Margin="15, 150,0,0" FontFamily="Verdana" FontSize="14" Width="320"/>
+                <ComboBox Height="30" SelectedItem="{Binding SelectedPeriod, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="175, 150,0,0" Width="120">
+                  <ComboBoxItem  FontSize="10" Content="In the selected period"/>
+                    <ComboBoxItem FontSize="10" Content="For the last week"/>
+                    <ComboBoxItem FontSize="10" Content="For the last month"/>
+                    <ComboBoxItem FontSize="10" Content="For the last 6 months"/>
+                    <ComboBoxItem FontSize="10" Content="For the last year"/>
+                </ComboBox>
+                <Button Height="30" Width="80" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="440, 150,0,0" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="12" Foreground="White" Content="Calculate" Command="{Binding CalcProfit}"/>
+                <Label Content="Show the most profitable customers" VerticalAlignment="Top" HorizontalAlignment="Left" Height="30"  Margin="15, 220,0,0" FontFamily="Verdana" FontSize="16" Width="320"/>
+                <ComboBox Height="30" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="155, 220,0,0" Width="100" SelectedItem="{Binding SelectedSortOrder, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+                  <ComboBoxItem Content="Ascending"/>
+                  <ComboBoxItem Content="Descending"/>
+                </ComboBox>
+               <Button Height="30" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="420, 220,0,0" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Content="Show" Command="{Binding ShowCustomers}"/>
+                <Label Content="Print table(s)" VerticalAlignment="Top" HorizontalAlignment="Center" Height="40"  Margin="0, 270,0,0" FontFamily="Verdana" FontSize="22" Width="160"/>
+                <ComboBox  Height="40" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="80,290,0,0" SelectedItem="{Binding SelectedTable, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBoxItem FontSize="10" Content="Order"/>
+                    <ComboBoxItem FontSize="10" Content="Customer"/>
+                    <ComboBoxItem FontSize="10" Content="Cornices"/>
+                    <ComboBoxItem FontSize="10" Content="Workshop"/>
+                    <ComboBoxItem FontSize="10" Content="Order_Goods"/>
+                </ComboBox>
+                <Button VerticalAlignment="Center"  Height="40" Width="120" Content="Select" Command="{Binding SelectTable}" HorizontalAlignment="Center" Margin="250,290,0,0" Background="#CC435DED" Foreground="White" FontFamily="Verdana" FontSize="14"/>
+            </Grid>
         </Grid>
+        
 
     </Grid>
 </UserControl>

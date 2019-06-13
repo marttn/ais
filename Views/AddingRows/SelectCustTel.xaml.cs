@@ -1,13 +1,11 @@
-﻿using ais.Tools.Navigation;
-using ais.ViewModels.AddingRowsVM;
-using System.Windows.Controls;
+﻿using ais.ViewModels.AddingRowsVM;
 
 namespace ais.Views.AddingRows
 {
     /// <summary>
     /// Логика взаимодействия для SelectCustTel.xaml
     /// </summary>
-    public partial class SelectCustTel : UserControl, INavigatable
+    public partial class SelectCustTel
     {
         public SelectCustTel()
         {

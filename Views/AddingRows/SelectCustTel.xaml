@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="ais.Views.AddingRows.SelectCustTel"
+﻿<Window x:Class="ais.Views.AddingRows.SelectCustTel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ais.Views.AddingRows"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="500">
+             Name="SelCustTel" 
+             Height="450" Width="500">
     <Grid Background="#0CCADCF9" Width="500" >
         <Grid.RowDefinitions>
             <RowDefinition Height="1.3*"/>
@@ -22,6 +22,6 @@
         <ComboBox  Grid.Row="1" Grid.Column="1"  Width="200" Height="30" IsReadOnly="False" IsEditable="False" ItemsSource="{Binding CustomersList}" SelectedItem= "{Binding SelectedName, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Verdana"/>
         <TextBlock Grid.Row="2" Margin="40, 0,0,0" Text= "Number"  VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Verdana" FontSize="26"/>
         <TextBox Grid.Row="2" Grid.Column="1" Margin="25" Height="33" VerticalAlignment="Center" Text="{Binding Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Grid.Row="3" Content="Add" Grid.ColumnSpan="2" VerticalAlignment="Center" Width="135" Height="50" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="22" FontFamily="Verdana" Command="{Binding AddSelTel}"/>
+        <Button CommandParameter="{Binding ElementName=SelCustTel}" Grid.Row="3" Content="Add" Grid.ColumnSpan="2" VerticalAlignment="Center" Width="135" Height="50" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="22" FontFamily="Verdana" Command="{Binding AddSelTel}"/>
     </Grid>
-</UserControl>
+</Window>

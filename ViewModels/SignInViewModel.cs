@@ -115,7 +115,7 @@ namespace ais.ViewModels
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
         }
 

@@ -1,10 +1,10 @@
-﻿using ais.Models;
+﻿using System;
+using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
 using ais.Tools.Navigation;
-using System;
-using System.Data.SqlClient;
 using System.Windows;
+using System.Data.SqlClient;
 
 namespace ais.ViewModels.UpdatingRowsVM
 {
@@ -30,7 +30,7 @@ namespace ais.ViewModels.UpdatingRowsVM
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -40,24 +40,21 @@ namespace ais.ViewModels.UpdatingRowsVM
 
         SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
 
-        private RelayCommand<object> updateContractGoods;
+        private RelayCommand<Window> _updateContractGoods;
 
         public Contract_Goods CurrentContractGoods { get; } = StationManager.CurrentContractGoods;
         public string Name { get; set; }
 
-        public RelayCommand<object> UpdateContractGoods
-        {
-            get => updateContractGoods ?? (updateContractGoods = new RelayCommand<object>(UpdImpl, CanUpd));
-        }
+        public RelayCommand<Window> UpdateContractGoods => _updateContractGoods ?? (_updateContractGoods = new RelayCommand<Window>(UpdImpl, CanUpd));
 
-        private void UpdImpl(object obj)
+        private void UpdImpl(Window obj)
         {
             StationManager.DataStorage.UpdateContractGoods(StationManager.CurrentContractGoods, CurrentContractGoods);
             StationManager.CurrentContractGoods = CurrentContractGoods;
-            NavigationManager.Instance.Navigate(ViewType.Admin);
+            obj.Close();
         }
 
-        private bool CanUpd(object obj)
+        private bool CanUpd(Window obj)
         {
             return CurrentContractGoods.Quantity > 0;
         }

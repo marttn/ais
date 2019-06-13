@@ -13,82 +13,58 @@ namespace ais.ViewModels.AddingRowsVM
 {
     class CustTelViewModel
     {
-        private string name;
-        private string tel;
-        private string selectedName;
-        private RelayCommand<object> addTel;
-        private RelayCommand<object> addSelTel;
-        
+        private string _name;
+        private string _tel;
+        private string _selectedName;
+        private RelayCommand<Window> _addTel;
+        private RelayCommand<Window> _addSelTel;
+        public ObservableCollection<string> CustomersList { get; }
+        SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
 
         public CustTelViewModel()
         {
-            
-            try
-            {
-                if (conn == null)
-                {
-                    throw new Exception("Connection String is Null");
-                }
-                conn.Open();
-                SqlCommand query1 = new SqlCommand("SELECT last_name, name_cust FROM Customer", conn);
-                SqlDataReader select1 = query1.ExecuteReader();
-                while (select1.Read())
-                {
-                    CustomersList.Add(select1["name_cust"].ToString().Trim(' ') + " " + select1["last_name"].ToString().Trim(' '));
-                }
-                select1.Close();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
-            finally
-            {
-                conn.Close();
-            }
+            CustomersList = new ObservableCollection<string>(StationManager.DataStorage.ListCustomers());
         }
 
-        public ObservableCollection<string> CustomersList { get; } = new ObservableCollection<string>();
-        SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
-
+        
         public string Name
         {
-            get => name ?? (name = $"{StationManager.CurrentCustomer.Name} {StationManager.CurrentCustomer.LastName}");
+            get => _name ?? (_name = $"{StationManager.CurrentCustomer.Name.Trim(' ')} {StationManager.CurrentCustomer.LastName.Trim(' ')}");
             set
             {
-                name = value;
+                _name = value;
                 OnPropertyChanged();
             }
         }
 
         public string Tel
         {
-            get => tel;
+            get => _tel;
             set
             {
-                tel = value;
+                _tel = value;
                 OnPropertyChanged();
             }
         }
 
         public string SelectedName
         {
-            get => selectedName;
+            get => _selectedName;
             set
             {
-                selectedName = value;
+                _selectedName = value;
                 OnPropertyChanged();
             }
         }
 
 
-        public RelayCommand<object> AddTel
+        public RelayCommand<Window> AddTel
         {
-            get => addTel ?? (addTel = new RelayCommand<object>(AddTelImpl, CanAdd));
+            get => _addTel ?? (_addTel = new RelayCommand<Window>(AddTelImpl, CanAdd));
         }
-        public RelayCommand<object> AddSelTel
+        public RelayCommand<Window> AddSelTel
         {
-            get => addSelTel ?? (addSelTel = new RelayCommand<object>(AddSelected, CanAddSelected));
+            get => _addSelTel ?? (_addSelTel = new RelayCommand<Window>(AddSelected, CanAddSelected));
         }
 
         private bool CanAddSelected(object obj)
@@ -97,7 +73,7 @@ namespace ais.ViewModels.AddingRowsVM
                 && !string.IsNullOrWhiteSpace(SelectedName);
         }
 
-        private void AddSelected(object obj)
+        private void AddSelected(Window obj)
         {
             
             try
@@ -131,10 +107,10 @@ namespace ais.ViewModels.AddingRowsVM
             {
                 conn.Close();
             }
-            NavigationManager.Instance.Navigate(ViewType.Admin);
+            obj.Close();
         }
 
-        private void AddTelImpl(object obj)
+        private void AddTelImpl(Window obj)
         {
             
             try
@@ -144,6 +120,7 @@ namespace ais.ViewModels.AddingRowsVM
                     throw new Exception("Connection String is Null");
                 }
                 conn.Open();
+                MessageBox.Show(Name);
                 string id = "";
                 SqlCommand query = new SqlCommand("SELECT ID FROM Customer WHERE name_cust = '" + Name.Split(' ')[0] + "' and last_name = '" + Name.Split(' ')[1] + "'", conn);
                 SqlDataReader select = query.ExecuteReader();
@@ -164,13 +141,10 @@ namespace ais.ViewModels.AddingRowsVM
             {
                 conn.Close();
             }
-            NavigationManager.Instance.Navigate(ViewType.Admin);
+            obj.Close();
         }
 
-        private bool CanAdd(object obj)
-        {
-            return !string.IsNullOrWhiteSpace(Tel) && (Tel.Length == 10);
-        }
+        private bool CanAdd(object obj) => !string.IsNullOrWhiteSpace(Tel) && Tel.Length == 10;
 
 
 

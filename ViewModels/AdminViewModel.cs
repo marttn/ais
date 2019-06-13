@@ -6,10 +6,13 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using ais.Views;
+using ais.Views.AddingRows;
+using ais.Views.UpdatingRows;
 
 namespace ais.ViewModels
 {
-    class AdminViewModel
+    class AdminViewModel : INotifyPropertyChanged
     {
         private string _name;
         private string _lastName;
@@ -17,17 +20,47 @@ namespace ais.ViewModels
         private string _type;
         private object _selectedRow;
 
-       // public ObservableCollection<Cust_Tel> Aaa { get; set; } = new ObservableCollection<Cust_Tel>(StationManager.DataStorage.CustTelsList);
-        private ObservableCollection<object> _table/* = new ObservableCollection<object>()*/;
+        private string _selectedTable;
+
+        private DateTime _startDate;
+        private DateTime _endDate;
+
+        private ObservableCollection<object> _table;
+
+        private Users _selectedUser;
 
         private RelayCommand<object> _showTable;
+
         private RelayCommand<object> _closeCommand;
+        private RelayCommand<object> _homeCommand;
+
         private RelayCommand<object> _addCommand;
         private RelayCommand<object> _updateCommand;
         private RelayCommand<object> _deleteCommand;
+        private RelayCommand<object> _costsCommand;
+        private RelayCommand<object> _printCommand;
 
+        private RelayCommand<object> _addUserCommand;
+        private RelayCommand<object> _deleteUserCommand;
+        
         public Users CurrentUser { get; } = StationManager.CurrentUser;
+        public ObservableCollection<Users> UsersCollection { get; } = new ObservableCollection<Users>(StationManager.DataStorage.UsersList);
 
+        public ObservableCollection<string> ListTables { get; } = new ObservableCollection<string>
+        {
+            "Customer", "Cust_Tel", "Cornices", "Workshop", "Order", "Contractor", "Contractor_Tel", "Goods",
+            "Contractor_Goods", "Order_Goods", "Contract", "Contract_Goods"
+        };
+
+        public Users SelectedUser
+        {
+            get => _selectedUser;
+            set
+            {
+                _selectedUser = value;
+                OnPropertyChanged();
+            }
+        }
         public AdminViewModel()
         {
             Name = CurrentUser.Name;
@@ -83,38 +116,78 @@ namespace ais.ViewModels
             }
         }
 
+        public DateTime StartDate
+        {
+            get => _startDate;
+            set
+            {
+                _startDate = value;
+                OnPropertyChanged("StartDate");
+            }
+        }
+        public DateTime EndDate
+        {
+            get => _endDate;
+            set
+            {
+                _endDate = value;
+                OnPropertyChanged("EndDate");
+            }
+        }
+
+        public string SelectedTable
+        {
+            get => _selectedTable;
+            set
+            {
+                _selectedTable = value;
+                OnPropertyChanged("SelectedTable");
+            }
+        }
+
         public ObservableCollection<object> Table
         {
             get => _table;
-            /*private */set
+            set
             {
                 _table = value;
-               // OnPropertyChanged("Table");
+                OnPropertyChanged("Table");
             }
 }
 
-        public RelayCommand<object> CloseCommand
+        public RelayCommand<object> CloseCommand => _closeCommand ?? (_closeCommand = new RelayCommand<object>(o=> StationManager.CloseApp()));
+        public RelayCommand<object> HomeCommand => _homeCommand ?? (_homeCommand = new RelayCommand<object>(o=>NavigationManager.Instance.Navigate(ViewType.SignIn)));
+
+
+        public RelayCommand<object> ShowTable => _showTable ?? (_showTable = new RelayCommand<object>(ShowTableImplementation));
+
+        public RelayCommand<object> CostsCommand => _costsCommand ?? (_costsCommand = new RelayCommand<object>(ShowCosts, CanShow));
+
+        public  RelayCommand<object> PrintCommand => _printCommand ??(_printCommand = new RelayCommand<object>(PrintImpl, CanPrint));
+
+        private bool CanPrint(object obj)
         {
-            get
-            {
-                return _closeCommand ?? (_closeCommand = new RelayCommand<object>(CloseImplementation));
-            }
+            return !string.IsNullOrWhiteSpace(SelectedTable);
         }
 
-        private void CloseImplementation(object obj)
+        private void PrintImpl(object obj)
         {
-            StationManager.CloseApp();
+            Print print = new Print(SelectedTable);
+            print.ShowDialog();
         }
 
-        public RelayCommand<object> ShowTable
+        private bool CanShow(object obj)
         {
-            get
-            {
-                return _showTable ?? (_showTable = new RelayCommand<object>(ShowTableImplementation));
-            }
+            return StartDate < EndDate;
         }
 
-       
+        private void ShowCosts(object obj)
+        {
+            Costs costs = new Costs(StartDate, EndDate);
+            costs.ShowDialog();
+        }
+
+
         private void ShowTableImplementation(object obj)
         {
             StationManager.CurrentTableType = $"{obj}";
@@ -168,7 +241,6 @@ namespace ais.ViewModels
                 Table = new ObservableCollection<object>(StationManager.DataStorage.ContractGoodsList);
                 }
             
-           // MessageBox.Show(Table.GetType().ToString());
             
         }
 
@@ -265,75 +337,85 @@ namespace ais.ViewModels
             {
                 case "Order":
                     StationManager.CurrentOrder = (Order)SelectedRow;
-                    NavigationManager.Instance.Navigate(ViewType.UpdOrder);
+                    UpdOrderView upd = new UpdOrderView();
+                    upd.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.OrdersList);
                     SelectedRow = null;
                     break;
                 case "Customer":
                     StationManager.CurrentCustomer = (Customer)SelectedRow;
-                    NavigationManager.Instance.Navigate(ViewType.UpdCustomer);
+                    UpdCustomerView updateCustomerView = new UpdCustomerView();
+                    updateCustomerView.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.CustomersList);
-                   // StationManager.CurrentCustomer = new Customer();
                     SelectedRow = null;
                     break;
                 case "Cust_Tel":
                     StationManager.CurrentCustTel = (Cust_Tel)SelectedRow;
-                    NavigationManager.Instance.Navigate(ViewType.UpdCustTel);
+                    UpdCustTel updCustTel = new UpdCustTel();
+                    updCustTel.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.CustTelsList);
-
                     SelectedRow = null;
                     break;
                 case "Cornices":
                     StationManager.CurrentCornices = (Cornices)SelectedRow;
-                    NavigationManager.Instance.Navigate(ViewType.UpdCornices);
+                    UpdCornicesView updCornices = new UpdCornicesView();
+                    updCornices.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.CornicesList);
                     SelectedRow = null;
                     break;
                 case "Workshop":
                     StationManager.CurrentWorkshop = (Workshop)SelectedRow;
-                    NavigationManager.Instance.Navigate(ViewType.UpdWorkshop);
+                    UpdWorkshopView updWorkshop = new UpdWorkshopView();
+                    updWorkshop.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.WorkshopsList);
                     SelectedRow = null;
                     break;
                 case "Contractor":
                     StationManager.CurrentContractor= (Contractor)SelectedRow;
-                    NavigationManager.Instance.Navigate(ViewType.UpdContractor);
+                    UpdContractorView updContractor = new UpdContractorView();
+                    updContractor.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorsList);
                     SelectedRow = null;
                     break;
                 case "Contractor_Tel":
                     StationManager.CurrentContractorTel = (Contractor_Tel)SelectedRow;
-                    NavigationManager.Instance.Navigate(ViewType.UpdContractorTel);
+                    UpdContractorTel tel = new UpdContractorTel();
+                    tel.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorTelList);
                     SelectedRow = null;
                     break;
                 case "Goods":
                     StationManager.CurrentGoods = (Goods)SelectedRow;
-                    NavigationManager.Instance.Navigate(ViewType.UpdGoods);
+                    UpdGoodsView updGoods = new UpdGoodsView();
+                    updGoods.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.GoodsList);
                     SelectedRow = null;
                     break;
                 case "Contractor_Goods":
                     StationManager.CurrentContractorGoods = (Contractor_Goods)SelectedRow;
-                    NavigationManager.Instance.Navigate(ViewType.UpdContractorGoods);
+                    UpdContractorGoodsView updContractorGoods = new UpdContractorGoodsView();
+                    updContractorGoods.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorGoodsList);
                     SelectedRow = null;
                     break;
                 case "Order_Goods":
                     StationManager.CurrentOrderGoods = (Order_Goods)SelectedRow;
-                    NavigationManager.Instance.Navigate(ViewType.UpdOrderGoods);
+                    UpdOrderGoodsView orderGoods = new UpdOrderGoodsView();
+                    orderGoods.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.OrderGoodsList);
                     SelectedRow = null;
                     break;
                 case "Contract":
                     StationManager.CurrentContract = (Contract)SelectedRow;
-                    NavigationManager.Instance.Navigate(ViewType.UpdContract);
+                    UpdContractView contract = new UpdContractView();
+                    contract.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.ContractsList);
                     SelectedRow = null;
                     break;
                 case "Contract_Goods":
                     StationManager.CurrentContractGoods = (Contract_Goods)SelectedRow;
-                    NavigationManager.Instance.Navigate(ViewType.UpdContractGoods);
+                    UpdContractGoodsView contractGoods = new UpdContractGoodsView();
+                    contractGoods.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.ContractGoodsList);
                     SelectedRow = null;
                     break;
@@ -345,57 +427,80 @@ namespace ais.ViewModels
             switch (StationManager.CurrentTableType)
             {
               case "Order":
-                    NavigationManager.Instance.Navigate(ViewType.NewOrder);
-                    //Table.Add(StationManager.CurrentOrder);
+                    NewOrderView order = new NewOrderView();
+                    order.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.OrdersList);
+                    OnPropertyChanged("Table");
                     break;
                 case "Customer":
-                    NavigationManager.Instance.Navigate(ViewType.NewCustomer);
+                    NewCustomerView customer = new NewCustomerView();
+                    customer.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.CustomersList);
                     break;
                 case "Cust_Tel":
-                    NavigationManager.Instance.Navigate(ViewType.NewSelCustTel);
+                    SelectCustTel select = new SelectCustTel();
+                    select.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.CustTelsList);
                     break;
                 case "Cornices":
-                    NavigationManager.Instance.Navigate(ViewType.NewCornices);
+                    NewCornicesView cornices = new NewCornicesView();
+                    cornices.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.CornicesList);
                     break;
                 case "Workshop":
-                    NavigationManager.Instance.Navigate(ViewType.NewWorkshop);
+                    NewWorkshopView workshop = new NewWorkshopView();
+                    workshop.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.WorkshopsList);
                     break;
                 case "Contractor":
-                    NavigationManager.Instance.Navigate(ViewType.NewContractor);
+                    NewContractorView contractor = new NewContractorView();
+                    contractor.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorsList);
                     break;
                 case "Contractor_Tel":
-                    NavigationManager.Instance.Navigate(ViewType.NewSelContractorTel);
+                    SelectContractorTel tel = new SelectContractorTel();
+                    tel.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorTelList);
                     break;
                 case "Goods":
-                    NavigationManager.Instance.Navigate(ViewType.NewGoods);
+                    NewGoodsView goods = new NewGoodsView();
+                    goods.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.GoodsList);
                     break;
                 case "Contractor_Goods":
-                    NavigationManager.Instance.Navigate(ViewType.NewContractorGoods);
+                    NewContractorGoodsView contrgoods = new NewContractorGoodsView();
+                    contrgoods.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.ContractorGoodsList);
                     break;
                 case "Order_Goods":
-                    NavigationManager.Instance.Navigate(ViewType.NewOrderGoods);
+                    NewOrderGoodsView orderGoods = new NewOrderGoodsView();
+                    orderGoods.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.OrderGoodsList);
                     break;
                 case "Contract":
-                    NavigationManager.Instance.Navigate(ViewType.NewContract);
+                    NewContractView contract = new NewContractView();
+                    contract.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.ContractsList);
                     break;
                 case "Contract_Goods":
-                    NavigationManager.Instance.Navigate(ViewType.NewContractGoods);
+                    NewContractGoodsView view = new NewContractGoodsView();
+                    view.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.ContractGoodsList);
                     break;
             }
         }
 
+
+        public RelayCommand<object> AddUserCommand => _addUserCommand ?? (_addUserCommand =
+                                                          new RelayCommand<object>(
+                                                              o => NavigationManager.Instance.Navigate(
+                                                                  viewType: ViewType.SignUp)));
+
+        public RelayCommand<object> DeleteUserCommand => _deleteUserCommand ?? (_deleteUserCommand =
+                                                             new RelayCommand<object>(
+                                                                 o => StationManager.DataStorage.DeleteUser(
+                                                                     StationManager.CurrentUser),
+                                                                 o => SelectedUser != null));
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 

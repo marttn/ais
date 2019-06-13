@@ -13,78 +13,55 @@ namespace ais.ViewModels.AddingRowsVM
 {
     class ContractViewModel
     {
-        private RelayCommand<object> addContract;
-        public ObservableCollection<string> ListContractors { get; } = new ObservableCollection<string>();
+        private RelayCommand<Window> _addContract;
+        public ObservableCollection<string> ListContractors { get; }
 
-        private string numContract;
-        private DateTime dateContract;
-        private string nameContr;
+        private string _numContract;
+        private DateTime _dateContract;
+        private string _nameContr;
 
         SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
 
         public ContractViewModel()
         {
-            try
-            {
-                if (conn == null)
-                {
-                    throw new Exception("Connection String is Null");
-                }
-                conn.Open();
-
-                SqlCommand query = new SqlCommand("SELECT Name_contr FROM Contractor", conn);
-                SqlDataReader select = query.ExecuteReader();
-                while (select.Read())
-                {
-                    ListContractors.Add(select["Name_contr"].ToString().Trim(' '));
-                }
-                select.Close();               
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
-            finally
-            {
-                conn.Close();
-            }
+            ListContractors = new ObservableCollection<string>(StationManager.DataStorage.NameContractors());
         }
 
         public string NumContract
         {
-            get => numContract;
+            get => _numContract;
             set
             {
-                numContract = value;
+                _numContract = value;
                 OnPropertyChanged();
             }
         }
         public DateTime DateContract
         {
-            get => dateContract;
+            get => _dateContract;
             set
             {
-                dateContract = value;
+                _dateContract = value;
                 OnPropertyChanged();
             }
         }
         public string NameContr
         {
-            get => nameContr;
+            get => _nameContr;
             set
             {
-                nameContr = value;
+                _nameContr = value;
                 OnPropertyChanged();
             }
         }
 
        
-        public RelayCommand<object> AddContract
+        public RelayCommand<Window> AddContract
         {
-            get => addContract ?? (addContract = new RelayCommand<object>(AddContractImpl, CanAdd));
+            get => _addContract ?? (_addContract = new RelayCommand<Window>(AddContractImpl, CanAdd));
         }
 
-        private void AddContractImpl(object obj)
+        private void AddContractImpl(Window obj)
         {
             try
             {
@@ -118,7 +95,7 @@ namespace ais.ViewModels.AddingRowsVM
             {
                 conn.Close();
             }
-            NavigationManager.Instance.Navigate(ViewType.Admin);
+            obj.Close();
         }
 
         private bool CanAdd(object obj)

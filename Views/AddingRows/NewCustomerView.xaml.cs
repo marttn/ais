@@ -1,13 +1,12 @@
-﻿using ais.Tools.Navigation;
+﻿using System.Windows;
 using ais.ViewModels.AddingRowsVM;
-using System.Windows.Controls;
 
 namespace ais.Views.AddingRows
 {
     /// <summary>
     /// Логика взаимодействия для NewCustomerView.xaml
     /// </summary>
-    public partial class NewCustomerView : UserControl, INavigatable
+    public partial class NewCustomerView : Window
     {
         public NewCustomerView()
         {

@@ -1,12 +1,15 @@
-﻿using ais.Models;
+﻿using System.Globalization;
+using System.Windows;
+using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
+using ais.Tools.Navigation;
 
 namespace ais.ViewModels.AddingRowsVM
 {
     class CornicesViewModel
     {
-        private RelayCommand<object> addCornices;
+        private RelayCommand<Window> addCornices;
         public Cornices CurrentCornices { get; }
 
         public CornicesViewModel()
@@ -15,25 +18,25 @@ namespace ais.ViewModels.AddingRowsVM
             StationManager.CurrentCornices = CurrentCornices;
         }
 
-        public RelayCommand<object> AddCornices
+        public RelayCommand<Window> AddCornices
         {
-            get => addCornices ?? (addCornices = new RelayCommand<object>(AddCorniceImpl, CanAdd));
+            get => addCornices ?? (addCornices = new RelayCommand<Window>(AddCorniceImpl, CanAdd));
         }
 
         private bool CanAdd(object obj)
         {
             return !string.IsNullOrWhiteSpace(CurrentCornices.Ipn) && (CurrentCornices.Ipn.Length == 10) &&
                    !string.IsNullOrWhiteSpace(CurrentCornices.LastName) &&
-                   !string.IsNullOrWhiteSpace(CurrentCornices.Name) &&
+                   !string.IsNullOrWhiteSpace(CurrentCornices.Name) && (CurrentCornices.Building == null || CurrentCornices.Building.Length <= 4) &&
                    !string.IsNullOrWhiteSpace(CurrentCornices.AccountCornice) &&
-                   !string.IsNullOrWhiteSpace(CurrentCornices.TelNum) &&
-                   !string.IsNullOrWhiteSpace(CurrentCornices.PriceOneCornice.ToString()) && CurrentCornices.PriceOneCornice != 0;
+                   !string.IsNullOrWhiteSpace(CurrentCornices.TelNum) && CurrentCornices.TelNum.Length==10 &&
+                   !string.IsNullOrWhiteSpace(CurrentCornices.PriceOneCornice.ToString(CultureInfo.InvariantCulture)) && CurrentCornices.PriceOneCornice > 0;
         }
 
-        private void AddCorniceImpl(object obj)
+        private void AddCorniceImpl(Window obj)
         {
             StationManager.DataStorage.AddCornices(StationManager.CurrentCornices);
-            NavigationManager.Instance.Navigate(Tools.Navigation.ViewType.Admin);
+            obj.Close();
         }
     }
 }

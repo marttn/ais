@@ -17,38 +17,16 @@ namespace ais.ViewModels.AddingRowsVM
         private string selectedName;
         private string tel;
 
-        private RelayCommand<object> addTel;
-        private RelayCommand<object> addTelSelected;
+        private RelayCommand<Window> addTel;
+        private RelayCommand<Window> addTelSelected;
 
-        public ObservableCollection<string> ContractorsList { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> ContractorsList { get; }
         SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
 
 
         public ContractorTelViewModel()
         {
-            try
-            {
-                if (conn == null)
-                {
-                    throw new Exception("Connection String is Null");
-                }
-                conn.Open();
-                SqlCommand query1 = new SqlCommand("SELECT Name_contr FROM Contractor", conn);
-                SqlDataReader select1 = query1.ExecuteReader();
-                while (select1.Read())
-                {
-                    ContractorsList.Add(select1["Name_contr"].ToString().Trim(' '));
-                }
-                select1.Close();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
-            finally
-            {
-                conn.Close();
-            }
+            ContractorsList = new ObservableCollection<string>(StationManager.DataStorage.NameContractors());
         }
         public string Name
         {
@@ -80,32 +58,36 @@ namespace ais.ViewModels.AddingRowsVM
             }
         }
 
-        public RelayCommand<object> AddTel
+        public RelayCommand<Window> AddTel
         {
-            get => addTel ?? (addTel = new RelayCommand<object>(AddTelImpl, CanAdd));
+            get => addTel ?? (addTel = new RelayCommand<Window>(AddTelImpl, CanAdd));
         }
-        public RelayCommand<object> AddTelSelected
+        public RelayCommand<Window> AddTelSelected
         {
-            get => addTelSelected ?? (addTelSelected = new RelayCommand<object>(AddSelTelImpl, CanAddSelected));
+            get => addTelSelected ?? (addTelSelected = new RelayCommand<Window>(AddSelTelImpl, CanAddSelected));
         }
 
-        private void AddTelImpl(object obj)
+        private void AddTelImpl(Window obj)
         {
-           
+
             try
             {
                 if (conn == null)
                 {
                     throw new Exception("Connection String is Null");
                 }
+
                 conn.Open();
                 string code = "";
-                SqlCommand query = new SqlCommand("SELECT Code_contractor FROM Contractor WHERE Name_contr = '" + Name.Trim(' ') + "'", conn);
+                SqlCommand query =
+                    new SqlCommand("SELECT Code_contractor FROM Contractor WHERE Name_contr = '" + Name.Trim(' ') + "'",
+                        conn);
                 SqlDataReader select = query.ExecuteReader();
                 while (select.Read())
                 {
                     code = select["Code_contractor"].ToString();
                 }
+
                 select.Close();
                 StationManager.CurrentContractorTel = new Contractor_Tel(Tel, code);
                 StationManager.DataStorage.AddContractorTel(StationManager.CurrentContractorTel);
@@ -119,10 +101,11 @@ namespace ais.ViewModels.AddingRowsVM
             {
                 conn.Close();
             }
-            NavigationManager.Instance.Navigate(ViewType.Admin);
+
+            obj.Close();
         }
 
-        private void AddSelTelImpl(object obj)
+        private void AddSelTelImpl(Window obj)
         {
            
             try
@@ -152,7 +135,7 @@ namespace ais.ViewModels.AddingRowsVM
             {
                 conn.Close();
             }
-            NavigationManager.Instance.Navigate(ViewType.Admin);
+            obj.Close();
         }
 
         private bool CanAdd(object obj)

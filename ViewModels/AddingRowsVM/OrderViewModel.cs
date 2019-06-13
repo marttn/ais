@@ -15,10 +15,10 @@ namespace ais.ViewModels.AddingRowsVM
     {
         //public Order CurrentOrder { get; }
 
-        private RelayCommand<object> _addOrder;
-        public ObservableCollection<string> ListCustomers { get; } = new ObservableCollection<string>();
-        public ObservableCollection<string> ListWorkshops { get; } = new ObservableCollection<string>();
-        public ObservableCollection<string> ListCornices { get; } = new ObservableCollection<string>();
+        private RelayCommand<Window> _addOrder;
+        public ObservableCollection<string> ListCustomers { get; }
+        public ObservableCollection<string> ListWorkshops { get; }
+        public ObservableCollection<string> ListCornices { get; }
 
 
         private DateTime _dateOrd = DateTime.Now;
@@ -28,7 +28,9 @@ namespace ais.ViewModels.AddingRowsVM
 
         public OrderViewModel()
         {
-            LoadComboBoxes();
+            ListWorkshops = new ObservableCollection<string>(StationManager.DataStorage.ListNameWorkshops());
+            ListCustomers = new ObservableCollection<string>(StationManager.DataStorage.ListCustomers());
+            ListCornices = new ObservableCollection<string>(StationManager.DataStorage.ListCorniceInstallers());
         }
         public DateTime DateOrd
         {
@@ -70,71 +72,16 @@ namespace ais.ViewModels.AddingRowsVM
             }
         }
 
-        private void LoadComboBoxes()
-        {
-            
-            SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
-           // MessageBox.Show("start load");
-            try
-            {
-                if (conn == null)
-                {
-                    throw new Exception("Connection String is Null");
-                }
-                conn.Open();
+       
+        public RelayCommand<Window> AddOrder => _addOrder ?? (_addOrder = new RelayCommand<Window>(AddOrderImplementation, CanExecute));
 
-                SqlCommand query = new SqlCommand("SELECT name_shop FROM Workshop", conn);
-                SqlDataReader select = query.ExecuteReader();
-                while (select.Read())
-                {
-                    ListWorkshops.Add(select["name_shop"].ToString().Trim(' '));
-                }
-                select.Close();
-                SqlCommand query1 = new SqlCommand("SELECT last_name, name_cust FROM Customer", conn);
-                SqlDataReader select1 = query1.ExecuteReader();
-                while (select1.Read())
-                {
-                    ListCustomers.Add(select1["name_cust"].ToString().Trim(' ') + " " + select1["last_name"].ToString().Trim(' '));
-                }
-                select1.Close();
-                SqlCommand query2 = new SqlCommand("SELECT last_name, name_c FROM Cornices", conn);
-                SqlDataReader select2 = query2.ExecuteReader();
-                while (select2.Read())
-                {
-                    ListCornices.Add(select2["name_c"].ToString().Trim(' ') + " " + select2["last_name"].ToString().Trim(' '));
-                }
-                select2.Close();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
-            finally
-            {
-                conn.Close();
-            }
-        }
-
-        
-
-
-
-
-        public RelayCommand<object> AddOrder
-        {
-            get
-            {
-                return _addOrder ?? (_addOrder = new RelayCommand<object>(AddOrderImplementation, CanExecute));
-            }
-        }
-        
 
         private bool CanExecute(object obj)
         {
             return !string.IsNullOrWhiteSpace(ID) && DateOrd <= DateTime.Now; 
         }
 
-        private void AddOrderImplementation(object obj)
+        private void AddOrderImplementation(Window obj)
         {
             SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
             try
@@ -148,7 +95,7 @@ namespace ais.ViewModels.AddingRowsVM
                 }
                 conn.Open();
 
-                if (!CodeWorkshop.Equals(""))
+                if (CodeWorkshop!=null)
                 {
                    query  = new SqlCommand("SELECT Code_workshop FROM Workshop WHERE name_shop = '" + CodeWorkshop + "'", conn);
                    reader = query.ExecuteReader();
@@ -166,7 +113,7 @@ namespace ais.ViewModels.AddingRowsVM
                     id = reader1["ID"].ToString();
                 }
                 reader1.Close();
-                if (!Ipn.Equals(""))
+                if (Ipn!=null)
                 {
                     query = new SqlCommand("SELECT Ipn FROM Cornices WHERE last_name = '" + Ipn.Split(' ')[1] + "'", conn);
                     reader2 = query.ExecuteReader();
@@ -183,14 +130,13 @@ namespace ais.ViewModels.AddingRowsVM
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
                 conn.Close();
             }
-            ID = Ipn = CodeWorkshop = "";
-            NavigationManager.Instance.Navigate(ViewType.Admin);
+            obj.Close();
         }
 
         #region INotifyPropertyChanged

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="http://schemas.microsoft.com/wpf/2008/toolkit"
              xmlns:local="clr-namespace:ais"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="780">
@@ -23,7 +24,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="0.7*"/>
-                <RowDefinition Height="0.05*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Ellipse Grid.Row="1" HorizontalAlignment="Center" Grid.ColumnSpan="2" Height="95"  VerticalAlignment="Center" Width="95" OpacityMask="White" RenderTransformOrigin="0.579,0.469">
                 <Ellipse.Fill>
@@ -34,16 +35,16 @@
             <TextBlock Grid.Row="2" TextAlignment="Left" Padding="5, 0, 0, 0" Grid.Column="1" TextWrapping="Wrap" Text="{Binding LastName, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Stretch"  FontFamily="Verdana" FontSize="13"/>
             <TextBlock Grid.Row="3" HorizontalAlignment="Center" Padding="0, 5, 0, 0" Grid.ColumnSpan="2"  TextWrapping="Wrap" Text="{Binding Login, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Stretch"  FontFamily="Verdana" FontSize="13"/>
             <TextBlock Grid.Row="4" HorizontalAlignment="Center" Padding="0, 5, 0, 0" Grid.ColumnSpan="2"  TextWrapping="Wrap" Text="{Binding Type, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"  VerticalAlignment="Stretch" FontFamily="Verdana" FontSize="13"/>
-            <Grid  Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center"  Margin="0, 0, 0, 5" VerticalAlignment="Center" Background="#FFA9B9E7" Opacity="0.9" MinWidth="130">
+            <Grid Name="LeftGrid" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center"  Margin="0, 0, 0, 5" VerticalAlignment="Center" Background="#FFA9B9E7" Opacity="0.9" MinWidth="130">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Button Content="Tables" HorizontalContentAlignment="Left" Padding="12" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="16" Click="Button_Click"/>
-                <Button Content="Queries" HorizontalContentAlignment="Left" Padding="12" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="16"/>
-                <Button Content="Users" HorizontalContentAlignment="Left" Padding="12" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2"  BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="16"/>
+                <Button Content="Tables" HorizontalContentAlignment="Left" Padding="12" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="16" Click="ShowTableClick"/>
+                <Button Content="Queries" HorizontalContentAlignment="Left" Padding="12" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="16" Click="ShowReportsClick"/>
+                <Button Content="Users" HorizontalContentAlignment="Left" Padding="12" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2"  BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Verdana" FontSize="16" Click="ShowUsersClick"/>
                 <Button Content="About" HorizontalContentAlignment="Left" Padding="12" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="3" BorderBrush="{x:Null}" Background="{x:Null}"  Foreground="White" FontFamily="Verdana" FontSize="16"/>
             </Grid>
             <Button HorizontalAlignment="Left" Grid.Row="0" Margin="10,10,0,10" VerticalAlignment="Stretch" Width="20" Height="20" BorderBrush="{x:Null}" Command="{Binding CloseCommand}">
@@ -51,7 +52,11 @@
                     <ImageBrush ImageSource="power.png"/>
                 </Button.Background>
             </Button>
-
+            <Button HorizontalAlignment="Left" Grid.Row="6" Grid.Column="0" Margin="10, 5" VerticalAlignment="Stretch" Width="20" Height="20" BorderBrush="{x:Null}" Command="{Binding HomeCommand}">
+                <Button.Background>
+                    <ImageBrush ImageSource="homepage.png"/>
+                </Button.Background>
+            </Button>
         </Grid>
         <Grid Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Background="White"  >
             <Grid.RowDefinitions>
@@ -73,22 +78,22 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Button Content="Customer" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="0" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="Button_Click_1" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
-                <Button Content="Cust_Tel" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="1" VerticalAlignment="Center" Width="185"  BorderBrush="{x:Null}" Background="{x:Null}" FontFamily="Verdana" FontSize="17" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"  Click="Button_Click_1"/>
-                <Button Content="Cornices" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Width="185"  Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="Button_Click_1" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
-                <Button Content="Workshop" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="3" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="Button_Click_1" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
-                <Button Content="Order" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="4" VerticalAlignment="Center" Width="185"  Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="Button_Click_1" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
-                <Button Content="Contractor" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="5" VerticalAlignment="Center" Width="185"  Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="Button_Click_1" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
-                <Button Content="Contractor_Tel" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="6" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="Button_Click_1" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
-                <Button Content="Goods" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="7" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="Button_Click_1" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
-                <Button Content="Contractor_Goods" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="8" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="Button_Click_1" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
-                <Button Content="Order_Goods" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="9" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="Button_Click_1" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
-                <Button Content="Contract" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="10" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="Button_Click_1" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
-                <Button Content="Contract_Goods" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="11" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="Button_Click_1" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+                <Button Content="Customer" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="0" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="ShowSelectedTable" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+                <Button Content="Cust_Tel" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="1" VerticalAlignment="Center" Width="185"  BorderBrush="{x:Null}" Background="{x:Null}" FontFamily="Verdana" FontSize="17" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"  Click="ShowSelectedTable"/>
+                <Button Content="Cornices" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Width="185"  Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="ShowSelectedTable" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+                <Button Content="Workshop" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="3" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="ShowSelectedTable" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+                <Button Content="Order" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="4" VerticalAlignment="Center" Width="185"  Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="ShowSelectedTable" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+                <Button Content="Contractor" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="5" VerticalAlignment="Center" Width="185"  Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="ShowSelectedTable" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+                <Button Content="Contractor_Tel" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="6" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="ShowSelectedTable" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+                <Button Content="Goods" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="7" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="ShowSelectedTable" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+                <Button Content="Contractor_Goods" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="8" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="ShowSelectedTable" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+                <Button Content="Order_Goods" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="9" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="ShowSelectedTable" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+                <Button Content="Contract" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="10" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="ShowSelectedTable" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+                <Button Content="Contract_Goods" Padding="20, 7, 0, 7" HorizontalContentAlignment="Left" Grid.Row="11" VerticalAlignment="Center" Width="185" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="17" Click="ShowSelectedTable" Command="{Binding ShowTable}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
             </Grid>
 
-            <Grid Grid.Row="0" Name="something" HorizontalAlignment="Center" Height="330"  VerticalAlignment="Center" MinWidth="515">
-                <DataGrid Name="DataGrid" HorizontalAlignment="Stretch" Width="515" Background="Transparent" AutoGenerateColumns="True" SelectedItem="{Binding SelectedRow}" ItemsSource="{Binding Path=Table, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" Visibility="Hidden" IsReadOnly="True" BorderBrush="{x:Null}"/>
+            <Grid Grid.Row="0" Name="CurrentTable" HorizontalAlignment="Center" Height="330"  VerticalAlignment="Center" MinWidth="515" Visibility="Hidden" >
+                <DataGrid Name="SelectedTableDataGrid" HorizontalAlignment="Stretch" Width="515" Background="Transparent" AutoGenerateColumns="True" SelectedItem="{Binding SelectedRow}" ItemsSource="{Binding Path=Table, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Single" IsReadOnly="True" BorderBrush="{x:Null}"/>
             </Grid>
 
             <Grid  Name="buttons" Grid.Row="1" HorizontalAlignment="Center"  VerticalAlignment="Center"  Visibility="Hidden">
@@ -101,8 +106,38 @@
                 <Button Content="Update" HorizontalAlignment="Center" Margin="15, 0" VerticalAlignment="Center" Width="115" Height="35" Background="#FF9999FF" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="14" Foreground="White" Grid.Column="1" Command="{Binding UpdateCommand}"/>
                 <Button Content="Delete" HorizontalAlignment="Right" Margin="15, 0" VerticalAlignment="Center" Width="115" Height="35" BorderBrush="{x:Null}" Background="#FF9999FF" FontFamily="Verdana" FontSize="14" Foreground="White" Grid.Column="2" Command="{Binding DeleteCommand}"/>
             </Grid>
-        </Grid>
 
+            <Grid Margin="25"  RowSpan="2" Name="UserList" Visibility="Hidden">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.85*"/>
+                    <RowDefinition Height="0.15*"/>
+                </Grid.RowDefinitions>
+                <DataGrid Grid.Row="0" Margin="0,0,0,20" Background="Transparent" ItemsSource="{Binding UsersCollection, Mode=OneWay}" SelectedItem="{Binding SelectedUser}" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Login" Binding="{Binding Login, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Last name" Binding="{Binding LastName, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="User type" Binding="{Binding Type, Mode=TwoWay}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Button Grid.Row="1" HorizontalAlignment="Left" Content="Add new user" Width="150" Margin="60,10" Background="#CC435DED" Foreground="White" FontFamily="Verdana" FontSize="14" Command="{Binding AddUserCommand}"/>
+                <Button Grid.Row="1" HorizontalAlignment="Right" Content="Delete user" Width="150" Margin="60,10" Background="#CC435DED" Foreground="White" FontFamily="Verdana" FontSize="14" Command="{Binding DeleteUserCommand}"/>
+            </Grid>
+
+            <Grid Name="Reports" RowSpan="2" Visibility="Hidden">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Margin="25" Grid.Row="0" Content="Income and expenses" FontFamily="Verdana" FontSize="24" HorizontalContentAlignment="Center"/>
+                <DatePicker Grid.Row="0" Height="40" Width="150" Margin="80,0,0,0" HorizontalAlignment="Left" SelectedDate="{Binding StartDate, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"/>
+                <DatePicker Grid.Row="0" Height="40" Width="150" Margin="0,0,80,0" HorizontalAlignment="Right" SelectedDate="{Binding EndDate, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Row="0" Height="35" Width="120" Content="Show" VerticalAlignment="Bottom" Margin="20" Background="#CC435DED" Foreground="White" FontFamily="Verdana" FontSize="14" Command="{Binding CostsCommand}"/>
+                <Label Height="40" VerticalAlignment="Top" Margin="20" Grid.Row="1" Content="Print selected table" FontFamily="Verdana" FontSize="24" HorizontalContentAlignment="Center"/>
+                <ComboBox Grid.Row="1" Height="40" Width="200" HorizontalAlignment="Left" Margin="60,0,0,0" ItemsSource="{Binding ListTables}" IsReadOnly="False" IsEditable="False" SelectedItem="{Binding SelectedTable, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Row="1" Height="40" Width="120" Content="Select" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="200,0,0,0" Background="#CC435DED" Foreground="White" FontFamily="Verdana" FontSize="14" Command="{Binding PrintCommand}"/>
+            </Grid>
+        </Grid>
     </Grid>
 
 </UserControl>

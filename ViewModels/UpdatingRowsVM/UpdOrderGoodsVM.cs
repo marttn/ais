@@ -1,19 +1,16 @@
 ﻿using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Data.SqlClient;
+using ais.Tools.Navigation;
+using System;
 
 namespace ais.ViewModels.UpdatingRowsVM
 {
     class UpdOrderGoodsVM
     {
-        private RelayCommand<object> updateOrderGoods;
+        private RelayCommand<Window> _updateOrderGoods;
 
         SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
 
@@ -43,21 +40,21 @@ namespace ais.ViewModels.UpdatingRowsVM
         public Order_Goods CurrentOrderGoods { get; } = StationManager.CurrentOrderGoods;
         public string NameGoods { get; set; }
 
-        public RelayCommand<object> UpdateOrderGoods
+        public RelayCommand<Window> UpdateOrderGoods
         {
-            get => updateOrderGoods ?? (updateOrderGoods = new RelayCommand<object>(UpdImpl, CanUpd));
+            get => _updateOrderGoods ?? (_updateOrderGoods = new RelayCommand<Window>(UpdImpl, CanUpd));
         }
 
-        private bool CanUpd(object obj)
+        private bool CanUpd(Window obj)
         {
             return CurrentOrderGoods.QuantityGoods > 0;
         }
 
-        private void UpdImpl(object obj)
+        private void UpdImpl(Window obj)
         {
             StationManager.DataStorage.UpdateOrderGoods(StationManager.CurrentOrderGoods, CurrentOrderGoods);
             StationManager.CurrentOrderGoods = CurrentOrderGoods;
-            NavigationManager.Instance.Navigate(Tools.Navigation.ViewType.Admin);
+            obj.Close();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ais.Tools.Navigation;
+﻿using System.Windows;
+using ais.Tools.Navigation;
 using ais.ViewModels.AddingRowsVM;
 using System.Windows.Controls;
 
@@ -7,7 +8,7 @@ namespace ais.Views.AddingRows
     /// <summary>
     /// Логика взаимодействия для NewOrderView.xaml
     /// </summary>
-    public partial class NewOrderView : UserControl, INavigatable
+    public partial class NewOrderView : Window
     {
         public NewOrderView()
         {

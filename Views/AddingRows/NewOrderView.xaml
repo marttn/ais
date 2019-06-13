@@ -1,12 +1,12 @@
-﻿<UserControl x:Class="ais.Views.AddingRows.NewOrderView"
+﻿<Window x:Class="ais.Views.AddingRows.NewOrderView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ais.Views.AddingRows"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="680">
+             Name="NewOrder"
+             Height="450" Width="680">
     <Grid Background="#0CCADCF9" Height="420" VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.4*"/>
@@ -29,6 +29,6 @@
         <ComboBox Name="cust" Grid.Column="1" IsReadOnly="False" IsEditable="False" ItemsSource="{Binding ListCustomers}" SelectedItem="{Binding ID, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Width="220"/>
         <ComboBox Name="work" Grid.Column="1" IsReadOnly="False" IsEditable="False" ItemsSource="{Binding ListWorkshops}" SelectedItem="{Binding CodeWorkshop, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged, TargetNullValue='Choose a workshop...'}" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="220"/>
         <ComboBox Name="cornice" Grid.Column="1" IsReadOnly="False" IsEditable="False" ItemsSource="{Binding ListCornices}"  SelectedItem="{Binding Ipn, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged, TargetNullValue='Choose an installer...'}" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Width="220"/>
-        <Button Content="Add" Command="{Binding AddOrder}" Grid.Column="1" HorizontalAlignment="Left" Margin="30,0,0,0" Grid.Row="5" VerticalAlignment="Center" Width="95" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="14" FontFamily="Verdana"/>
+        <Button CommandParameter="{Binding ElementName=NewOrder}" Content="Add" Command="{Binding AddOrder}" Grid.Column="1" HorizontalAlignment="Left" Margin="30,0,0,0" Grid.Row="5" VerticalAlignment="Center" Width="95" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="14" FontFamily="Verdana"/>
     </Grid>
-</UserControl>
+</Window>

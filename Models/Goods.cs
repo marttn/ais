@@ -6,20 +6,23 @@ namespace ais.Models
     class Goods
     {
 
-        public string articul;
-        public string name;
-        public string type;
-        public string material;
-        public string characteristics;
+        private string articul;
+        private string name;
+        private string type;
+        private string material;
+        private string characteristics;
+        private double sellingPrice;
 
 
-        public Goods(string articul = "", string name = "", string type = "", string material = "", string characteristics = "")
+        public Goods(string articul = "", string name = "", string type = "", string material = "",
+            string characteristics = "", double sellingPrice = 0.0)
         {
             Articul = articul;
             Name = name;
             Type = type;
             Material = material;
             Characteristics = characteristics;
+            SellingPrice = sellingPrice;
         }
 
         public string Articul
@@ -64,6 +67,15 @@ namespace ais.Models
             set
             {
                 characteristics = value;
+                OnPropertyChanged();
+            }
+        }
+        public double SellingPrice
+        {
+            get => sellingPrice;
+            set
+            {
+                sellingPrice = value;
                 OnPropertyChanged();
             }
         }

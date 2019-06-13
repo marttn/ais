@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
 using ais.Tools.Navigation;
+using ais.Views;
+using ais.Views.AddingRows;
+using ais.Views.UpdatingRows;
 
 namespace ais.ViewModels
 {
-    internal class DesignerViewModel
+    internal class DesignerViewModel : INotifyPropertyChanged
     {
         private string _name;
         private string _lastName;
@@ -25,10 +24,32 @@ namespace ais.ViewModels
         private Cornices _selectedCornices;
         private Workshop _selectedWorkshop;
 
+        private DateTime _startDate;
+        private DateTime _endDate;
+
 
         private RelayCommand<object> _addCommand;
         private RelayCommand<object> _updateCommand;
         private RelayCommand<object> _deleteCommand;
+
+        private RelayCommand<object> _showOrders;
+        private RelayCommand<object> _calcProfit;
+        private RelayCommand<object> _showCustomers;
+        private RelayCommand<object> _selectTable;
+
+        private RelayCommand<object> _closeCommand;
+        private RelayCommand<object> _homeCommand;
+
+        private RelayCommand<object> _addNumCommand;
+
+        private string _selectedPeriod;
+        private string _selectedTable;
+        private string _selectedSortOrder;
+
+        private ObservableCollection<Order> _orders;
+        private ObservableCollection<Customer> _сustomers;
+        private ObservableCollection<Cornices> _cornices;
+        private ObservableCollection<Workshop> _workshops;
 
         public Users CurrentUser { get; } = StationManager.CurrentUser;
 
@@ -76,19 +97,7 @@ namespace ais.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        //public string SelectedContractor
-        //{
-        //    get => _selectedContractor;
-        //    set
-        //    {
-        //        _selectedContractor = value;
-        //        OnPropertyChanged("SelectedContractor");
-        //        OnPropertyChanged("ListSelectedGoods");
-        //        //MessageBox.Show(StationManager.SelectedContractor);
-        //    }
-        //}
-
+        
         public Order SelectedOrder
         {
             get => _selectedOrder;
@@ -98,7 +107,6 @@ namespace ais.ViewModels
                 OnPropertyChanged("SelectedOrder");
             }
         }
-
         public Customer SelectedCustomer
         {
             get => _selectedCustomer;
@@ -108,7 +116,6 @@ namespace ais.ViewModels
                 OnPropertyChanged("SelectedCustomer");
             }
         }
-
         public Cornices SelectedCornice
         {
             get => _selectedCornices;
@@ -118,7 +125,6 @@ namespace ais.ViewModels
                 OnPropertyChanged("SelectedCornice");
             }
         }
-
         public Workshop SelectedWorkshop
         {
             get => _selectedWorkshop;
@@ -129,14 +135,89 @@ namespace ais.ViewModels
             }
         }
 
-        public ObservableCollection<Order> Orders { get; set; } = new ObservableCollection<Order>(StationManager.DataStorage.OrdersList);
-        public ObservableCollection<Customer> Customers { get; set; } = new ObservableCollection<Customer>(StationManager.DataStorage.CustomersList);
-        public ObservableCollection<Cornices> Cornices { get; set; } = new ObservableCollection<Cornices>(StationManager.DataStorage.CornicesList);
-        public ObservableCollection<Workshop> Workshops { get; set; } = new ObservableCollection<Workshop>(StationManager.DataStorage.WorkshopsList);
-        //public ObservableCollection<string> ListContractors { get; set; } = new ObservableCollection<string>(StationManager.DataStorage.NameContractors());
-        // public ObservableCollection<string> ListNameGoods { get; set; } = new ObservableCollection<string>(StationManager.DataStorage.NameGoods());
+        public ObservableCollection<Order> Orders
+        {
+            get => new ObservableCollection<Order>(StationManager.DataStorage.OrdersList);
+            set
+            {
+                _orders = value;
+                OnPropertyChanged("Orders");
+            }
+        }
+        public ObservableCollection<Customer> Customers
+        {
+            get => new ObservableCollection<Customer>(StationManager.DataStorage.CustomersList);
+            set
+            {
+                _сustomers = value;
+                OnPropertyChanged("Customers");
+            }
+        }
+        public ObservableCollection<Cornices> Cornices
+        {
+            get => new ObservableCollection<Cornices>(StationManager.DataStorage.CornicesList);
+            set
+            {
+                _cornices = value;
+                OnPropertyChanged("Cornices");
+            }
+        }
+        public ObservableCollection<Workshop> Workshops
+        {
+            get => new ObservableCollection<Workshop>(StationManager.DataStorage.WorkshopsList);
+            set
+            {
+                _workshops = value;
+                OnPropertyChanged("Workshops");
+            }
+        } 
 
+        public DateTime StartDate
+        {
+            get => _startDate;
+            set
+            {
+                _startDate = value;
+                OnPropertyChanged("StartDate");
+            }
+        }
+        public DateTime EndDate
+        {
+            get => _endDate;
+            set
+            {
+                _endDate = value;
+                OnPropertyChanged("EndDate");
+            }
+        }
 
+        public string SelectedPeriod
+        {
+            get => _selectedPeriod;
+            set
+            {
+                _selectedPeriod = value;
+                OnPropertyChanged("SelectedPeriod");
+            }
+        }
+        public string SelectedTable
+        {
+            get => _selectedTable?.Replace("System.Windows.Controls.ComboBoxItem: ", "");
+            set
+            {
+                _selectedTable = value;
+                OnPropertyChanged("SelectedTable");
+            }
+        }
+        public string SelectedSortOrder
+        {
+            get => _selectedSortOrder;
+            set
+            {
+                _selectedSortOrder = value;
+                OnPropertyChanged("SelectedSortOrder");
+            }
+        }
         public RelayCommand<object> AddCommand => _addCommand ?? (_addCommand = new RelayCommand<object>(AddRowImplementation));
 
         private void AddRowImplementation(object obj)
@@ -144,19 +225,25 @@ namespace ais.ViewModels
             switch (StationManager.CurrentTableType)
             {
                 case "Order":
-                    NavigationManager.Instance.Navigate(ViewType.NewOrder);
+                    NewOrderView order = new NewOrderView();
+                    order.ShowDialog();
                     Orders = new ObservableCollection<Order>(StationManager.DataStorage.OrdersList);
+                    OnPropertyChanged("Orders");
                     break;
                 case "Customer":
-                    NavigationManager.Instance.Navigate(ViewType.NewCustomer);
+                    NewCustomerView customer = new NewCustomerView();
+                    customer.ShowDialog();
                     Customers = new ObservableCollection<Customer>(StationManager.DataStorage.CustomersList);
                     break;
                 case "Cornices":
-                    NavigationManager.Instance.Navigate(ViewType.NewCornices);
+                    NewCornicesView cornices = new NewCornicesView();
+                    cornices.ShowDialog();
                     Cornices = new ObservableCollection<Cornices>(StationManager.DataStorage.CornicesList);
+                    OnPropertyChanged("Cornices");
                     break;
                 case "Workshop":
-                    NavigationManager.Instance.Navigate(ViewType.NewWorkshop);
+                    NewWorkshopView workshop = new NewWorkshopView();
+                    workshop.ShowDialog();
                     Workshops = new ObservableCollection<Workshop>(StationManager.DataStorage.WorkshopsList);
                     break;
                 case null:
@@ -189,25 +276,29 @@ namespace ais.ViewModels
             {
                 case "Order":
                     StationManager.CurrentOrder = SelectedOrder;
-                    NavigationManager.Instance.Navigate(ViewType.UpdOrder);
+                    UpdOrderView upd = new UpdOrderView();
+                    upd.ShowDialog();
                     Orders = new ObservableCollection<Order>(StationManager.DataStorage.OrdersList);
                     SelectedOrder = null;
                     break;
                 case "Customer":
                     StationManager.CurrentCustomer = SelectedCustomer;
-                    NavigationManager.Instance.Navigate(ViewType.UpdCustomer);
+                    UpdCustomerView updateCustomerView = new UpdCustomerView();
+                    updateCustomerView.ShowDialog();
                     Customers = new ObservableCollection<Customer>(StationManager.DataStorage.CustomersList);
                     SelectedCustomer = null;
                     break;
                 case "Cornices":
                     StationManager.CurrentCornices = SelectedCornice;
-                    NavigationManager.Instance.Navigate(ViewType.UpdCornices);
+                    UpdCornicesView updCornices = new UpdCornicesView();
+                    updCornices.ShowDialog();
                     Cornices = new ObservableCollection<Cornices>(StationManager.DataStorage.CornicesList);
                     SelectedCornice = null;
                     break;
                 case "Workshop":
                     StationManager.CurrentWorkshop = SelectedWorkshop;
-                    NavigationManager.Instance.Navigate(ViewType.UpdWorkshop);
+                    UpdWorkshopView updWorkshop = new UpdWorkshopView();
+                    updWorkshop.ShowDialog();
                     Workshops = new ObservableCollection<Workshop>(StationManager.DataStorage.WorkshopsList);
                     SelectedWorkshop = null;
                     break;
@@ -246,6 +337,146 @@ namespace ais.ViewModels
                     break;
             }
         }
+
+        public RelayCommand<object> ShowOrders => _showOrders ?? (_showOrders = new RelayCommand<object>(ShowOrdersImpl, CanShowOrder));
+
+        private bool CanShowOrder(object obj)
+        {
+            return StartDate < EndDate;
+        }
+
+        private void ShowOrdersImpl(object obj)
+        {
+            OrdersSelectedPeriod order = new OrdersSelectedPeriod(StartDate, EndDate);
+            order.ShowDialog();
+        }
+
+        public RelayCommand<object> CalcProfit => _calcProfit ?? (_calcProfit = new RelayCommand<object>(CalcProfitImpl, CanCalc));
+
+        private bool CanCalc(object obj) => !string.IsNullOrWhiteSpace(SelectedPeriod);
+
+        private void CalcProfitImpl(object obj)
+        {
+            DateTime s = DateTime.Now, e = DateTime.Now;
+                if (SelectedPeriod.EndsWith("period"))
+                {
+                    if (StartDate < EndDate)
+                    {
+                        s = StartDate;
+                        e = EndDate;
+                    }
+                    else
+                    {
+                        MessageBox.Show("select a correct date!");
+                        return;
+                    }
+                }
+                else if (SelectedPeriod.EndsWith("week"))
+                {
+                    e = DateTime.Today;
+                    int m, d, y;
+                    if (e.Day < 7)
+                    {
+                        if (e.Month == 5 || e.Month == 7 || e.Month == 10 || e.Month == 12)
+                        {
+                            m = e.Month - 1;
+                            d = e.Day - 7 + 30;
+                            y = e.Year;
+                        }
+                        else if (e.Month == 3)
+                        {
+                            m = e.Month - 1;
+                            d = e.Day - 7 + 28;
+                            y = e.Year;
+                        }
+                        else if (e.Month == 2 || e.Month == 4 || e.Month == 6 || e.Month == 8 || e.Month == 9 ||
+                                 e.Month == 11)
+                        {
+                            m = e.Month - 1;
+                            d = e.Day - 7 + 31;
+                            y = e.Year;
+                        }
+                        else
+                        {
+                            m = 12;
+                            d = e.Day - 7 + 30;
+                            y = e.Year - 1;
+                        }
+                    }
+                    else
+                    {
+                        d = e.Day - 7;
+                        m = e.Month;
+                        y = e.Year;
+                    }
+
+                    s = new DateTime(y, m, d);
+
+                }
+                else if (SelectedPeriod.EndsWith("month"))
+                {
+                    e = DateTime.Now;
+                    s = new DateTime(e.Month == 1 ? e.Year - 1 : e.Year, e.Month == 1 ? 12 : e.Month - 1, e.Day);
+                }
+                else if (SelectedPeriod.EndsWith("6 months"))
+                {
+                    e = DateTime.Now;
+                    s = e.Month <= 6
+                        ? new DateTime(e.Year - 1, e.Month + 6, e.Day)
+                        : new DateTime(e.Year, e.Month - 6, e.Day);
+                }
+                else if (SelectedPeriod.EndsWith("year"))
+                {
+                    e = DateTime.Now;
+                    s = new DateTime(e.Year - 1, e.Month, e.Day);
+                }
+
+                MessageBox.Show(s.ToShortDateString() + " " + e.ToShortDateString());
+                NetProfit p = new NetProfit(s, e);
+                p.ShowDialog();
+        }
+
+        public RelayCommand<object> ShowCustomers => _showCustomers ?? (_showCustomers = new RelayCommand<object>(ShowCustsImpl, CanShowSort));
+
+        private bool CanShowSort(object obj)
+        {
+            return !string.IsNullOrWhiteSpace(SelectedSortOrder);
+        }
+
+        private void ShowCustsImpl(object obj)
+        {
+            ProfitableCustomers profitableCustomers = SelectedSortOrder.EndsWith("Ascending") ? new ProfitableCustomers(true) : new ProfitableCustomers(false);
+            profitableCustomers.ShowDialog();
+
+        }
+
+        public RelayCommand<object> SelectTable => _selectTable ?? (_selectTable = new RelayCommand<object>(SelectImpl, CanSelect));
+
+        private bool CanSelect(object obj)
+        {
+            return !string.IsNullOrWhiteSpace(SelectedTable);
+        }
+
+        private void SelectImpl(object obj)
+        {
+            MessageBox.Show(SelectedTable);
+            Print print = new Print(SelectedTable);
+            print.ShowDialog();
+        }
+
+        public RelayCommand<object> AddNumCommand => _addNumCommand ??
+                                                     (_addNumCommand = new RelayCommand<object>(AddNumImpl,
+                                                         o => SelectedCustomer != null));
+
+        private void AddNumImpl(object obj)
+        {
+            StationManager.CurrentCustomer = SelectedCustomer;
+            CustTelView custTelView = new CustTelView();
+            custTelView.ShowDialog();
+        }
+
+        public RelayCommand<object> CloseCommand => _closeCommand ?? (_closeCommand = new RelayCommand<object>(o=>StationManager.CloseApp()));
+        public RelayCommand<object> HomeCommand => _homeCommand ?? (_homeCommand = new RelayCommand<object>(o=>NavigationManager.Instance.Navigate(ViewType.SignIn)));
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

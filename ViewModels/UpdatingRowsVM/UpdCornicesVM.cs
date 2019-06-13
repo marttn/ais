@@ -1,7 +1,8 @@
 ﻿using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using System;
+using ais.Tools.Navigation;
+using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,28 +13,28 @@ namespace ais.ViewModels.UpdatingRowsVM
     class UpdCornicesVM
     {
 
-        private RelayCommand<object> updateCornices;
+        private RelayCommand<Window> _updateCornices;
         public Cornices CurrentCornices { get; } = StationManager.CurrentCornices;
 
-        public RelayCommand<object> UpdateCornices
+        public RelayCommand<Window> UpdateCornices
         {
-            get => updateCornices ?? (updateCornices = new RelayCommand<object>(UpdImpl, CanUpd));
+            get => _updateCornices ?? (_updateCornices = new RelayCommand<Window>(UpdImpl, CanUpd));
         }
 
-        private bool CanUpd(object obj)
+        private bool CanUpd(Window obj)
         {
             return !string.IsNullOrWhiteSpace(CurrentCornices.LastName) &&
                    !string.IsNullOrWhiteSpace(CurrentCornices.Name) &&
                    !string.IsNullOrWhiteSpace(CurrentCornices.AccountCornice) &&
                    !string.IsNullOrWhiteSpace(CurrentCornices.TelNum) &&
-                   !string.IsNullOrWhiteSpace(CurrentCornices.PriceOneCornice.ToString()) && CurrentCornices.PriceOneCornice != 0;
+                   !string.IsNullOrWhiteSpace(CurrentCornices.PriceOneCornice.ToString()) && CurrentCornices.PriceOneCornice != 0.0;
         }
 
-        private void UpdImpl(object obj)
+        private void UpdImpl(Window obj)
         {
             StationManager.DataStorage.UpdateCornices(StationManager.CurrentCornices, CurrentCornices);
             StationManager.CurrentCornices = CurrentCornices;
-            NavigationManager.Instance.Navigate(Tools.Navigation.ViewType.Admin);
+            obj.Close();
         }
     }
 }

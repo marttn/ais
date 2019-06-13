@@ -1,16 +1,16 @@
-﻿using ais.Tools.Navigation;
-using System.Windows.Controls;
+﻿using ais.ViewModels.UpdatingRowsVM;
 
 namespace ais.Views.UpdatingRows
 {
     /// <summary>
     /// Логика взаимодействия для UpdContractorTel.xaml
     /// </summary>
-    public partial class UpdContractorTel : UserControl, INavigatable
+    public partial class UpdContractorTel 
     {
         public UpdContractorTel()
         {
             InitializeComponent();
+            DataContext = new UpdContractorTelVM();
         }
     }
 }

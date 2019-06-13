@@ -1,5 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
+using ais.Tools.Managers;
 
 namespace ais.Models
 {
@@ -15,6 +19,7 @@ namespace ais.Models
         private int porch;
         private int _apartment;
         private string email;
+        private ObservableCollection<Order> _customersOrders;
 
         public Customer(string iD = "", string lastName = "", string name = "", string middleName = "", string city = "", string street = "", string building = "", int porch = 0, int apartment= 0, string email = "")
         {
@@ -28,6 +33,7 @@ namespace ais.Models
             Porch = porch;
             Apartment = apartment;
             Email = email;
+           // CustomersOrders = new ObservableCollection<Order>(StationManager.DataStorage.CustomersOrdersList(iD));
         }
 
         public string ID
@@ -121,6 +127,31 @@ namespace ais.Models
             {
                 email = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<Order> CustomersOrders
+        {
+            get
+            {
+                if (_customersOrders == null)
+                {
+                    GetList();
+                }
+                return _customersOrders;
+            }
+        }
+
+        private void GetList()
+        {
+            try
+            {
+                _customersOrders = new ObservableCollection<Order>(StationManager.DataStorage.CustomersOrdersList(ID));
+                
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message + "\n" + exc.Source + "\n" + exc.StackTrace);
             }
         }
 

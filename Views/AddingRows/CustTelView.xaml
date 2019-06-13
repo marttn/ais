@@ -1,12 +1,12 @@
-﻿<UserControl x:Class="ais.Views.AddingRows.CustTelView"
+﻿<Window x:Class="ais.Views.AddingRows.CustTelView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ais.Views.AddingRows"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="500">
-    <Grid Background="#0CCADCF9" Width="500" >
+             Name="CustTel"
+             Height="450" Width="510">
+    <Grid Background="#0CCADCF9" Width="510" >
         <Grid.RowDefinitions>
             <RowDefinition Height="1.3*"/>
             <RowDefinition Height="*"/>
@@ -19,9 +19,9 @@
         </Grid.ColumnDefinitions>
         <Label Grid.Row="0" VerticalAlignment="Center" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="Add customer's number" FontSize="35" FontFamily="Verdana" />
         <TextBlock Grid.Row="1" Margin="40, 0,0,0" Text= "Customer"  VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Verdana" FontSize="26"/>
-        <TextBlock Name="CurrentUser" Grid.Row="1" Grid.Column="1" Margin="25, 0,0,0" Text= "{Binding Name, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Verdana" FontSize="33" Visibility="Visible"/>
+        <TextBlock Name="CurrentUser" Grid.Row="1" Grid.Column="1" Margin="25, 0,0,0" Text= "{Binding Name, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Verdana" FontSize="22" Visibility="Visible"/>
         <TextBlock Grid.Row="2" Margin="40, 0,0,0" Text= "Number"  VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Verdana" FontSize="26"/>
         <TextBox Grid.Row="2" Grid.Column="1" Margin="25" Height="33" VerticalAlignment="Center" Text="{Binding Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Grid.Row="3" Content="Add" Grid.ColumnSpan="2" VerticalAlignment="Center" Width="135" Height="50" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="22" FontFamily="Verdana" Command="{Binding AddTel}"/>
+        <Button CommandParameter="{Binding ElementName=CustTel}" Grid.Row="3" Content="Add" Grid.ColumnSpan="2" VerticalAlignment="Center" Width="135" Height="50" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="22" FontFamily="Verdana" Command="{Binding AddTel}"/>
     </Grid>
-</UserControl>
+</Window>

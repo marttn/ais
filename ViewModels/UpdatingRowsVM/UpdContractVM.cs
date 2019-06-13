@@ -1,13 +1,9 @@
-﻿using ais.Models;
+﻿using System;
+using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Data.SqlClient;
 
 namespace ais.ViewModels.UpdatingRowsVM
 {
@@ -38,28 +34,25 @@ namespace ais.ViewModels.UpdatingRowsVM
             }
         }
 
-        private RelayCommand<object> updateContract;
+        private RelayCommand<Window> _updateContract;
 
         SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
 
         public Contract CurrentContract { get; } = StationManager.CurrentContract;
         public string NameContr { get; set; }
 
-        public RelayCommand<object> UpdateContract
-        {
-            get => updateContract ?? (updateContract = new RelayCommand<object>(UpdImpl, CanUpd));
-        }
+        public RelayCommand<Window> UpdateContract => _updateContract ?? (_updateContract = new RelayCommand<Window>(UpdImpl, CanUpd));
 
-        private bool CanUpd(object obj)
+        private bool CanUpd(Window obj)
         {
             return CurrentContract.DateContract <= DateTime.Now;
         }
 
-        private void UpdImpl(object obj)
+        private void UpdImpl(Window obj)
         {
             StationManager.DataStorage.UpdateContract(StationManager.CurrentContract, CurrentContract);
             StationManager.CurrentContract = CurrentContract;
-            NavigationManager.Instance.Navigate(Tools.Navigation.ViewType.Admin);
+            obj.Close();
         }
     }
 }

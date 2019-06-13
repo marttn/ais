@@ -1,7 +1,8 @@
 ﻿using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using System;
+using ais.Tools.Navigation;
+using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,31 +12,31 @@ namespace ais.ViewModels.UpdatingRowsVM
 {
     class UpdCustomerVM
     {
-        private RelayCommand<object> updCust;
+        private RelayCommand<Window> _updCust;
         public Customer CurrentCustomer { get; } = StationManager.CurrentCustomer;
 
-        public RelayCommand<object> UpdCust
+        public RelayCommand<Window> UpdCust
         {
-            get => updCust ?? (updCust = new RelayCommand<object>(UpdImpl, CanUpd));
+            get => _updCust ?? (_updCust = new RelayCommand<Window>(UpdImpl, CanUpd));
         }
 
-        private bool CanUpd(object obj)
+        private bool CanUpd(Window obj)
         {
             return !string.IsNullOrWhiteSpace(CurrentCustomer.LastName) &&
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Name) &&
                    !string.IsNullOrWhiteSpace(CurrentCustomer.City) &&
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Street) &&
-                   !string.IsNullOrWhiteSpace(CurrentCustomer.Building) &&
+                   !string.IsNullOrWhiteSpace(CurrentCustomer.Building) && CurrentCustomer.Building.Length <=4 &&
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Porch.ToString()) &&
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Apartment.ToString()) &&
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Email);
         }
 
-        private void UpdImpl(object obj)
+        private void UpdImpl(Window obj)
         {
             StationManager.DataStorage.UpdateCustomer(StationManager.CurrentCustomer, CurrentCustomer);
-           // StationManager.CurrentCustomer = CurrentCustomer;
-            NavigationManager.Instance.Navigate(Tools.Navigation.ViewType.Admin);
+            StationManager.CurrentCustomer = CurrentCustomer;
+            obj.Close(); 
         }
     }
 }

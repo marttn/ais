@@ -3,157 +3,114 @@ using ais.Tools;
 using ais.Tools.Managers;
 using ais.Tools.Navigation;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ais.ViewModels.AddingRowsVM
 {
     class OrderGoodsViewModel
     {
-        private string numOrd;
-        private string nameCurtain;
-        private string nameCornice;
-        private string nameAccessories;
-        private int curtAmount;
-        private int cornAmount;
-        private int accAmount;
+        private string _numOrd;
+        private string _nameCurtain;
+        private string _nameCornice;
+        private string _nameAccessories;
+        private int _curtAmount;
+        private int _cornAmount;
+        private int _accAmount;
 
-        private RelayCommand<object> addOrderGoods;
+        private RelayCommand<Window> _addOrderGoods;
         SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
 
         public OrderGoodsViewModel()
         {
-            try
-            {
-                if (conn == null)
-                {
-                    throw new Exception("Connection String is Null");
-                }
-                conn.Open();
                 //cornices
-                SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('стелеві карнизи', 'настінні карнизи') ", conn);
-                SqlDataReader select = query.ExecuteReader(), sql1, sql2, sql3;
-                while (select.Read())
-                {
-                    ListCornices.Add(select["name_g"].ToString().Trim(' '));
-                }
-                select.Close();
+                ListCornices = new ObservableCollection<string>(StationManager.DataStorage.ListCornices());
                 //curtains
-                query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('тюль', 'портьєрні', 'водовідштовхувальні', 'рулонні', 'жалюзі')", conn);
-                sql1 = query.ExecuteReader();
-                while (sql1.Read())
-                {
-                    ListCurtains.Add(sql1["name_g"].ToString().Trim(' '));
-                }
-                sql1.Close();
+                ListCurtains = new ObservableCollection<string>(StationManager.DataStorage.ListCurtains());
                 //Accessories
-                query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('китиці', 'бахрома', 'люверси', 'тесьма')", conn);
-                sql2 = query.ExecuteReader();
-                while (sql2.Read())
-                {
-                    ListAccs.Add(sql2["name_g"].ToString().Trim(' '));
-                }
-                sql2.Close();
+                ListAccs = new ObservableCollection<string>(StationManager.DataStorage.ListAccs());
                 //orders
-                query = new SqlCommand("Select Num_ord FROM [Order]", conn);
-                sql3 = query.ExecuteReader();
-                while (sql3.Read())
-                {
-                    ListNums.Add(sql3["Num_ord"].ToString().Trim(' '));
-                }
-                sql3.Close();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
-            finally
-            {
-                conn.Close();
-            }
+                ListNums = new ObservableCollection<string>(StationManager.DataStorage.ListOrderNums());
+            
         }
         
-        public ObservableCollection<string> ListNums { get; } = new ObservableCollection<string>();
-        public ObservableCollection<string> ListCurtains { get; } = new ObservableCollection<string>();
-        public ObservableCollection<string> ListCornices { get; } = new ObservableCollection<string>();
-        public ObservableCollection<string> ListAccs { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> ListNums { get; }
+        public ObservableCollection<string> ListCurtains { get; }
+        public ObservableCollection<string> ListCornices { get; }
+        public ObservableCollection<string> ListAccs { get; }
 
         public string NumOrd
         {
-            get => /*StationManager.CurrentOrder.NumOrd ??*/ numOrd;
+            get => /*StationManager.CurrentOrder.NumOrd ??*/ _numOrd;
             set
             {
-                numOrd = value;
+                _numOrd = value;
                 OnPropertyChanged();
             }
         }
         public string NameCurtain
         {
-            get => nameCurtain;
+            get => _nameCurtain;
             set
             {
-                nameCurtain = value;
+                _nameCurtain = value;
                 OnPropertyChanged();
             }
         }
         public string NameCornice
         {
-            get => nameCornice;
+            get => _nameCornice;
             set
             {
-                nameCornice = value;
+                _nameCornice = value;
                 OnPropertyChanged();
             }
         }
         public string NameAccessories
         {
-            get => nameAccessories;
+            get => _nameAccessories;
             set
             {
-                nameAccessories = value;
+                _nameAccessories = value;
                 OnPropertyChanged();
             }
         }
 
         public int CurtAmount
         {
-            get => curtAmount;
+            get => _curtAmount;
             set
             {
-                curtAmount = value;
+                _curtAmount = value;
                 OnPropertyChanged();
             }
         }
         public int CornAmount
         {
-            get => cornAmount;
+            get => _cornAmount;
             set
             {
-                cornAmount = value;
+                _cornAmount = value;
                 OnPropertyChanged();
             }
         }
         public int AccAmount
         {
-            get => accAmount;
+            get => _accAmount;
             set
             {
-                accAmount = value;
+                _accAmount = value;
                 OnPropertyChanged();
             }
         }
 
 
-        public RelayCommand<object> AddOrderGoods
+        public RelayCommand<Window> AddOrderGoods
         {
-            get => addOrderGoods ?? (addOrderGoods = new RelayCommand<object>(AddImpl, CanAdd));
+            get => _addOrderGoods ?? (_addOrderGoods = new RelayCommand<Window>(AddImpl, CanAdd));
         }
 
         private bool CanAdd(object obj)
@@ -167,7 +124,7 @@ namespace ais.ViewModels.AddingRowsVM
                    !string.IsNullOrWhiteSpace(AccAmount.ToString()));
         }
 
-        private void AddImpl(object obj)
+        private void AddImpl(Window obj)
         {
             try
             {
@@ -253,7 +210,7 @@ namespace ais.ViewModels.AddingRowsVM
             {
                 conn.Close();
             }
-            NavigationManager.Instance.Navigate(ViewType.Admin);
+            obj.Close();
         }
 
 

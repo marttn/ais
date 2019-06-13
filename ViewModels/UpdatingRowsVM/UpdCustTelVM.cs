@@ -1,19 +1,15 @@
-﻿using ais.Models;
+﻿using System;
+using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Data.SqlClient;
 
 namespace ais.ViewModels.UpdatingRowsVM
 {
     class UpdCustTelVM
     {
-        private RelayCommand<object> updTel;
+        private RelayCommand<Window> _updTel;
 
         public UpdCustTelVM()
         {
@@ -29,7 +25,7 @@ namespace ais.ViewModels.UpdatingRowsVM
                 SqlDataReader select = query.ExecuteReader();
                 while (select.Read())
                 {
-                    Name = select["last_name"].ToString().Trim(' ') + select["name_cust"].ToString().Trim(' ');
+                    Name = select["last_name"].ToString().Trim(' ') + " " + select["name_cust"].ToString().Trim(' ');
                 }
                 select.Close();
             }
@@ -48,22 +44,19 @@ namespace ais.ViewModels.UpdatingRowsVM
         public Cust_Tel CurrentCustTel { get; } = StationManager.CurrentCustTel;
         public string Name { get; set; }
 
-        public RelayCommand<object> UpdTel
-        {
-            get => updTel ?? (updTel = new RelayCommand<object>(UpdImpl, CanUpd));
-        }
+        public RelayCommand<Window> UpdTel => _updTel ?? (_updTel = new RelayCommand<Window>(UpdImpl, CanUpd));
 
-        private bool CanUpd(object obj)
+        private bool CanUpd(Window obj)
         {
             return CurrentCustTel.TelNum.Length == 10 &&
                    !string.IsNullOrWhiteSpace(CurrentCustTel.TelNum);
         }
 
-        private void UpdImpl(object obj)
+        private void UpdImpl(Window obj)
         {
             StationManager.DataStorage.UpdateCustTel(StationManager.CurrentCustTel, CurrentCustTel);
             StationManager.CurrentCustTel = CurrentCustTel;
-            NavigationManager.Instance.Navigate(Tools.Navigation.ViewType.Admin);
+            obj.Close();
         }
     }
 }

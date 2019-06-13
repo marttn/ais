@@ -1,0 +1,39 @@
+﻿<Window x:Class="ais.Views.Costs" SizeToContent="WidthAndHeight"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ais.Views"
+        mc:Ignorable="d"
+        Title="Costs" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.85*"></RowDefinition>
+            <RowDefinition Height="0.15*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid  Row="0" Name="GridCosts">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <DataGrid Grid.Column="0" Grid.Row="0" Margin="20,40" Background="Transparent" ItemsSource="{Binding OrdersList}" IsReadOnly="True"/>
+            <DataGrid Grid.Column="1" Grid.Row="0" Margin="20,40" Background="Transparent" ItemsSource="{Binding ContractsList}" IsReadOnly="True"/>
+            <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Center" Content="Orders" FontFamily="Verdana" FontSize="22" />
+            <Label Grid.Column="1" Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Center" Content="Contracts" FontFamily="Verdana" FontSize="22" />
+            <TextBlock Text="{Binding Income}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom" Margin="10" FontFamily="Verdana" FontSize="22" />
+            <TextBlock Text="{Binding Expenses}" Grid.Row="1"  Grid.Column="1" VerticalAlignment="Bottom" Margin="10" FontFamily="Verdana" FontSize="22" />
+            <TextBlock Text="{Binding Profit}" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10" HorizontalAlignment="Center" FontFamily="Verdana" FontSize="22" />
+        </Grid>
+        
+        <Grid Row="2">
+            <Button Width="140" Content="Print" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#CC435DED" Foreground="White" FontFamily="Verdana" FontSize="16" Click="PrintClick"/>
+        </Grid>
+    </Grid>
+    
+
+</Window>

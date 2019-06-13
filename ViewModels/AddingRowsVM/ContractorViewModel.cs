@@ -1,12 +1,14 @@
-﻿using ais.Models;
+﻿using System.Windows;
+using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
+using ais.Tools.Navigation;
 
 namespace ais.ViewModels.AddingRowsVM
 {
     class ContractorViewModel
     {
-        private RelayCommand<object> addContractor;
+        private RelayCommand<Window> _addContractor;
         public Contractor CurrentContractor { get; }
 
         public ContractorViewModel()
@@ -15,9 +17,9 @@ namespace ais.ViewModels.AddingRowsVM
             StationManager.CurrentContractor = CurrentContractor;
         }
 
-        public RelayCommand<object> AddContractor
+        public RelayCommand<Window> AddContractor
         {
-            get => addContractor ?? (addContractor = new RelayCommand<object>(AddContractorImpl, CanAdd));
+            get => _addContractor ?? (_addContractor = new RelayCommand<Window>(AddContractorImpl, CanAdd));
         }
 
         private bool CanAdd(object obj)
@@ -27,16 +29,16 @@ namespace ais.ViewModels.AddingRowsVM
                    !string.IsNullOrWhiteSpace(CurrentContractor.City) &&
                    !string.IsNullOrWhiteSpace(CurrentContractor.Street) &&
                    !string.IsNullOrWhiteSpace(CurrentContractor.Building) &&
-                   !string.IsNullOrWhiteSpace(CurrentContractor.Porch.ToString()) &&
+                   !string.IsNullOrWhiteSpace(CurrentContractor.Porch.ToString()) && CurrentContractor.Building.Length <= 4 &&
                    !string.IsNullOrWhiteSpace(CurrentContractor.Office.ToString()) &&
                    !string.IsNullOrWhiteSpace(CurrentContractor.Account) && CurrentContractor.Account.Length == 16 &&
                    !string.IsNullOrWhiteSpace(CurrentContractor.Email);
         }
 
-        private void AddContractorImpl(object obj)
+        private void AddContractorImpl(Window obj)
         {
             StationManager.DataStorage.AddContractor(StationManager.CurrentContractor);
-            NavigationManager.Instance.Navigate(Tools.Navigation.ViewType.Admin);
+            obj.Close();
         }
     }
 }

@@ -89,7 +89,6 @@
     <Compile Include="Models\Order_Goods.cs" />
     <Compile Include="Models\Users.cs" />
     <Compile Include="Models\Workshop.cs" />
-    <Compile Include="Tools\Columns.cs" />
     <Compile Include="Tools\DataStorage\DbDataStorage.cs" />
     <Compile Include="Tools\DataStorage\IDataStorage.cs" />
     <Compile Include="Tools\PasswordHelper.cs" />
@@ -107,7 +106,12 @@
     <Compile Include="ViewModels\AddingRowsVM\OrderViewModel.cs" />
     <Compile Include="ViewModels\AddingRowsVM\WorkshopViewModel.cs" />
     <Compile Include="ViewModels\AdminViewModel.cs" />
+    <Compile Include="ViewModels\CostsViewModel.cs" />
     <Compile Include="ViewModels\DesignerViewModel.cs" />
+    <Compile Include="ViewModels\NetProfitViewModel.cs" />
+    <Compile Include="ViewModels\OrderSelectedPeriodViewModel.cs" />
+    <Compile Include="ViewModels\PrintViewModel.cs" />
+    <Compile Include="ViewModels\ProfitableCustomersViewModel.cs" />
     <Compile Include="ViewModels\SignInViewModel.cs" />
     <Compile Include="ViewModels\SignUpViewModel.cs" />
     <Compile Include="ViewModels\UpdatingRowsVM\UpdContractGoodsVM.cs" />
@@ -168,6 +172,18 @@
       <DependentUpon>AdminView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tools\Navigation\BaseNavigationModel.cs" />
+    <Compile Include="Views\Costs.xaml.cs">
+      <DependentUpon>Costs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NetProfit.xaml.cs">
+      <DependentUpon>NetProfit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrdersSelectedPeriod.xaml.cs">
+      <DependentUpon>OrdersSelectedPeriod.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Print.xaml.cs">
+      <DependentUpon>Print.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DesignerView.xaml.cs">
       <DependentUpon>DesignerView.xaml</DependentUpon>
     </Compile>
@@ -177,6 +193,9 @@
     <Compile Include="Tools\Navigation\InitializationNavigationModel.cs" />
     <Compile Include="Tools\Managers\NavigationManager.cs" />
     <Compile Include="Tools\RelayCommand.cs" />
+    <Compile Include="Views\ProfitableCustomers.xaml.cs">
+      <DependentUpon>ProfitableCustomers.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SignInView.xaml.cs">
       <DependentUpon>SignInView.xaml</DependentUpon>
     </Compile>
@@ -279,6 +298,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Costs.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NetProfit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OrdersSelectedPeriod.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Print.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DesignerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -295,6 +330,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\ProfitableCustomers.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SignInView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -403,6 +442,8 @@
   <ItemGroup>
     <Resource Include="Views\power.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Views\homepage.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

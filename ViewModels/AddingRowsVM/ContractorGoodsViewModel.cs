@@ -3,24 +3,20 @@ using ais.Tools;
 using ais.Tools.Managers;
 using ais.Tools.Navigation;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ais.ViewModels.AddingRowsVM
 {
     class ContractorGoodsViewModel
     {
-        public ObservableCollection<string> ListContractors { get; } = new ObservableCollection<string>();
-        public ObservableCollection<string> ListCurtains { get; } = new ObservableCollection<string>();
-        public ObservableCollection<string> ListCornices { get; } = new ObservableCollection<string>();
-        public ObservableCollection<string> ListAccs { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> ListContractors { get; }
+        public ObservableCollection<string> ListCurtains { get; }
+        public ObservableCollection<string> ListCornices { get; }
+        public ObservableCollection<string> ListAccs { get; }
 
         private string nameContractor;
         private string nameCurtain;
@@ -30,63 +26,18 @@ namespace ais.ViewModels.AddingRowsVM
         private int cornPrice;
         private int accPrice;
 
-        private RelayCommand<object> addContractorGoods;
+        private RelayCommand<Window> addContractorGoods;
         SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
 
         public ContractorGoodsViewModel()
         {
-            LoadComboBoxes();
+            ListContractors = new ObservableCollection<string>(StationManager.DataStorage.NameContractors());
+            ListCurtains = new ObservableCollection<string>(StationManager.DataStorage.ListCurtains());
+            ListCornices = new ObservableCollection<string>(StationManager.DataStorage.ListCornices());
+            ListAccs = new ObservableCollection<string>(StationManager.DataStorage.ListAccs());
         }
 
-        private void LoadComboBoxes()
-        {
-            try
-            {
-                if (conn == null)
-                {
-                    throw new Exception("Connection String is Null");
-                }
-                conn.Open();
-
-                SqlCommand query = new SqlCommand("SELECT Name_contr FROM Contractor", conn);
-                SqlDataReader select = query.ExecuteReader();
-                while (select.Read())
-                {
-                    ListContractors.Add(select["Name_contr"].ToString().Trim(' '));
-                }
-                select.Close();
-                query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('стелеві карнизи', 'настінні карнизи') ", conn);
-                SqlDataReader sql1 = query.ExecuteReader(), sql2, sql3;
-                while (sql1.Read())
-                {
-                    ListCornices.Add(sql1["name_g"].ToString().Trim(' '));
-                }
-                sql1.Close();
-                query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('тюль', 'портьєрні', 'водовідштовхувальні', 'рулонні', 'жалюзі')", conn);
-                sql2 = query.ExecuteReader();
-                while (sql2.Read())
-                {
-                    ListCurtains.Add(sql2["name_g"].ToString().Trim(' '));
-                }
-                sql2.Close();
-                query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('китиці', 'бахрома', 'люверси', 'тесьма')", conn);
-                sql3 = query.ExecuteReader();
-                while (sql3.Read())
-                {
-                    ListAccs.Add(sql3["name_g"].ToString().Trim(' '));
-                }
-                sql3.Close();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
-            finally
-            {
-                conn.Close();
-            }
-        }
-
+        
 
         public string NameContractor
         {
@@ -144,12 +95,12 @@ namespace ais.ViewModels.AddingRowsVM
         }
 
 
-        public RelayCommand<object> AddContractorGoods
+        public RelayCommand<Window> AddContractorGoods
         {
-            get => addContractorGoods ?? (addContractorGoods = new RelayCommand<object>(AddImpl, CanAdd));
+            get => addContractorGoods ?? (addContractorGoods = new RelayCommand<Window>(AddImpl, CanAdd));
         }
 
-        private bool CanAdd(object obj)
+        private bool CanAdd(Window obj)
         {
             return (!string.IsNullOrWhiteSpace(NameAccessories) ||
                    !string.IsNullOrWhiteSpace(NameCurtain) ||
@@ -160,7 +111,7 @@ namespace ais.ViewModels.AddingRowsVM
                    (!string.IsNullOrWhiteSpace(AccPrice.ToString()) && AccPrice > 0));
         }
 
-        private void AddImpl(object obj)
+        private void AddImpl(Window obj)
         {
             try
             {
@@ -259,7 +210,7 @@ namespace ais.ViewModels.AddingRowsVM
             {
                 conn.Close();
             }
-            NavigationManager.Instance.Navigate(ViewType.Admin);
+            obj.Close();
         }
 
 

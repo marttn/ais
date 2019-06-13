@@ -38,49 +38,49 @@ namespace ais.Tools.DataStorage
         public List<Goods> GoodsList { get => _goodsList; }
         public List<Order_Goods> OrderGoodsList { get => _orderGoodsList; }
         public List<Workshop> WorkshopsList { get => workshopsList; }
-
-        public List<string> NameList { get; } = new List<string>();
+        
 
         public List<string> NameContractors()
         {
+            List<string> nameList = new List<string>();
                 try
                 {
-                    NameList.Clear();
                     conn.Open();
 
                     SqlCommand query = new SqlCommand("SELECT Name_contr FROM Contractor", conn);
                     SqlDataReader reader = query.ExecuteReader();
                     while (reader.Read())
                     {
-                        NameList.Add(reader["Name_contr"].ToString().Trim(' '));
+                        nameList.Add(reader["Name_contr"].ToString().Trim(' '));
                     }
                     reader.Close();
                 }
                 catch (Exception exc)
                 {
-                    MessageBox.Show(exc.Message);
+                    MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace + "\n" + exc.Source + "\n"+ exc.StackTrace);
                 }
                 finally
                 {
                     conn.Close();
                 }
 
-                return NameList;
+                return nameList;
         }
 
-        public List<string> PricesList { get; } = new List<string>();
+        
         public List<string> LoadList()
         {
+         List<string> pricesList = new List<string>();
             try
             {
-                PricesList.Clear();
+                //pricesList.Clear();
                 conn.Open();
 
                 SqlCommand query = new SqlCommand("select Articul, [01234984], [09473433], [11111111], [12345098], [23801858], [28853090], [45800125], [73540129], [78012753], [88412345], [94820123] from Contractor_Goods pivot (sum(Contractor_Goods.price_1_product) for Code_contractor in ([01234984], [09473433], [11111111], [12345098], [23801858], [28853090], [45800125], [73540129], [78012753], [88412345], [94820123])) as aaa", conn);
                 SqlDataReader reader = query.ExecuteReader();
                 while (reader.Read())
                 {
-                    PricesList.Add(reader.GetString(0) + 
+                    pricesList.Add(reader.GetString(0) + 
                                    reader.GetString(1) + 
                                    reader.GetString(2) + 
                                    reader.GetString(3) +
@@ -97,14 +97,224 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace + "\n" + exc.Source + "\n" + exc.StackTrace);
             }
             finally
             {
                 conn.Close();
             }
 
-            return PricesList;
+            return pricesList;
+        }
+
+        public List<Users> UsersList { get; } = new List<Users>
+        {
+            new Users("Marina", "Tyutyun", "mar_ttn", "Admin"),
+            new Users("Liudmila", "Ivanova", "liuda", "Designer")
+        };
+
+        public List<string> ListCurtains()
+        {
+            List<string> curtains = new List<string>();
+            try
+            {
+                SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('тюль', 'портьєрні', 'водовідштовхувальні', 'рулонні', 'жалюзі')", conn);
+                SqlDataReader sql1 = query.ExecuteReader();
+                while (sql1.Read())
+                {
+                    curtains.Add(sql1["name_g"].ToString().Trim(' '));
+                }
+                sql1.Close();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return curtains;
+        }
+
+        public List<string> ListCornices()
+        {
+            List<string> cornices = new List<string>();
+            try
+            {
+                SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('стелеві карнизи', 'настінні карнизи') ", conn);
+                SqlDataReader sql1 = query.ExecuteReader();
+                while (sql1.Read())
+                {
+                    cornices.Add(sql1["name_g"].ToString().Trim(' '));
+                }
+                sql1.Close();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return cornices;
+        }
+
+        public List<string> ListAccs()
+        {
+            List<string> accs = new List<string>();
+            try
+            {
+                SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('китиці', 'бахрома', 'люверси', 'тесьма')", conn);
+                SqlDataReader sql1 = query.ExecuteReader();
+                while (sql1.Read())
+                {
+                    accs.Add(sql1["name_g"].ToString().Trim(' '));
+                }
+                sql1.Close();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return accs;
+        }
+
+        public List<string> ListContracts()
+        {
+            List<string> nums = new List<string>();
+            try
+            {
+                SqlCommand query = new SqlCommand("SELECT Num_contract FROM Contract", conn);
+                SqlDataReader sql1 = query.ExecuteReader();
+                while (sql1.Read())
+                {
+                    nums.Add(sql1["Num_contract"].ToString().Trim(' '));
+                }
+                sql1.Close();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return nums;
+        }
+
+        public List<string> ListCustomers()
+        {
+            List<string> custs = new List<string>();
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query1 = new SqlCommand("SELECT last_name, name_cust FROM Customer", conn);
+                SqlDataReader select1 = query1.ExecuteReader();
+                while (select1.Read())
+                {
+                    custs.Add(select1["name_cust"].ToString().Trim(' ') + " " + select1["last_name"].ToString().Trim(' '));
+                }
+                select1.Close();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return custs;
+        }
+        
+        public List<string> ListOrderNums()
+        {
+            List<string> nums = new List<string>();
+            try
+            {
+                conn.Open();
+                SqlCommand query = new SqlCommand("Select Num_ord FROM [Order]", conn);
+                SqlDataReader sql3 = query.ExecuteReader();
+                while (sql3.Read())
+                {
+                    nums.Add(sql3["Num_ord"].ToString().Trim(' '));
+                }
+                sql3.Close();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return nums;
+        }
+
+        public List<string> ListCorniceInstallers()
+        {
+            List<string> cornices = new List<string>();
+            try
+            {
+                conn.Open();
+                SqlCommand query2 = new SqlCommand("SELECT last_name, name_c FROM Cornices", conn);
+                SqlDataReader select2 = query2.ExecuteReader();
+                while (select2.Read())
+                {
+                    cornices.Add(select2["name_c"].ToString().Trim(' ') + " " + select2["last_name"].ToString().Trim(' '));
+                }
+                select2.Close();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return cornices;
+        }
+
+        public List<string> ListNameWorkshops()
+        {
+            List<string> shops = new List<string>();
+            try
+            {
+                conn.Open();
+                SqlCommand query = new SqlCommand("SELECT name_shop FROM Workshop", conn);
+                SqlDataReader select = query.ExecuteReader();
+                while (select.Read())
+                {
+                    shops.Add(select["name_shop"].ToString().Trim(' '));
+                }
+                select.Close();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return shops;
         }
 
 
@@ -137,7 +347,7 @@ namespace ais.Tools.DataStorage
                 
                     for (int i = 0; i < dataTable1.Rows.Count; ++i)
                     {
-                        customersList.Add(new Customer(
+                        var customer = new Customer(
                             dataTable1.Rows[i][0].ToString() ?? "",
                             dataTable1.Rows[i][1].ToString() ?? "",
                             dataTable1.Rows[i][2].ToString() ?? "",
@@ -147,7 +357,8 @@ namespace ais.Tools.DataStorage
                             dataTable1.Rows[i][6].ToString() ?? "",
                             Convert.ToInt32(dataTable1.Rows[i][7]),
                             Convert.ToInt32(dataTable1.Rows[i][8]),
-                            dataTable1.Rows[i][9].ToString() ?? ""));
+                            dataTable1.Rows[i][9].ToString() ?? "");
+                        customersList.Add(customer);
                     }
                 //MessageBox.Show(customersList[2].ID);
 
@@ -204,7 +415,7 @@ namespace ais.Tools.DataStorage
                     }
 
 
-                SqlCommand cmd5 = new SqlCommand($"select * from [Order]", conn);
+                SqlCommand cmd5 = new SqlCommand($"select * from [upd_order]", conn);
                 SqlDataAdapter da5 = new SqlDataAdapter(cmd5);
                 DataTable dataTable5 = new DataTable();
                 da5.Fill(dataTable5);
@@ -215,7 +426,11 @@ namespace ais.Tools.DataStorage
                             (DateTime)dataTable5.Rows[i][1],
                             dataTable5.Rows[i][2].ToString() ?? "",
                             dataTable5.Rows[i][3].ToString() ?? "",
-                            dataTable5.Rows[i][4].ToString() ?? ""));
+                            dataTable5.Rows[i][4].ToString() ?? "",
+                            dataTable5.Rows[i][5] == DBNull.Value ? 0 : Convert.ToDouble(dataTable5.Rows[i][5]),
+                            dataTable5.Rows[i][6] == DBNull.Value ? 0 : Convert.ToDouble(dataTable5.Rows[i][6]),
+                            dataTable5.Rows[i][7] == DBNull.Value ? 0 : Convert.ToDouble(dataTable5.Rows[i][7]),
+                            dataTable5.Rows[i][8] == DBNull.Value ? 0 : Convert.ToDouble(dataTable5.Rows[i][8])));
                 }
                 StationManager.NumOrder = int.Parse(dataTable5.Rows[dataTable5.Rows.Count - 1][0].ToString());
                 StationManager.CurrentOrder = ordersList[dataTable5.Rows.Count - 1];
@@ -252,18 +467,19 @@ namespace ais.Tools.DataStorage
                 }
 
 
-                SqlCommand cmd8 = new SqlCommand($"select * from Goods", conn);
+                SqlCommand cmd8 = new SqlCommand($"select * from upd_goods", conn);
                 SqlDataAdapter da8 = new SqlDataAdapter(cmd8);
                 DataTable dataTable8 = new DataTable();
                 da8.Fill(dataTable8);
                 for (int i = 0; i < dataTable8.Rows.Count; ++i)
                 {
-                        _goodsList.Add(new Goods(
-                            dataTable8.Rows[i][0].ToString() ?? "",
-                            dataTable8.Rows[i][1].ToString() ?? "",
-                            dataTable8.Rows[i][2].ToString() ?? "",
-                            dataTable8.Rows[i][3].ToString() ?? "",
-                            dataTable8.Rows[i][4].ToString() ?? ""));
+                    _goodsList.Add(new Goods(
+                        dataTable8.Rows[i][0].ToString() ?? "",
+                        dataTable8.Rows[i][1].ToString() ?? "",
+                        dataTable8.Rows[i][2].ToString() ?? "",
+                        dataTable8.Rows[i][3].ToString() ?? "",
+                        dataTable8.Rows[i][4].ToString() ?? "",
+                        sellingPrice:dataTable8.Rows[i][5] == DBNull.Value ? 0 : Convert.ToDouble(dataTable8.Rows[i][5])));
                 }
                 SqlCommand cmd9 = new SqlCommand($"select * from Contractor_Goods", conn);
                 SqlDataAdapter da9 = new SqlDataAdapter(cmd9);
@@ -291,7 +507,7 @@ namespace ais.Tools.DataStorage
                 }
 
 
-                SqlCommand cmd11 = new SqlCommand($"select * from Contract", conn);
+                SqlCommand cmd11 = new SqlCommand($"select * from upd_contract", conn);
                 SqlDataAdapter da11 = new SqlDataAdapter(cmd11);
                 DataTable dataTable11 = new DataTable();
                 da11.Fill(dataTable11);
@@ -300,11 +516,12 @@ namespace ais.Tools.DataStorage
                         contractsList.Add(new Contract(
                             dataTable11.Rows[i][0].ToString() ?? "",
                             (DateTime)dataTable11.Rows[i][1],
-                            dataTable11.Rows[i][2].ToString() ?? ""));
+                            dataTable11.Rows[i][2].ToString() ?? "",
+                            dataTable11.Rows[i][3] == DBNull.Value ? 0 : Convert.ToDouble(dataTable11.Rows[i][3])));
                 }
 
 
-                SqlCommand cmd12 = new SqlCommand($"select * from Contract_Goods", conn);
+                SqlCommand cmd12 = new SqlCommand($"select * from upd_contract_Goods", conn);
                 SqlDataAdapter da12 = new SqlDataAdapter(cmd12);
                 DataTable dataTable12 = new DataTable();
                 da12.Fill(dataTable12);
@@ -313,12 +530,13 @@ namespace ais.Tools.DataStorage
                         contractGoodsList.Add(new Contract_Goods(
                             dataTable12.Rows[i][0].ToString() ?? "",
                             dataTable12.Rows[i][1].ToString() ?? "",
-                            Convert.ToInt32(dataTable12.Rows[i][2])));
+                            Convert.ToInt32(dataTable12.Rows[i][2]),
+                            dataTable12.Rows[i][3] == DBNull.Value ? 0 : Convert.ToDouble(dataTable12.Rows[i][3])));
                 }
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -331,6 +549,11 @@ namespace ais.Tools.DataStorage
 
         public void AddContract(Contract contract)
         {
+            if (ContractsList.Any(x => x.NumContract == contract.NumContract))
+            {
+                MessageBox.Show("this item already exists");
+                return;
+            }
             try
             {
                 if (conn == null)
@@ -338,7 +561,6 @@ namespace ais.Tools.DataStorage
                     throw new Exception("Connection String is Null");
                 }
                 conn.Open();
-
                 SqlCommand query = new SqlCommand("INSERT INTO Contract VALUES (@Num_contract, @date_contract, @Code_contractor)", conn);
                 query.Parameters.AddWithValue("@Num_contract", contract.NumContract);
                 query.Parameters.AddWithValue("@date_contract", contract.DateContract);
@@ -348,7 +570,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -358,6 +580,11 @@ namespace ais.Tools.DataStorage
 
         public void AddContractGoods(Contract_Goods contrgoods)
         {
+            if (ContractGoodsList.Any(x => x.Articul == contrgoods.Articul && x.NumContract == contrgoods.Articul))
+            {
+                MessageBox.Show("this item already exists");
+                return;
+            }
             try
             {
                 if (conn == null)
@@ -365,7 +592,6 @@ namespace ais.Tools.DataStorage
                     throw new Exception("Connection String is Null");
                 }
                 conn.Open();
-
                 SqlCommand query = new SqlCommand("INSERT INTO Contract VALUES (@Num_contract, @Articul, @quantity_contract)", conn);
                 query.Parameters.AddWithValue("@Num_contract", contrgoods.NumContract);
                 query.Parameters.AddWithValue("@Articul", contrgoods.Articul);
@@ -375,7 +601,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -385,6 +611,11 @@ namespace ais.Tools.DataStorage
 
         public void AddContractor(Contractor contractor)
         {
+            if (ContractorsList.Any(x=>x.CodeContractor==contractor.CodeContractor))
+            {
+                MessageBox.Show("this item already exists");
+                return;
+            }
             try
             {
                 if (conn == null)
@@ -407,7 +638,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -417,6 +648,11 @@ namespace ais.Tools.DataStorage
 
         public void AddContractorTel(Contractor_Tel contrtel)
         {
+            if (ContractorTelList.Any(x=>x.TelNum==contrtel.TelNum))
+            {
+                MessageBox.Show("this item already exists");
+                return;
+            }
             try
             {
                 if (conn == null)
@@ -432,7 +668,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -440,8 +676,184 @@ namespace ais.Tools.DataStorage
             }
         }
 
+        public List<Order> OrderSelPeriod(DateTime s, DateTime e)
+        {
+            List<Order> list = new List<Order>();
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("SELECT * FROM upd_order WHERE date_ord BETWEEN @start AND @end", conn);
+                query.Parameters.AddWithValue("@start", s);
+                query.Parameters.AddWithValue("@end", e);
+                SqlDataReader reader = query.ExecuteReader();
+                while (reader.Read())
+                {
+                    list.Add(new Order(
+                        reader.GetString(0) ?? "",
+                        reader.GetDateTime(1),
+                        reader.GetString(2)?? "",
+                        reader.IsDBNull(3) ? "":reader.GetString(3),
+                        reader.IsDBNull(4)? "": reader.GetString(4),// reader.
+                        reader.IsDBNull(5)? 0 : Convert.ToDouble(reader.GetValue(5)),
+                        reader.IsDBNull(6)  ? 0 : Convert.ToDouble(reader.GetValue(6)),
+                        reader.IsDBNull(7) ? 0 : Convert.ToDouble(reader.GetValue(7)),
+                        reader.IsDBNull(8) ? 0 : Convert.ToDouble(reader.GetValue(8))));
+                }
+                reader.Close();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return list;
+        }
+
+        public List<Contract> ContractSelPeriod(DateTime s, DateTime e)
+        {
+            List<Contract> list = new List<Contract>();
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("SELECT * FROM upd_contract WHERE date_contract BETWEEN @start AND @end", conn);
+                query.Parameters.AddWithValue("@start", s);
+                query.Parameters.AddWithValue("@end", e);
+                SqlDataReader reader = query.ExecuteReader();
+                while (reader.Read())
+                {
+                    list.Add(new Contract(
+                        reader.GetString(0) ?? "",
+                        reader.GetValue(1) == DBNull.Value ? DateTime.Now : reader.GetDateTime(1),
+                        reader.GetString(2)?? "",
+                        totalCost:reader.IsDBNull(3) ? 0 : Convert.ToDouble(reader.GetValue(3))));
+                }
+                reader.Close();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return list;
+        }
+
+
+        public string Income(DateTime s, DateTime e)
+        {
+            string res = "";
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                conn.Open();
+                SqlCommand query = new SqlCommand("SELECT sum([Total_cost]) from [upd_order] WHERE date_ord >= @start AND date_ord <=  @end", conn);
+                query.Parameters.AddWithValue("@start", s);
+                query.Parameters.AddWithValue("@end", e);
+                res = Convert.ToString(query.ExecuteScalar());
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return res;
+        }
+
+        public string Profit(DateTime s, DateTime e)
+        {
+            string res = "";
+            try
+            {
+                conn.Open();
+                SqlCommand query = new SqlCommand("select sum([Total_cost] - coalesce(Cost_cornices,0)- coalesce(Cost_curtains,0)) from [upd_order] WHERE date_ord  >= @start AND date_ord <=  @end", conn);
+                query.Parameters.AddWithValue("@start", s);
+                query.Parameters.AddWithValue("@end", e);
+                res = Convert.ToString(query.ExecuteScalar());
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return res;
+        }
+
+        public string Expenses(DateTime s, DateTime e)
+        {
+            string res = "";
+            try
+            {
+                conn.Open();
+                SqlCommand query = new SqlCommand("SELECT sum([total_cost]) from [upd_contract] WHERE date_contract >= @start AND date_contract <=  @end", conn);
+                query.Parameters.AddWithValue("@start", s);
+                query.Parameters.AddWithValue("@end", e);
+                res = Convert.ToString(query.ExecuteScalar());
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message + "\n" + exc.Source + "\n" + exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return res;
+        }
+
+        public string RevenueAdmin(DateTime s, DateTime e)
+        {
+            double profit = 0, expenses = 0, res = 0;
+            try
+            {
+                profit = Convert.ToDouble(Profit(s, e));
+                expenses = Convert.ToDouble(Expenses(s, e));
+                res = profit - expenses;
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine(@"Unable to convert '{0}' or '{1}' to a Double.", profit, expenses);
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine(@"'{0}' or '{1}' is outside the range of a Double.", profit, expenses);
+            }
+
+            return res.ToString();
+        }
+
         public void AddOrder(Order order)
         {
+            if(OrdersList.Any(x=> x.NumOrd==order.NumOrd))
+            {
+                MessageBox.Show("this item already exists");
+                return;
+            }
             try
             {
                 if (conn == null)
@@ -461,7 +873,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -485,7 +897,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -508,7 +920,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -534,7 +946,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -557,7 +969,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -581,7 +993,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -592,6 +1004,11 @@ namespace ais.Tools.DataStorage
        
         public void AddContractorGoods(Contractor_Goods contractorgoods)
         {
+            if(ContractorGoodsList.Any(x=>x.CodeContractor==contractorgoods.CodeContractor&&x.Articul==contractorgoods.Articul))
+            {
+                MessageBox.Show("this item already exists");
+                return;
+            }
             try
             {
                 if (conn == null)
@@ -608,7 +1025,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -631,7 +1048,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -643,6 +1060,11 @@ namespace ais.Tools.DataStorage
 
         public void AddCornices(Cornices cornices)
         {
+            if (CornicesList.Any(x=>x.Ipn==cornices.Ipn))
+            {
+                MessageBox.Show("this item already exists");
+                return;
+            }
             try
             {
                 if (conn == null)
@@ -669,7 +1091,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -693,7 +1115,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -705,6 +1127,11 @@ namespace ais.Tools.DataStorage
 
         public void AddCustTel(Cust_Tel cust_Tel)
         {
+            if(CustTelsList.Any(x=>x.TelNum==cust_Tel.TelNum))
+            {
+                MessageBox.Show("this item already exists");
+                return;
+            }
             try
             {
                 if (conn == null)
@@ -720,7 +1147,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -743,7 +1170,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -755,6 +1182,11 @@ namespace ais.Tools.DataStorage
 
         public void AddCustomer(Customer customer)
         {
+            if (CustomersList.Any(x=>x.ID==customer.ID))
+            {
+                MessageBox.Show("this item already exists");
+                return;
+            }
             try
             {
                 if (conn == null)
@@ -785,7 +1217,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -810,7 +1242,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -822,6 +1254,11 @@ namespace ais.Tools.DataStorage
 
         public void AddGoods(Goods goods)
         {
+            if (GoodsList.Any(x=>x.Articul==goods.Articul))
+            {
+                MessageBox.Show("this item already exists");
+                return;
+            }
             try
             {
                 if (conn == null)
@@ -847,7 +1284,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -873,7 +1310,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -885,6 +1322,11 @@ namespace ais.Tools.DataStorage
 
         public void AddOrderGoods(Order_Goods order_Goods)
         {
+            if (OrderGoodsList.Any(x=>x.Articul==order_Goods.Articul&&x.NumOrd==order_Goods.NumOrd))
+            {
+                MessageBox.Show("this item already exists");
+                return;
+            }
             try
             {
                 if (conn == null)
@@ -901,7 +1343,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -924,7 +1366,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -936,6 +1378,11 @@ namespace ais.Tools.DataStorage
 
         public void AddWorkshop(Workshop workshop)
         {
+            if (WorkshopsList.Any(x=>x.CodeWorkshop==workshop.CodeWorkshop))
+            {
+                MessageBox.Show("this item already exists");
+                return;
+            }
             try
             {
                 if (conn == null)
@@ -959,7 +1406,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -984,7 +1431,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -1031,7 +1478,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -1056,7 +1503,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -1081,7 +1528,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -1120,7 +1567,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -1145,7 +1592,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -1170,7 +1617,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -1215,7 +1662,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -1235,12 +1682,12 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("UPDATE Cust_Tel SET Tel_num = @Tel_num WHERE Tel_num = '" + cust_Tel.TelNum +"'", conn);
                 query.Parameters.AddWithValue("@Tel_num", newCust_Tel.TelNum);
                 query.ExecuteNonQuery();
-                var obj = ContractorTelList.FirstOrDefault(x => x.TelNum == cust_Tel.TelNum);
+                var obj = CustTelsList.FirstOrDefault(x => x.TelNum == cust_Tel.TelNum);
                 obj.TelNum = newCust_Tel.TelNum;
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -1281,7 +1728,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -1308,7 +1755,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -1333,7 +1780,7 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
@@ -1374,7 +1821,112 @@ namespace ais.Tools.DataStorage
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public List<Customer> MostProfitableCustomers(bool asc)
+        {
+            List<Customer> list = new List<Customer>();
+            try
+            {
+                if (conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+
+                conn.Open();
+                string order = asc ? "asc" : "desc";
+                SqlCommand cmd1 = new SqlCommand($"select * from prof_cust order by total {order}", conn);
+                SqlDataAdapter da1 = new SqlDataAdapter(cmd1);
+                DataTable dataTable1 = new DataTable();
+                da1.Fill(dataTable1);
+
+                for (int i = 0; i < dataTable1.Rows.Count; ++i)
+                {
+                    list.Add(new Customer(
+                        dataTable1.Rows[i][0].ToString() ?? "",
+                        dataTable1.Rows[i][1].ToString() ?? "",
+                        dataTable1.Rows[i][2].ToString() ?? "",
+                        dataTable1.Rows[i][3].ToString() ?? "",
+                        dataTable1.Rows[i][4].ToString() ?? "",
+                        dataTable1.Rows[i][5].ToString() ?? "",
+                        dataTable1.Rows[i][6].ToString() ?? "",
+                        Convert.ToInt32(dataTable1.Rows[i][7]),
+                        Convert.ToInt32(dataTable1.Rows[i][8]),
+                        dataTable1.Rows[i][9].ToString() ?? ""));
+                }
+
+                for (var i = 0; i < list.Count; i++)
+                for (var j = i + 1; j < list.Count; j++)
+                    if (list[i].ID.Equals(list[j].ID))
+                        list.RemoveAt(j);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return list;
+        }
+
+        public List<Order> CustomersOrdersList(string Id)
+        {
+            SqlConnection con = new SqlConnection(Properties.Settings.Default.ais);
+            List<Order> list = new List<Order>();
+            try
+            {
+                con.Open();
+                using (SqlCommand command = new SqlCommand("select * from upd_order where id =  @id", con))
+                {
+                    command.Parameters.AddWithValue("@id", Id);
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        list.Add(new Order(
+                            reader.GetString(0) ?? "",
+                            reader.GetDateTime(1),
+                            reader.GetString(2) ?? "",
+                            reader.IsDBNull(3) ? "" : reader.GetString(3),
+                            reader.IsDBNull(4) ? "" : reader.GetString(4),
+                            reader.IsDBNull(5) ? 0 : Convert.ToDouble(reader.GetValue(5)),
+                            reader.IsDBNull(6) ? 0 : Convert.ToDouble(reader.GetValue(6)),
+                            reader.IsDBNull(7) ? 0 : Convert.ToDouble(reader.GetValue(7)),
+                            reader.IsDBNull(8) ? 0 : Convert.ToDouble(reader.GetValue(8))));
+                    }
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
+            }
+            finally
+            {
+                con?.Close();
+            }
+
+            return list;
+        }
+
+        public void DeleteUser(Users user)
+        {
+            try
+            {
+                conn.Open();
+                SqlCommand query = new SqlCommand("DELETE FROM Users WHERE login = '" + user.Login + "'", conn);
+                query.ExecuteNonQuery();
+                UsersList.Remove(user);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message + "\n" + exc.Source + "\n" + exc.StackTrace);
             }
             finally
             {

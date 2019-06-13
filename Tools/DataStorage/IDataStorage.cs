@@ -1,4 +1,5 @@
-﻿using ais.Models;
+﻿using System;
+using ais.Models;
 using System.Collections.Generic;
 
 namespace ais.Tools.DataStorage
@@ -65,10 +66,35 @@ namespace ais.Tools.DataStorage
         List<Goods> GoodsList { get; }
         List<Order_Goods> OrderGoodsList { get; }
         List<Workshop> WorkshopsList { get; }
-
-        List<string> NameList { get; }
+        
         List<string> NameContractors();
-        List<string> PricesList { get; }
         List<string> LoadList();
+
+
+        List<Users> UsersList { get; }
+
+        List<string> ListCurtains();
+        List<string> ListCornices();
+        List<string> ListAccs();
+        List<string> ListContracts();
+        List<string> ListCustomers();
+        List<string> ListOrderNums();
+        List<string> ListCorniceInstallers();
+        List<string> ListNameWorkshops();
+
+
+        List<Order> OrderSelPeriod(DateTime s, DateTime e);
+        List<Contract> ContractSelPeriod(DateTime s, DateTime e);
+        string Income(DateTime s, DateTime e);
+        string Profit(DateTime s, DateTime e);
+
+        string Expenses(DateTime s, DateTime e);
+        string RevenueAdmin(DateTime s, DateTime e);
+
+        List<Customer> MostProfitableCustomers(bool asc);
+        List<Order> CustomersOrdersList(string Id);
+
+        void DeleteUser(Users user);
+
     }
 }

@@ -6,6 +6,8 @@ using System;
 using System.Data;
 using System.Windows;
 using System.Security.Cryptography;
+using ais.Models;
+using ais.Tools.Managers;
 
 namespace ais.ViewModels
 {
@@ -104,14 +106,15 @@ namespace ais.ViewModels
                 string savedPasswordHash = Convert.ToBase64String(hashBytes);
                 //end of hashing
                 SqlCommand query = new SqlCommand("INSERT INTO Users (login, password, name, lastname, usertype) VALUES('" + Login + "', '" + savedPasswordHash + "', '" + Name + "', '" + LastName + "', '" + SelectedType.Replace("System.Windows.Controls.ComboBoxItem: ", "") + "')", conn);
-                MessageBox.Show(savedPasswordHash+"\n"+Login + "\n" +Name + "\n" +LastName + "\n" + SelectedType.Replace("System.Windows.Controls.ComboBoxItem: ", ""));
+                //MessageBox.Show(savedPasswordHash+"\n"+Login + "\n" +Name + "\n" +LastName + "\n" + SelectedType.Replace("System.Windows.Controls.ComboBoxItem: ", ""));
                 query.ExecuteNonQuery();
                 MessageBox.Show("Success");
+                StationManager.DataStorage.UsersList.Add(new Users(Name, LastName, Login, SelectedType.Replace("System.Windows.Controls.ComboBoxItem: ", "")));
                 conn.Close();
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
                
             

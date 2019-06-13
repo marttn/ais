@@ -1,14 +1,9 @@
 ﻿using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using ais.Tools.Navigation;
-using System;
 using System.Windows;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
 namespace ais.ViewModels.UpdatingRowsVM
 {
@@ -16,7 +11,7 @@ namespace ais.ViewModels.UpdatingRowsVM
     {
         SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
 
-        private RelayCommand<object> updateContractorGoods;
+        private RelayCommand<Window> _updateContractorGoods;
 
         public UpdContractorGoodsVM()
         {
@@ -53,19 +48,16 @@ namespace ais.ViewModels.UpdatingRowsVM
         public string NameGoods { get; set; }
         public string NameContractor { get; set; }
 
-        public RelayCommand<object> UpdateContractorGoods
-        {
-            get => updateContractorGoods ?? (updateContractorGoods = new RelayCommand<object>(UpdImpl, CanUpd));
-        }
+        public RelayCommand<Window> UpdateContractorGoods => _updateContractorGoods ?? (_updateContractorGoods = new RelayCommand<Window>(UpdImpl, CanUpd));
 
-        private void UpdImpl(object obj)
+        private void UpdImpl(Window obj)
         {
             StationManager.DataStorage.UpdateContractorGoods(StationManager.CurrentContractorGoods, CurrentContractorGoods);
             StationManager.CurrentContractorGoods = CurrentContractorGoods;
-            NavigationManager.Instance.Navigate(ViewType.Admin);
+            obj.Close();
         }
 
-        private bool CanUpd(object obj)
+        private bool CanUpd(Window obj)
         {
             return CurrentContractorGoods.PriceOneProduct > 0;
         }

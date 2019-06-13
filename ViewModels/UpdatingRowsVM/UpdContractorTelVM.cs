@@ -1,14 +1,9 @@
-﻿using ais.Models;
+﻿using System;
+using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using ais.Tools.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Data.SqlClient;
 
 namespace ais.ViewModels.UpdatingRowsVM
 {
@@ -16,10 +11,10 @@ namespace ais.ViewModels.UpdatingRowsVM
     {
         SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
 
-        private RelayCommand<object> updateContractorTel;
+        private RelayCommand<Window> _updateContractorTel;
 
         public string NameContractor { get; set; }
-        public Contractor_Tel CurrentContractorTel = StationManager.CurrentContractorTel;
+        public Contractor_Tel CurrentContractorTel { get; }= StationManager.CurrentContractorTel;
 
         public UpdContractorTelVM()
         {
@@ -27,7 +22,7 @@ namespace ais.ViewModels.UpdatingRowsVM
             {
                 conn.Open();
 
-                SqlCommand query = new SqlCommand("SELECT Name_contr FROM Goods WHERE Code_contractor = '" + CurrentContractorTel.CodeContractor+ "'", conn);
+                SqlCommand query = new SqlCommand("SELECT Name_contr FROM Contractor WHERE Code_contractor = '" + CurrentContractorTel.CodeContractor+ "'", conn);
                 SqlDataReader select = query.ExecuteReader();
                 while (select.Read())
                 {
@@ -46,21 +41,21 @@ namespace ais.ViewModels.UpdatingRowsVM
             }
         }
 
-        public RelayCommand<object> UpdateContractorTel
+        public RelayCommand<Window> UpdateContractorTel
         {
-            get => updateContractorTel ?? (updateContractorTel = new RelayCommand<object>(UpdImpl, CanUpd));
+            get => _updateContractorTel ?? (_updateContractorTel = new RelayCommand<Window>(UpdImpl, CanUpd));
         }
 
-        private bool CanUpd(object obj)
+        private bool CanUpd(Window obj)
         {
             return CurrentContractorTel.TelNum.Length == 10;
         }
 
-        private void UpdImpl(object obj)
+        private void UpdImpl(Window obj)
         {
             StationManager.DataStorage.UpdateContractorTel(StationManager.CurrentContractorTel, CurrentContractorTel);
             StationManager.CurrentContractorTel = CurrentContractorTel;
-            NavigationManager.Instance.Navigate(ViewType.Admin);
+            obj.Close();
         }
 
         

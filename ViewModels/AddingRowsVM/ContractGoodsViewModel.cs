@@ -11,21 +11,21 @@ using System.Windows;
 
 namespace ais.ViewModels.AddingRowsVM
 {
-    class ContractGoodsViewModel
+    internal class ContractGoodsViewModel
     {
-        private RelayCommand<object> addContractGoods;
-        public ObservableCollection<string> ListContracts { get; } = new ObservableCollection<string>();
-        public ObservableCollection<string> ListCurtains { get; } = new ObservableCollection<string>();
-        public ObservableCollection<string> ListCornices { get; } = new ObservableCollection<string>();
-        public ObservableCollection<string> ListAccs { get; } = new ObservableCollection<string>();
+        private RelayCommand<Window> _addContractGoods;
+        public ObservableCollection<string> ListContracts { get; }
+        public ObservableCollection<string> ListCurtains { get; }
+        public ObservableCollection<string> ListCornices { get; }
+        public ObservableCollection<string> ListAccs { get; }
 
-        private string numContract;
-        private string nameCurtain;
-        private string nameCornice;
-        private string nameAccessories;
-        private int curtAmount;
-        private int cornAmount;
-        private int accAmount;
+        private string _numContract;
+        private string _nameCurtain;
+        private string _nameCornice;
+        private string _nameAccessories;
+        private int _curtAmount;
+        private int _cornAmount;
+        private int _accAmount;
 
         
 
@@ -33,115 +33,74 @@ namespace ais.ViewModels.AddingRowsVM
 
         public ContractGoodsViewModel()
         {
-            try
-            {
-                if (conn == null)
-                {
-                    throw new Exception("Connection String is Null");
-                }
-                conn.Open();
-
-                SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('стелеві карнизи', 'настінні карнизи') ", conn);
-                SqlDataReader select = query.ExecuteReader(), sql1, sql2, sql3;
-                while (select.Read())
-                {
-                    ListCornices.Add(select["name_g"].ToString().Trim(' '));
-                }
-                select.Close();
-                query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('тюль', 'портьєрні', 'водовідштовхувальні', 'рулонні', 'жалюзі')", conn);
-                sql1 = query.ExecuteReader();
-                while (sql1.Read())
-                {
-                    ListCurtains.Add(sql1["name_g"].ToString().Trim(' '));
-                }
-                sql1.Close();
-                query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('китиці', 'бахрома', 'люверси', 'тесьма')", conn);
-                sql2 = query.ExecuteReader();
-                while (sql2.Read())
-                {
-                    ListAccs.Add(sql2["name_g"].ToString().Trim(' '));
-                }
-                sql2.Close();
-                query = new SqlCommand("SELECT Num_contract FROM Contract", conn);
-                sql3 = query.ExecuteReader();
-                while (sql3.Read())
-                {
-                    ListContracts.Add(sql3["Num_contract"].ToString().Trim(' '));
-                }
-                sql3.Close();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
-            finally
-            {
-                conn.Close();
-            }
+           ListAccs = new ObservableCollection<string>(StationManager.DataStorage.ListAccs());
+           ListContracts = new ObservableCollection<string>(StationManager.DataStorage.ListContracts());
+           ListCornices = new ObservableCollection<string>(StationManager.DataStorage.ListCornices());
+           ListCurtains = new ObservableCollection<string>(StationManager.DataStorage.ListCurtains());
         }
          
         public string NumContract
         {
-            get => numContract;
+            get => _numContract;
             set
             {
-                numContract = value;
+                _numContract = value;
                 OnPropertyChanged();
             }
         }
 
         public string NameCurtain
         {
-            get => nameCurtain;
+            get => _nameCurtain;
             set
             {
-                nameCurtain = value;
+                _nameCurtain = value;
                 OnPropertyChanged();
             }
         }
         public string NameCornice
         {
-            get => nameCornice;
+            get => _nameCornice;
             set
             {
-                nameCornice = value;
+                _nameCornice = value;
                 OnPropertyChanged();
             }
         }
         public string NameAccessories
         {
-            get => nameAccessories;
+            get => _nameAccessories;
             set
             {
-                nameAccessories = value;
+                _nameAccessories = value;
                 OnPropertyChanged();
             }
         }
 
         public int CurtAmount
         {
-            get => curtAmount;
-            set { curtAmount = value; OnPropertyChanged(); }
+            get => _curtAmount;
+            set { _curtAmount = value; OnPropertyChanged(); }
         }
         public int CornAmount
         {
-            get => cornAmount;
-            set { cornAmount = value; OnPropertyChanged(); }
+            get => _cornAmount;
+            set { _cornAmount = value; OnPropertyChanged(); }
         }
         public int AccAmount
         {
-            get => accAmount;
-            set { accAmount = value; OnPropertyChanged(); }
+            get => _accAmount;
+            set { _accAmount = value; OnPropertyChanged(); }
         }
 
 
-        public RelayCommand<object> AddContractGoods
+        public RelayCommand<Window> AddContractGoods
         {
-            get => addContractGoods ??(addContractGoods = new RelayCommand<object>(AddImpl, CanAdd));
+            get => _addContractGoods ??(_addContractGoods = new RelayCommand<Window>(AddImpl, CanAdd));
         }
         
 
-        private void AddImpl(object obj)
+        private void AddImpl(Window obj)
         {
             string articul = null;
             SqlDataReader reader1, reader2, reader3;
@@ -201,13 +160,13 @@ namespace ais.ViewModels.AddingRowsVM
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace);
             }
             finally
             {
                 conn.Close();
             }
-            NavigationManager.Instance.Navigate(ViewType.Admin);
+            obj.Close();
         }
 
         private bool CanAdd(object obj)

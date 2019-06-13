@@ -7,12 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ais.ViewModels.AddingRowsVM
 {
     class GoodsViewModel
     {
-        private RelayCommand<object> addGoods;
+        private RelayCommand<Window> _addGoods;
         public Goods CurrentGoods { get; }
 
         public GoodsViewModel()
@@ -21,10 +22,7 @@ namespace ais.ViewModels.AddingRowsVM
             StationManager.CurrentGoods = CurrentGoods;
         }
 
-        public RelayCommand<object> AddGoods
-        {
-            get => addGoods ?? (addGoods = new RelayCommand<object>(AddGoodsImpl, CanAdd));
-        }
+        public RelayCommand<Window> AddGoods => _addGoods ?? (_addGoods = new RelayCommand<Window>(AddGoodsImpl, CanAdd));
 
         private bool CanAdd(object obj)
         {
@@ -35,10 +33,10 @@ namespace ais.ViewModels.AddingRowsVM
                    && CurrentGoods.Characteristics.Length <= 255;
         }
 
-        private void AddGoodsImpl(object obj)
+        private void AddGoodsImpl(Window obj)
         {
             StationManager.DataStorage.AddGoods(StationManager.CurrentGoods);
-            NavigationManager.Instance.Navigate(ViewType.Admin);
+            obj.Close();
         }
     }
 }
