@@ -76,6 +76,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\ContractorsPrices.cs" />
     <Compile Include="Models\Cornices.cs" />
     <Compile Include="Models\Contract.cs" />
     <Compile Include="Models\Contractor.cs" />

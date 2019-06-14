@@ -85,7 +85,7 @@ namespace ais.ViewModels.AddingRowsVM
 
                 StationManager.CurrentContract = new Contract(NumContract, DateContract, code);
                 StationManager.DataStorage.AddContract(StationManager.CurrentContract);
-                MessageBox.Show("row added");
+                
             }
             catch (Exception exc)
             {

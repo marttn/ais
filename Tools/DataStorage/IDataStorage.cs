@@ -68,9 +68,7 @@ namespace ais.Tools.DataStorage
         List<Workshop> WorkshopsList { get; }
         
         List<string> NameContractors();
-        List<string> LoadList();
-
-
+        
         List<Users> UsersList { get; }
 
         List<string> ListCurtains();
@@ -95,6 +93,8 @@ namespace ais.Tools.DataStorage
         List<Order> CustomersOrdersList(string Id);
 
         void DeleteUser(Users user);
+
+        List<ContractorsPrices> CurrentContractorsPrices(string name);
 
     }
 }

@@ -32,7 +32,6 @@ namespace ais.Tools.Managers
         internal static Goods CurrentGoods { get; set; }
         internal static Order_Goods CurrentOrderGoods { get; set; }
         internal static Workshop CurrentWorkshop { get; set; }
-        //internal static string SelectedContractor { get; set; }
 
         internal static void CloseApp()
         {

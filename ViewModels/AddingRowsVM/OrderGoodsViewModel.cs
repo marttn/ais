@@ -153,7 +153,7 @@ namespace ais.ViewModels.AddingRowsVM
                 {
                     StationManager.CurrentOrderGoods = new Order_Goods(NumOrd, articul, CurtAmount);
                     StationManager.DataStorage.AddOrderGoods(StationManager.CurrentOrderGoods);
-                    MessageBox.Show("row added");
+                    
                 }
                 //cornice
                 if (!string.IsNullOrWhiteSpace(NameCornice))
@@ -175,7 +175,7 @@ namespace ais.ViewModels.AddingRowsVM
                     {
                         StationManager.CurrentOrderGoods = new Order_Goods(NumOrd, articul, CornAmount);
                         StationManager.DataStorage.AddOrderGoods(StationManager.CurrentOrderGoods);
-                        MessageBox.Show("row added");
+                        
                     }
                 }
                 //accessories 
@@ -198,7 +198,7 @@ namespace ais.ViewModels.AddingRowsVM
                     {
                         StationManager.CurrentOrderGoods = new Order_Goods(NumOrd, articul, AccAmount);
                         StationManager.DataStorage.AddOrderGoods(StationManager.CurrentOrderGoods);
-                        MessageBox.Show("row added");
+                        
                     }
                 }
             }

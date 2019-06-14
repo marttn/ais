@@ -50,6 +50,7 @@ namespace ais.ViewModels
         private ObservableCollection<Customer> _сustomers;
         private ObservableCollection<Cornices> _cornices;
         private ObservableCollection<Workshop> _workshops;
+        private ObservableCollection<ContractorsPrices> _contrPrices;
 
         public Users CurrentUser { get; } = StationManager.CurrentUser;
 
@@ -170,7 +171,9 @@ namespace ais.ViewModels
                 _workshops = value;
                 OnPropertyChanged("Workshops");
             }
-        } 
+        }
+        
+
 
         public DateTime StartDate
         {

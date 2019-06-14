@@ -68,44 +68,6 @@ namespace ais.Tools.DataStorage
         }
 
         
-        public List<string> LoadList()
-        {
-         List<string> pricesList = new List<string>();
-            try
-            {
-                //pricesList.Clear();
-                conn.Open();
-
-                SqlCommand query = new SqlCommand("select Articul, [01234984], [09473433], [11111111], [12345098], [23801858], [28853090], [45800125], [73540129], [78012753], [88412345], [94820123] from Contractor_Goods pivot (sum(Contractor_Goods.price_1_product) for Code_contractor in ([01234984], [09473433], [11111111], [12345098], [23801858], [28853090], [45800125], [73540129], [78012753], [88412345], [94820123])) as aaa", conn);
-                SqlDataReader reader = query.ExecuteReader();
-                while (reader.Read())
-                {
-                    pricesList.Add(reader.GetString(0) + 
-                                   reader.GetString(1) + 
-                                   reader.GetString(2) + 
-                                   reader.GetString(3) +
-                                   reader.GetString(4) +
-                                   reader.GetString(5) +
-                                   reader.GetString(6) +
-                                   reader.GetString(7) +
-                                   reader.GetString(8) +
-                                   reader.GetString(9) +
-                                   reader.GetString(10) 
-                                   );
-                }
-                reader.Close();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message  + "\n" + exc.Source + "\n"+ exc.StackTrace + "\n" + exc.Source + "\n" + exc.StackTrace);
-            }
-            finally
-            {
-                conn.Close();
-            }
-
-            return pricesList;
-        }
 
         public List<Users> UsersList { get; } = new List<Users>
         {
@@ -118,6 +80,7 @@ namespace ais.Tools.DataStorage
             List<string> curtains = new List<string>();
             try
             {
+                conn.Open();
                 SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('тюль', 'портьєрні', 'водовідштовхувальні', 'рулонні', 'жалюзі')", conn);
                 SqlDataReader sql1 = query.ExecuteReader();
                 while (sql1.Read())
@@ -142,6 +105,7 @@ namespace ais.Tools.DataStorage
             List<string> cornices = new List<string>();
             try
             {
+                conn.Open();
                 SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('стелеві карнизи', 'настінні карнизи') ", conn);
                 SqlDataReader sql1 = query.ExecuteReader();
                 while (sql1.Read())
@@ -166,6 +130,7 @@ namespace ais.Tools.DataStorage
             List<string> accs = new List<string>();
             try
             {
+                conn.Open();
                 SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE type IN ('китиці', 'бахрома', 'люверси', 'тесьма')", conn);
                 SqlDataReader sql1 = query.ExecuteReader();
                 while (sql1.Read())
@@ -190,6 +155,7 @@ namespace ais.Tools.DataStorage
             List<string> nums = new List<string>();
             try
             {
+                conn.Open();
                 SqlCommand query = new SqlCommand("SELECT Num_contract FROM Contract", conn);
                 SqlDataReader sql1 = query.ExecuteReader();
                 while (sql1.Read())
@@ -360,7 +326,6 @@ namespace ais.Tools.DataStorage
                             dataTable1.Rows[i][9].ToString() ?? "");
                         customersList.Add(customer);
                     }
-                //MessageBox.Show(customersList[2].ID);
 
                 SqlCommand cmd2 = new SqlCommand($"select * from Cust_Tel", conn);
                 SqlDataAdapter da2 = new SqlDataAdapter(cmd2);
@@ -549,7 +514,7 @@ namespace ais.Tools.DataStorage
 
         public void AddContract(Contract contract)
         {
-            if (ContractsList.Any(x => x.NumContract == contract.NumContract))
+            if (ContractsList.Any(x => x.NumContract.Contains(contract.NumContract)))
             {
                 MessageBox.Show("this item already exists");
                 return;
@@ -580,7 +545,7 @@ namespace ais.Tools.DataStorage
 
         public void AddContractGoods(Contract_Goods contrgoods)
         {
-            if (ContractGoodsList.Any(x => x.Articul == contrgoods.Articul && x.NumContract == contrgoods.Articul))
+            if (ContractGoodsList.Any(x => x.Articul.Contains(contrgoods.Articul) && x.NumContract.Contains(contrgoods.Articul)))
             {
                 MessageBox.Show("this item already exists");
                 return;
@@ -611,7 +576,7 @@ namespace ais.Tools.DataStorage
 
         public void AddContractor(Contractor contractor)
         {
-            if (ContractorsList.Any(x=>x.CodeContractor==contractor.CodeContractor))
+            if (ContractorsList.Any(x=>x.CodeContractor.Contains(contractor.CodeContractor)))
             {
                 MessageBox.Show("this item already exists");
                 return;
@@ -648,7 +613,7 @@ namespace ais.Tools.DataStorage
 
         public void AddContractorTel(Contractor_Tel contrtel)
         {
-            if (ContractorTelList.Any(x=>x.TelNum==contrtel.TelNum))
+            if (ContractorTelList.Any(x=>x.TelNum.Contains(contrtel.TelNum)))
             {
                 MessageBox.Show("this item already exists");
                 return;
@@ -849,7 +814,7 @@ namespace ais.Tools.DataStorage
 
         public void AddOrder(Order order)
         {
-            if(OrdersList.Any(x=> x.NumOrd==order.NumOrd))
+            if(OrdersList.Any(x=> x.NumOrd.Contains(order.NumOrd)))
             {
                 MessageBox.Show("this item already exists");
                 return;
@@ -893,7 +858,7 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("DELETE FROM Contract WHERE Num_contract = '" + contract.NumContract + "'", conn);
                 query.ExecuteNonQuery();
                 ContractsList.Remove(contract);
-                ContractGoodsList.RemoveAll(x => x.NumContract == contract.NumContract);
+                ContractGoodsList.RemoveAll(x => x.NumContract.Contains(contract.NumContract));
             }
             catch (Exception exc)
             {
@@ -940,9 +905,9 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("DELETE FROM Contractor WHERE Code_contractor = '" + contractor.CodeContractor + "'", conn);
                 query.ExecuteNonQuery();
                 ContractorsList.Remove(contractor);
-                ContractorTelList.RemoveAll(x => x.CodeContractor == contractor.CodeContractor);
-                ContractsList.RemoveAll(x => x.CodeContractor == contractor.CodeContractor);
-                ContractorGoodsList.RemoveAll(x => x.CodeContractor == contractor.CodeContractor);
+                ContractorTelList.RemoveAll(x => x.CodeContractor.Contains(contractor.CodeContractor));
+                ContractsList.RemoveAll(x => x.CodeContractor.Contains(contractor.CodeContractor));
+                ContractorGoodsList.RemoveAll(x => x.CodeContractor.Contains(contractor.CodeContractor));
             }
             catch (Exception exc)
             {
@@ -989,7 +954,7 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("DELETE FROM [Order] WHERE Num_ord = '" + order.NumOrd +  "'", conn);
                 query.ExecuteNonQuery();
                 OrdersList.Remove(order);
-                OrderGoodsList.RemoveAll(x => x.NumOrd == order.NumOrd);
+                OrderGoodsList.RemoveAll(x => x.NumOrd.Contains(order.NumOrd));
             }
             catch (Exception exc)
             {
@@ -1004,7 +969,7 @@ namespace ais.Tools.DataStorage
        
         public void AddContractorGoods(Contractor_Goods contractorgoods)
         {
-            if(ContractorGoodsList.Any(x=>x.CodeContractor==contractorgoods.CodeContractor&&x.Articul==contractorgoods.Articul))
+            if(ContractorGoodsList.Any(x=>x.CodeContractor.Contains(contractorgoods.CodeContractor)&&x.Articul.Contains(contractorgoods.Articul)))
             {
                 MessageBox.Show("this item already exists");
                 return;
@@ -1060,7 +1025,7 @@ namespace ais.Tools.DataStorage
 
         public void AddCornices(Cornices cornices)
         {
-            if (CornicesList.Any(x=>x.Ipn==cornices.Ipn))
+            if (CornicesList.Any(x=>x.Ipn.Contains(cornices.Ipn)))
             {
                 MessageBox.Show("this item already exists");
                 return;
@@ -1086,8 +1051,7 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@tel_num", cornices.TelNum);
                 query.Parameters.AddWithValue("@price_1_cornice", cornices.PriceOneCornice);
                 query.ExecuteNonQuery();
-                if (!CornicesList.Any(x => x.Ipn == cornices.Ipn))
-                    CornicesList.Add(cornices);
+                CornicesList.Add(cornices);
             }
             catch (Exception exc)
             {
@@ -1111,7 +1075,7 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("DELETE FROM Cornices WHERE Ipn = '" + cornices.Ipn + "'", conn);
                 query.ExecuteNonQuery();
                 CornicesList.Remove(cornices);
-                OrdersList.RemoveAll(x => x.Ipn == cornices.Ipn);
+                OrdersList.RemoveAll(x => x.Ipn.Contains(cornices.Ipn));
             }
             catch (Exception exc)
             {
@@ -1127,7 +1091,7 @@ namespace ais.Tools.DataStorage
 
         public void AddCustTel(Cust_Tel cust_Tel)
         {
-            if(CustTelsList.Any(x=>x.TelNum==cust_Tel.TelNum))
+            if(CustTelsList.Any(x=>x.TelNum.Contains(cust_Tel.TelNum)))
             {
                 MessageBox.Show("this item already exists");
                 return;
@@ -1182,7 +1146,7 @@ namespace ais.Tools.DataStorage
 
         public void AddCustomer(Customer customer)
         {
-            if (CustomersList.Any(x=>x.ID==customer.ID))
+            if (CustomersList.Any(x=>x.ID.Contains(customer.ID)))
             {
                 MessageBox.Show("this item already exists");
                 return;
@@ -1237,8 +1201,8 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("DELETE FROM Customer WHERE ID = '" + customer.ID + "'", conn);
                 query.ExecuteNonQuery();
                 CustomersList.Remove(customer);
-                CustTelsList.RemoveAll(x => x.ID == customer.ID);
-                OrdersList.RemoveAll(x => x.ID == customer.ID);
+                CustTelsList.RemoveAll(x => x.ID.Contains(customer.ID));
+                OrdersList.RemoveAll(x => x.ID.Contains(customer.ID));
             }
             catch (Exception exc)
             {
@@ -1254,7 +1218,7 @@ namespace ais.Tools.DataStorage
 
         public void AddGoods(Goods goods)
         {
-            if (GoodsList.Any(x=>x.Articul==goods.Articul))
+            if (GoodsList.Any(x=>x.Articul.Contains(goods.Articul)))
             {
                 MessageBox.Show("this item already exists");
                 return;
@@ -1304,9 +1268,9 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("DELETE FROM Goods WHERE Articul = '" + goods.Articul + "'", conn);
                 query.ExecuteNonQuery();
                 GoodsList.Remove(goods);
-                OrderGoodsList.RemoveAll(x => x.Articul == goods.Articul);
-                ContractGoodsList.RemoveAll(x => x.Articul == goods.Articul);
-                ContractorGoodsList.RemoveAll(x => x.Articul == goods.Articul);
+                OrderGoodsList.RemoveAll(x => x.Articul.Contains(goods.Articul));
+                ContractGoodsList.RemoveAll(x => x.Articul.Contains(goods.Articul));
+                ContractorGoodsList.RemoveAll(x => x.Articul.Contains(goods.Articul));
             }
             catch (Exception exc)
             {
@@ -1322,7 +1286,7 @@ namespace ais.Tools.DataStorage
 
         public void AddOrderGoods(Order_Goods order_Goods)
         {
-            if (OrderGoodsList.Any(x=>x.Articul==order_Goods.Articul&&x.NumOrd==order_Goods.NumOrd))
+            if (OrderGoodsList.Any(x=>x.Articul.Contains(order_Goods.Articul)&&x.NumOrd.Contains(order_Goods.NumOrd)))
             {
                 MessageBox.Show("this item already exists");
                 return;
@@ -1378,7 +1342,7 @@ namespace ais.Tools.DataStorage
 
         public void AddWorkshop(Workshop workshop)
         {
-            if (WorkshopsList.Any(x=>x.CodeWorkshop==workshop.CodeWorkshop))
+            if (WorkshopsList.Any(x=>x.CodeWorkshop.Contains(workshop.CodeWorkshop)))
             {
                 MessageBox.Show("this item already exists");
                 return;
@@ -1426,8 +1390,8 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("DELETE FROM Workshop WHERE Code_workshop = '" + workshop.CodeWorkshop+ "'", conn);
                 query.ExecuteNonQuery();
                 WorkshopsList.Remove(workshop);
-                OrdersList.RemoveAll(x => x.CodeWorkshop == workshop.CodeWorkshop);
-                OrdersList.RemoveAll(x => x.CodeWorkshop == workshop.CodeWorkshop);
+                OrdersList.RemoveAll(x => x.CodeWorkshop.Contains(workshop.CodeWorkshop));
+                OrdersList.RemoveAll(x => x.CodeWorkshop.Contains(workshop.CodeWorkshop));
             }
             catch (Exception exc)
             {
@@ -1471,7 +1435,7 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@Code_workshop", (object) newOrder.CodeWorkshop ?? DBNull.Value);
                 query.Parameters.AddWithValue("@Ipn", (object)newOrder.Ipn ?? DBNull.Value);
                 query.ExecuteNonQuery();
-                var obj = OrdersList.FirstOrDefault(x => x.NumOrd == order.NumOrd);
+                var obj = OrdersList.FirstOrDefault(x => x.NumOrd.Contains(order.NumOrd));
                 obj.DateOrd = newOrder.DateOrd;
                 obj.CodeWorkshop = newOrder.CodeWorkshop ?? "";
                 obj.Ipn= newOrder.Ipn ?? "";
@@ -1498,7 +1462,7 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("UPDATE Contract SET date_contract = @date_contract WHERE Num_contract = '" + contract.NumContract + "'", conn);
                 query.Parameters.AddWithValue("@date_contract", newContract.DateContract);
                 query.ExecuteNonQuery();
-                var obj = ContractsList.FirstOrDefault(x => x.NumContract == contract.NumContract);
+                var obj = ContractsList.FirstOrDefault(x => x.NumContract.Contains(contract.NumContract));
                 obj.DateContract = newContract.DateContract;
             }
             catch (Exception exc)
@@ -1523,7 +1487,7 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("UPDATE Contract_goods SET quantity_contract = @quantity_contract WHERE Num_contract = '" + contrgoods.NumContract + "' AND Articul = '" + contrgoods.Articul+"'", conn);
                 query.Parameters.AddWithValue("@quantity_contract", newContract_Goods.Quantity);
                 query.ExecuteNonQuery(); 
-                var obj = ContractGoodsList.FirstOrDefault(x => x.Articul == contrgoods.Articul && x.NumContract == contrgoods.NumContract);
+                var obj = ContractGoodsList.FirstOrDefault(x => x.Articul.Contains(contrgoods.Articul) && x.NumContract.Contains(contrgoods.NumContract));
                 obj.Quantity = newContract_Goods.Quantity;
             }
             catch (Exception exc)
@@ -1555,7 +1519,7 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@account_contr", newContractor.Account);
                 query.Parameters.AddWithValue("@email", newContractor.Email);
                 query.ExecuteNonQuery();
-                var obj = ContractorsList.FirstOrDefault(x => x.CodeContractor == contractor.CodeContractor);
+                var obj = ContractorsList.FirstOrDefault(x => x.CodeContractor.Contains(contractor.CodeContractor));
                 obj.NameContractor = newContractor.NameContractor;
                 obj.City = newContractor.City;
                 obj.Street = newContractor.Street;
@@ -1587,7 +1551,7 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("UPDATE Contractor_Tel SET Tel_num = @Tel_num WHERE Tel_num = '" + contrtel.TelNum + "'", conn);
                 query.Parameters.AddWithValue("@Tel_num", newContractor_Tel.TelNum);
                 query.ExecuteNonQuery();
-                var obj = ContractorTelList.FirstOrDefault(x => x.TelNum == contrtel.TelNum);
+                var obj = ContractorTelList.FirstOrDefault(x => x.TelNum.Contains(contrtel.TelNum));
                 obj.TelNum = newContractor_Tel.TelNum;
             }
             catch (Exception exc)
@@ -1612,7 +1576,7 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("UPDATE Contractor_Goods SET price_1_product = @price_1_product WHERE Code_contractor = '" + contractorgoods.CodeContractor + "' AND Articul = '" + contractorgoods.Articul + "'", conn);
                 query.Parameters.AddWithValue("@price_1_product", newContractor_Goods.PriceOneProduct);
                 query.ExecuteNonQuery();
-                var obj = ContractorGoodsList.FirstOrDefault(x => x.Articul == contractorgoods.Articul && x.CodeContractor == contractorgoods.CodeContractor);
+                var obj = ContractorGoodsList.FirstOrDefault(x => x.Articul.Contains(contractorgoods.Articul) && x.CodeContractor.Contains(contractorgoods.CodeContractor));
                 obj.PriceOneProduct = newContractor_Goods.PriceOneProduct;
             }
             catch (Exception exc)
@@ -1647,7 +1611,7 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@tel_num", newCornices.TelNum);
                 query.Parameters.AddWithValue("@price_1_cornice", newCornices.PriceOneCornice);
                 query.ExecuteNonQuery();
-                var obj = CornicesList.FirstOrDefault(x => x.Ipn == cornices.Ipn);
+                var obj = CornicesList.FirstOrDefault(x => x.Ipn.Contains(cornices.Ipn));
                 obj.LastName = newCornices.LastName;
                 obj.Name = newCornices.Name;
                 obj.MiddleName = newCornices.MiddleName ?? "";
@@ -1682,7 +1646,7 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("UPDATE Cust_Tel SET Tel_num = @Tel_num WHERE Tel_num = '" + cust_Tel.TelNum +"'", conn);
                 query.Parameters.AddWithValue("@Tel_num", newCust_Tel.TelNum);
                 query.ExecuteNonQuery();
-                var obj = CustTelsList.FirstOrDefault(x => x.TelNum == cust_Tel.TelNum);
+                var obj = CustTelsList.FirstOrDefault(x => x.TelNum.Contains(cust_Tel.TelNum));
                 obj.TelNum = newCust_Tel.TelNum;
             }
             catch (Exception exc)
@@ -1715,7 +1679,7 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@apartment", newCustomer.Apartment);
                 query.Parameters.AddWithValue("@email", newCustomer.Email);
                 query.ExecuteNonQuery();
-                var obj = CustomersList.FirstOrDefault(x => x.ID == customer.ID);
+                var obj = CustomersList.FirstOrDefault(x => x.ID.Contains(customer.ID));
                 obj.LastName = newCustomer.LastName;
                 obj.Name = newCustomer.Name;
                 obj.MiddleName = newCustomer.MiddleName ?? "";
@@ -1749,7 +1713,7 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@name_g", newGoods.Name);
                 query.Parameters.AddWithValue("@characteristics", newGoods.Characteristics);
                 query.ExecuteNonQuery();
-                var obj = GoodsList.FirstOrDefault(x => x.Articul == goods.Articul);
+                var obj = GoodsList.FirstOrDefault(x => x.Articul.Contains(goods.Articul));
                 obj.Name = newGoods.Name;
                 obj.Characteristics = newGoods.Characteristics;
             }
@@ -1775,7 +1739,7 @@ namespace ais.Tools.DataStorage
                 SqlCommand query = new SqlCommand("UPDATE Order_Goods SET quantity_goods = @quantity_goods WHERE Articul = '" + order_Goods.Articul + "' AND Num_ord = '" + order_Goods.NumOrd + "'", conn);
                 query.Parameters.AddWithValue("@quantity_goods", newOrder_Goods.QuantityGoods);
                 query.ExecuteNonQuery();
-                var obj = OrderGoodsList.FirstOrDefault(x => x.NumOrd == order_Goods.NumOrd && x.Articul == order_Goods.Articul);
+                var obj = OrderGoodsList.FirstOrDefault(x => x.NumOrd.Contains(order_Goods.NumOrd) && x.Articul.Contains(order_Goods.Articul));
                 obj.QuantityGoods = newOrder_Goods.QuantityGoods;
             }
             catch (Exception exc)
@@ -1808,7 +1772,7 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@account_shop", newWorkshop.AccountShop);
                 query.Parameters.AddWithValue("@price_1_curtain", newWorkshop.PriceOneCurtain);
                 query.ExecuteNonQuery();
-                var obj = WorkshopsList.FirstOrDefault(x => x.CodeWorkshop == workshop.CodeWorkshop);
+                var obj = WorkshopsList.FirstOrDefault(x => x.CodeWorkshop.Contains(workshop.CodeWorkshop));
                 obj.Name = newWorkshop.Name;
                 obj.TelNum = newWorkshop.TelNum;
                 obj.City = newWorkshop.City;
@@ -1932,6 +1896,34 @@ namespace ais.Tools.DataStorage
             {
                 conn.Close();
             }
+        }
+
+        public List<ContractorsPrices> CurrentContractorsPrices(string name)
+        {
+            List<ContractorsPrices> list = new List<ContractorsPrices>();
+            try
+            {
+                conn.Open();
+                SqlCommand query = new SqlCommand($"select Contractor.Code_contractor, Contractor.Name_contr, Contractor_Goods.price_1_product from (Contractor_Goods inner join Contractor on Contractor_Goods.Code_contractor = Contractor.Code_contractor) inner join Goods on Contractor_Goods.Articul = Goods.Articul where Goods.name_g like '{name}%'", conn);
+                SqlDataReader reader= query.ExecuteReader();
+                while (reader.Read())
+                {
+                 list.Add(new ContractorsPrices(
+                     reader.GetString(0), 
+                     reader.GetString(1), 
+                     Convert.ToDouble(reader.GetValue(2))));   
+                }
+                
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message + "\n" + exc.Source + "\n" + exc.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return list;
         }
     }
 }

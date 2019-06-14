@@ -125,7 +125,7 @@ namespace ais.ViewModels.AddingRowsVM
                 }
                 StationManager.CurrentOrder = new Order((++StationManager.NumOrder).ToString(), DateOrd, id, code, ipn);
                 StationManager.DataStorage.AddOrder(StationManager.CurrentOrder);
-                MessageBox.Show("row added");
+                
                 
             }
             catch (Exception exc)

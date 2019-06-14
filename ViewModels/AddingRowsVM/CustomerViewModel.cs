@@ -37,7 +37,7 @@ namespace ais.ViewModels.AddingRowsVM
         private void AddCustomerImplementation(Window obj)
         {
             StationManager.DataStorage.AddCustomer(StationManager.CurrentCustomer);
-            MessageBox.Show("row added");
+            
             obj.Close();
             CustTelView tel = new CustTelView();
             tel.ShowDialog();

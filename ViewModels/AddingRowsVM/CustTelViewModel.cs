@@ -96,7 +96,7 @@ namespace ais.ViewModels.AddingRowsVM
                 reader1.Close();
                 StationManager.CurrentCustTel = new Cust_Tel(Tel, id);
                 StationManager.DataStorage.AddCustTel(StationManager.CurrentCustTel);
-                MessageBox.Show("row added");
+                
 
             }
             catch (Exception exc)
@@ -120,7 +120,6 @@ namespace ais.ViewModels.AddingRowsVM
                     throw new Exception("Connection String is Null");
                 }
                 conn.Open();
-                MessageBox.Show(Name);
                 string id = "";
                 SqlCommand query = new SqlCommand("SELECT ID FROM Customer WHERE name_cust = '" + Name.Split(' ')[0] + "' and last_name = '" + Name.Split(' ')[1] + "'", conn);
                 SqlDataReader select = query.ExecuteReader();

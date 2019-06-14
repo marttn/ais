@@ -125,7 +125,7 @@ namespace ais.ViewModels.AddingRowsVM
                     reader1.Close();
                     StationManager.CurrentContractGoods = new Contract_Goods(NumContract, articul, CurtAmount);
                     StationManager.DataStorage.AddContractGoods(StationManager.CurrentContractGoods);
-                    MessageBox.Show("row added");
+                    
                 }
                 if (!string.IsNullOrWhiteSpace(NameCornice))
                 {
@@ -140,7 +140,7 @@ namespace ais.ViewModels.AddingRowsVM
                     reader2.Close();
                     StationManager.CurrentContractGoods = new Contract_Goods(NumContract, articul, CornAmount);
                     StationManager.DataStorage.AddContractGoods(StationManager.CurrentContractGoods);
-                    MessageBox.Show("row added");
+                    
                 }
                 if (!string.IsNullOrWhiteSpace(NameAccessories))
                 {
@@ -155,7 +155,7 @@ namespace ais.ViewModels.AddingRowsVM
                     reader3.Close();
                     StationManager.CurrentContractGoods = new Contract_Goods(NumContract, articul, AccAmount);
                     StationManager.DataStorage.AddContractGoods(StationManager.CurrentContractGoods);
-                    MessageBox.Show("row added");
+                    
                 }
             }
             catch (Exception exc)

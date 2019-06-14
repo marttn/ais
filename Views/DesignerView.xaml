@@ -56,7 +56,7 @@
                     <ImageBrush ImageSource="power.png"/>
                 </Button.Background>
             </Button>
-            <Button HorizontalAlignment="Left" Grid.Row="6" Grid.Column="0" Margin="10, 5" VerticalAlignment="Stretch" Width="20" Height="20" BorderBrush="{x:Null}" Command="{Binding HomeCommand}">
+            <Button HorizontalAlignment="Left" Grid.Row="6" Grid.Column="0" Margin="10,0,10,10" VerticalAlignment="Stretch" Width="20" Height="20" BorderBrush="{x:Null}" Command="{Binding HomeCommand}">
                 <Button.Background>
                     <ImageBrush ImageSource="homepage.png"/>
                 </Button.Background>
@@ -195,18 +195,38 @@
             </Grid>
             <Grid Name="Prices" Visibility="Hidden">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.15*"/> 
-                    <RowDefinition Height="0.85*"/> 
+                    <RowDefinition Height="0.1*"/> 
+                    <RowDefinition Height="0.9*"/> 
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.65*"/>
-                    <ColumnDefinition Width="0.35*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" Content="Choose a contractor to find out prices" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Verdana" FontSize="16"/>
-                <ComboBox Grid.Row="0" Grid.Column="1" Margin="15, 20" SelectedItem="{Binding SelectedContractor}" IsReadOnly="False" IsEditable="False" ItemsSource="{Binding ListContractors}"/>
-                <DataGrid AutoGenerateColumns="False" Name="Goods" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0"
-                          Margin="15" Background="Transparent" ItemsSource="{Binding}" HeadersVisibility="All">
-                </DataGrid>
+                
+                <Label Grid.Row="0" Grid.Column="0" Content="Contractor's  prices" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Verdana" FontSize="17"/>
+                <Grid Name="GoodsTypes" Row="1" Margin="0"  VerticalAlignment="Top" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="170"/>
+                        <ColumnDefinition Width="170"/>
+                        <ColumnDefinition Width="170"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Button VerticalAlignment="Top" Grid.Row="0" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="19" Content="Curtains" Grid.Column="0" Click="CurtainsClick"/>
+                    <Button VerticalAlignment="Top" Grid.Row="0" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="19" Content="Cornices" Grid.Column="1" Click="CornicesClick"/>
+                    <Button VerticalAlignment="Top" Grid.Row="0" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Verdana" FontSize="19" Content="Accessories" Grid.Column="2" Click="AccsClick"/>
+                    <Grid VerticalAlignment="Top" Grid.Row="1" Column="0" Name="CurtainsGrid" Visibility="Hidden"/>
+                    <Grid VerticalAlignment="Top" Grid.Row="1" Column="1" Name="CornicesGrid" Visibility="Hidden"/>
+                    <Grid VerticalAlignment="Top" Grid.Row="1" Column="2" Name="AccessoriesGrid" Visibility="Hidden"/>
+                    
+                </Grid>
+                <Grid Row="1"  Name="ContractorsPrices" Margin="75" Visibility="Hidden">
+                    <DataGrid Background="Transparent" Name="DataGrid" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Contractor's code" Binding="{Binding Code, Mode=TwoWay}"/>
+                            <DataGridTextColumn Header="Contractor's name" Binding="{Binding Name, Mode=TwoWay}"/>
+                            <DataGridTextColumn Header="Price" Binding="{Binding Price, Mode=TwoWay}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
             </Grid>
            <Grid Name="Reports" Visibility="Hidden">
                 <Label Content="Display orders" VerticalAlignment="Top" Margin="0,20" FontFamily="Verdana" Height="40" FontSize="22" Width="180"/>

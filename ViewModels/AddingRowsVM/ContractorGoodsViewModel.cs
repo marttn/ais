@@ -151,7 +151,7 @@ namespace ais.ViewModels.AddingRowsVM
                     {
                         StationManager.CurrentContractorGoods = new Contractor_Goods(articul, code, CurtPrice);
                         StationManager.DataStorage.AddContractorGoods(StationManager.CurrentContractorGoods);
-                        MessageBox.Show("row added");
+                        
                     }
                     
                 }
@@ -175,7 +175,7 @@ namespace ais.ViewModels.AddingRowsVM
                     {
                         StationManager.CurrentContractorGoods = new Contractor_Goods(articul, code, CornPrice);
                         StationManager.DataStorage.AddContractorGoods(StationManager.CurrentContractorGoods);
-                        MessageBox.Show("row added");
+                        
                     }
                 }
                 //accessories
@@ -198,7 +198,7 @@ namespace ais.ViewModels.AddingRowsVM
                     {
                         StationManager.CurrentContractorGoods = new Contractor_Goods(articul, code, AccPrice);
                         StationManager.DataStorage.AddContractorGoods(StationManager.CurrentContractorGoods);
-                        MessageBox.Show("row added");
+                        
                     }
                 }
             }
