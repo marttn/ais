@@ -9,7 +9,7 @@ namespace ais.ViewModels.UpdatingRowsVM
 {
     class UpdContractorGoodsVM
     {
-        SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
+        readonly SqlConnection _conn = new SqlConnection(Properties.Settings.Default.ais);
 
         private RelayCommand<Window> _updateContractorGoods;
 
@@ -17,16 +17,16 @@ namespace ais.ViewModels.UpdatingRowsVM
         {
             try
             {
-                conn.Open();
+                _conn.Open();
 
-                SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE Articul = '" + CurrentContractorGoods.Articul + "'", conn);
+                SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE Articul like '" + CurrentContractorGoods.Articul + "%'", _conn);
                 SqlDataReader select = query.ExecuteReader(), select1;
                 while (select.Read())
                 {
                     NameGoods = select["name_g"].ToString().Trim(' ');
                 }
                 select.Close();
-                query = new SqlCommand("SELECT Name_contr FROM Contractor WHERE Code_contractor = '" + CurrentContractorGoods.CodeContractor + "'", conn);
+                query = new SqlCommand("SELECT Name_contr FROM Contractor WHERE Code_contractor like '" + CurrentContractorGoods.CodeContractor + "%'", _conn);
                 select1 = query.ExecuteReader();
                 while (select1.Read())
                 {
@@ -40,7 +40,7 @@ namespace ais.ViewModels.UpdatingRowsVM
             }
             finally
             {
-                conn.Close();
+                _conn.Close();
             }
         }
 

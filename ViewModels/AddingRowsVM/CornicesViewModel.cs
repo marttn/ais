@@ -1,15 +1,15 @@
 ﻿using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows;
 using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using ais.Tools.Navigation;
 
 namespace ais.ViewModels.AddingRowsVM
 {
     class CornicesViewModel
     {
-        private RelayCommand<Window> addCornices;
+        private RelayCommand<Window> _addCornices;
         public Cornices CurrentCornices { get; }
 
         public CornicesViewModel()
@@ -20,16 +20,20 @@ namespace ais.ViewModels.AddingRowsVM
 
         public RelayCommand<Window> AddCornices
         {
-            get => addCornices ?? (addCornices = new RelayCommand<Window>(AddCorniceImpl, CanAdd));
+            get => _addCornices ?? (_addCornices = new RelayCommand<Window>(AddCorniceImpl, CanAdd));
         }
 
         private bool CanAdd(object obj)
         {
-            return !string.IsNullOrWhiteSpace(CurrentCornices.Ipn) && (CurrentCornices.Ipn.Length == 10) &&
-                   !string.IsNullOrWhiteSpace(CurrentCornices.LastName) &&
-                   !string.IsNullOrWhiteSpace(CurrentCornices.Name) && (CurrentCornices.Building == null || CurrentCornices.Building.Length <= 4) &&
-                   !string.IsNullOrWhiteSpace(CurrentCornices.AccountCornice) &&
-                   !string.IsNullOrWhiteSpace(CurrentCornices.TelNum) && CurrentCornices.TelNum.Length==10 &&
+            return new Regex("^\\d{10}").IsMatch(CurrentCornices.Ipn)  &&
+                   new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentCornices.LastName) &&
+                   new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentCornices.Name) &&
+                   (CurrentCornices.Building == null || CurrentCornices.Building.Length <= 4) &&
+                   (CurrentCornices.Building == null || new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentCornices.MiddleName)) &&
+                   (CurrentCornices.City== null || new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentCornices.City)) &&
+                   (CurrentCornices.Street == null || new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentCornices.Street)) &&
+                   new Regex("^\\d{16}").IsMatch(CurrentCornices.AccountCornice) &&
+                   new Regex("^\\d{10}").IsMatch(CurrentCornices.TelNum)  &&
                    !string.IsNullOrWhiteSpace(CurrentCornices.PriceOneCornice.ToString(CultureInfo.InvariantCulture)) && CurrentCornices.PriceOneCornice > 0;
         }
 

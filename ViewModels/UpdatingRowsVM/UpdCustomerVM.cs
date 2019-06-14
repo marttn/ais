@@ -1,12 +1,8 @@
 ﻿using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using ais.Tools.Navigation;
 using System.Windows;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace ais.ViewModels.UpdatingRowsVM
 {
@@ -22,14 +18,14 @@ namespace ais.ViewModels.UpdatingRowsVM
 
         private bool CanUpd(Window obj)
         {
-            return !string.IsNullOrWhiteSpace(CurrentCustomer.LastName) &&
-                   !string.IsNullOrWhiteSpace(CurrentCustomer.Name) &&
-                   !string.IsNullOrWhiteSpace(CurrentCustomer.City) &&
-                   !string.IsNullOrWhiteSpace(CurrentCustomer.Street) &&
-                   !string.IsNullOrWhiteSpace(CurrentCustomer.Building) && CurrentCustomer.Building.Length <=4 &&
+            return new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentCustomer.LastName) &&
+                   new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentCustomer.Name) &&
+                   new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentCustomer.City) &&
+                   new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentCustomer.Street) &&
+                   new Regex("^\\d+[a-zA-ZА-Яа-я]*$").IsMatch(CurrentCustomer.Building) && CurrentCustomer.Building.Length <= 4 &&
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Porch.ToString()) &&
                    !string.IsNullOrWhiteSpace(CurrentCustomer.Apartment.ToString()) &&
-                   !string.IsNullOrWhiteSpace(CurrentCustomer.Email);
+                   new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$").IsMatch(CurrentCustomer.Email);
         }
 
         private void UpdImpl(Window obj)

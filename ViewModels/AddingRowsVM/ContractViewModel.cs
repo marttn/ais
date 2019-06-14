@@ -74,7 +74,7 @@ namespace ais.ViewModels.AddingRowsVM
                 }
                 conn.Open();
                 
-                    query = new SqlCommand("SELECT Code_contractor FROM Contractor WHERE Name_contr = '" + NameContr + "'", conn);
+                    query = new SqlCommand("SELECT Code_contractor FROM Contractor WHERE Name_contr like '" + NameContr + "%'", conn);
                     reader = query.ExecuteReader();
 
                     while (reader.Read())

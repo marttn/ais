@@ -1,7 +1,6 @@
 ﻿using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using ais.Tools.Navigation;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -22,7 +21,8 @@ namespace ais.ViewModels.AddingRowsVM
         private int _accAmount;
 
         private RelayCommand<Window> _addOrderGoods;
-        SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
+        private RelayCommand<Window> _addOrderDetails;
+        readonly SqlConnection _conn = new SqlConnection(Properties.Settings.Default.ais);
 
         public OrderGoodsViewModel()
         {
@@ -107,21 +107,20 @@ namespace ais.ViewModels.AddingRowsVM
             }
         }
 
+        public string OrderDetails { get; set; } =
+            $"Number of order: {StationManager.CurrentOrder.NumOrd.Trim(' ')}, date: {StationManager.CurrentOrder.DateOrd.ToShortDateString()}";
 
-        public RelayCommand<Window> AddOrderGoods
-        {
-            get => _addOrderGoods ?? (_addOrderGoods = new RelayCommand<Window>(AddImpl, CanAdd));
-        }
+        public RelayCommand<Window> AddOrderGoods => _addOrderGoods ?? (_addOrderGoods = new RelayCommand<Window>(AddImpl, CanAdd));
 
         private bool CanAdd(object obj)
         {
             return !string.IsNullOrWhiteSpace(NumOrd) &&
-                   !string.IsNullOrWhiteSpace(NameCurtain) &&
-                   (!string.IsNullOrWhiteSpace(NameCornice) ||
-                   !string.IsNullOrWhiteSpace(NameAccessories)) &&
-                   !string.IsNullOrWhiteSpace(CurtAmount.ToString()) && CurtAmount > 0 &&
-                   (!string.IsNullOrWhiteSpace(CornAmount.ToString()) ||
-                   !string.IsNullOrWhiteSpace(AccAmount.ToString()));
+                   !string.IsNullOrWhiteSpace(NameCurtain) && !string.IsNullOrWhiteSpace(CurtAmount.ToString()) &&
+                   CurtAmount > 0 |
+                   (!string.IsNullOrWhiteSpace(NameCornice) && !string.IsNullOrWhiteSpace(CornAmount.ToString()) &&
+                    CornAmount > 0) |
+                   (!string.IsNullOrWhiteSpace(NameAccessories) && !string.IsNullOrWhiteSpace(AccAmount.ToString()) &&
+                    AccAmount > 0);
         }
 
         private void AddImpl(Window obj)
@@ -129,16 +128,14 @@ namespace ais.ViewModels.AddingRowsVM
             try
             {
                 string articul = null;
-                SqlDataReader reader1, reader2, reader3;
-                SqlCommand query1, query2, query3;
-                if (conn == null)
+                if (_conn == null)
                 {
                     throw new Exception("Connection String is Null");
                 }
-                conn.Open();
+                _conn.Open();
                 //curtain
-                query1 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameCurtain + "'", conn);
-                reader1 = query1.ExecuteReader();
+                var query1 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g like '" + NameCurtain + "%'", _conn);
+                var reader1 = query1.ExecuteReader();
                 while (reader1.Read())
                 {
                     articul = reader1["Articul"].ToString();
@@ -158,8 +155,8 @@ namespace ais.ViewModels.AddingRowsVM
                 //cornice
                 if (!string.IsNullOrWhiteSpace(NameCornice))
                 {
-                    query2 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameCornice + "'", conn);
-                    reader2 = query2.ExecuteReader();
+                    var query2 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g like '" + NameCornice + "%'", _conn);
+                    var reader2 = query2.ExecuteReader();
 
                     while (reader2.Read())
                     {
@@ -181,8 +178,8 @@ namespace ais.ViewModels.AddingRowsVM
                 //accessories 
                 if (!string.IsNullOrWhiteSpace(NameAccessories))
                 {
-                    query3 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameAccessories + "'", conn);
-                    reader3 = query3.ExecuteReader();
+                    var query3 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g like '" + NameAccessories + "%'", _conn);
+                    var reader3 = query3.ExecuteReader();
 
                     while (reader3.Read())
                     {
@@ -201,6 +198,8 @@ namespace ais.ViewModels.AddingRowsVM
                         
                     }
                 }
+
+                StationManager.DataStorage.UpdateOrdersList();
             }
             catch (Exception exc)
             {
@@ -208,7 +207,108 @@ namespace ais.ViewModels.AddingRowsVM
             }
             finally
             {
-                conn.Close();
+                _conn?.Close();
+            }
+            obj.Close();
+        }
+
+        public RelayCommand<Window> AddOrderDetails =>
+            _addOrderDetails ?? (_addOrderDetails = new RelayCommand<Window>(AddDetails, CanAddDetails));
+
+        private bool CanAddDetails(Window obj)
+        {
+            return !string.IsNullOrWhiteSpace(NameCurtain) && !string.IsNullOrWhiteSpace(CurtAmount.ToString()) &&
+                   CurtAmount > 0 |
+                   (!string.IsNullOrWhiteSpace(NameCornice) && !string.IsNullOrWhiteSpace(CornAmount.ToString()) &&
+                    CornAmount > 0) |
+                   (!string.IsNullOrWhiteSpace(NameAccessories) && !string.IsNullOrWhiteSpace(AccAmount.ToString()) &&
+                    AccAmount > 0);
+        }
+
+        private void AddDetails(Window obj)
+        {
+            try
+            {
+                string articul = null, num = OrderDetails.Remove(19).Replace("Number of order: ", "");
+                if (_conn == null)
+                {
+                    throw new Exception("Connection String is Null");
+                }
+                _conn.Open();
+
+                //curtain
+                var query1 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g like '" + NameCurtain + "%'", _conn);
+                var reader1 = query1.ExecuteReader();
+                while (reader1.Read())
+                {
+                    articul = reader1["Articul"].ToString();
+                }
+                reader1.Close();
+                if (StationManager.DataStorage.OrderGoodsList.Exists(u => u.NumOrd.Trim(' ').Equals(num) &&
+                u.Articul.Trim(' ').Equals(articul)))
+                {
+                    MessageBox.Show("Item " + NameCurtain + " is already added in order №" + num);
+                }
+                else
+                {
+                    StationManager.CurrentOrderGoods = new Order_Goods(num, articul, CurtAmount);
+                    StationManager.DataStorage.AddOrderGoods(StationManager.CurrentOrderGoods);
+
+                }
+                //cornice
+                if (!string.IsNullOrWhiteSpace(NameCornice))
+                {
+                    var query2 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g like '" + NameCornice + "%'", _conn);
+                    var reader2 = query2.ExecuteReader();
+
+                    while (reader2.Read())
+                    {
+                        articul = reader2["Articul"].ToString();
+                    }
+                    reader2.Close();
+                    if (StationManager.DataStorage.OrderGoodsList.Exists(u => u.NumOrd.Trim(' ').Equals(num) &&
+                        u.Articul.Trim(' ').Equals(articul)))
+                    {
+                        MessageBox.Show("Item " + NameCornice + " is already added in order №" + num);
+                    }
+                    else
+                    {
+                        StationManager.CurrentOrderGoods = new Order_Goods(num, articul, CornAmount);
+                        StationManager.DataStorage.AddOrderGoods(StationManager.CurrentOrderGoods);
+
+                    }
+                }
+                //accessories 
+                if (!string.IsNullOrWhiteSpace(NameAccessories))
+                {
+                    var query3 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g like '" + NameAccessories + "%'", _conn);
+                    var reader3 = query3.ExecuteReader();
+
+                    while (reader3.Read())
+                    {
+                        articul = reader3["Articul"].ToString();
+                    }
+                    reader3.Close();
+                    if (StationManager.DataStorage.OrderGoodsList.Exists(u => u.NumOrd.Trim(' ').Equals(num) &&
+                     u.Articul.Trim(' ').Equals(articul)))
+                    {
+                        MessageBox.Show("Item " + NameAccessories + " is already added in order №" + num);
+                    }
+                    else
+                    {
+                        StationManager.CurrentOrderGoods = new Order_Goods(num, articul, AccAmount);
+                        StationManager.DataStorage.AddOrderGoods(StationManager.CurrentOrderGoods);
+
+                    }
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            finally
+            {
+                _conn.Close();
             }
             obj.Close();
         }

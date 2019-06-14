@@ -35,7 +35,7 @@ namespace ais.Tools.DataStorage
         void UpdateCornices(Cornices cornices, Cornices newCornices);
 
         void AddCustTel(Cust_Tel cust_Tel);
-        void RemoveCustTel(Cust_Tel cust_Tel);
+        void RemoveCustTel(Cust_Tel custTel);
         void UpdateCustTel(Cust_Tel cust_Tel, Cust_Tel newCust_Tel);
 
         void AddCustomer(Customer customer);
@@ -68,7 +68,10 @@ namespace ais.Tools.DataStorage
         List<Workshop> WorkshopsList { get; }
         
         List<string> NameContractors();
-        
+
+        void UpdateOrdersList();
+        void UpdateContractGoodsList();
+
         List<Users> UsersList { get; }
 
         List<string> ListCurtains();

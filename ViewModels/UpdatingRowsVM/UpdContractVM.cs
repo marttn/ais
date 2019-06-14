@@ -14,9 +14,9 @@ namespace ais.ViewModels.UpdatingRowsVM
         {
             try
             {
-                conn.Open();
+                _conn.Open();
 
-                SqlCommand query = new SqlCommand("SELECT Name_contr FROM Contractor WHERE Code_contractor = '" + CurrentContract.CodeContractor + "'", conn);
+                SqlCommand query = new SqlCommand("SELECT Name_contr FROM Contractor WHERE Code_contractor like '" + CurrentContract.CodeContractor + "%'", _conn);
                 SqlDataReader select = query.ExecuteReader();
                 while (select.Read())
                 {
@@ -30,13 +30,13 @@ namespace ais.ViewModels.UpdatingRowsVM
             }
             finally
             {
-                conn.Close();
+                _conn.Close();
             }
         }
 
         private RelayCommand<Window> _updateContract;
 
-        SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
+        readonly SqlConnection _conn = new SqlConnection(Properties.Settings.Default.ais);
 
         public Contract CurrentContract { get; } = StationManager.CurrentContract;
         public string NameContr { get; set; }

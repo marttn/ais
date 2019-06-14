@@ -1,7 +1,6 @@
 ﻿using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using ais.Tools.Navigation;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -13,7 +12,6 @@ namespace ais.ViewModels.AddingRowsVM
 {
     internal class OrderViewModel
     {
-        //public Order CurrentOrder { get; }
 
         private RelayCommand<Window> _addOrder;
         public ObservableCollection<string> ListCustomers { get; }
@@ -87,18 +85,13 @@ namespace ais.ViewModels.AddingRowsVM
             try
             {
                 string code = null, ipn = null, id = "";
-                SqlDataReader reader, reader1, reader2;
                 SqlCommand query;
-                if (conn == null)
-                {
-                    throw new Exception("Connection String is Null");
-                }
                 conn.Open();
 
                 if (CodeWorkshop!=null)
                 {
-                   query  = new SqlCommand("SELECT Code_workshop FROM Workshop WHERE name_shop = '" + CodeWorkshop + "'", conn);
-                   reader = query.ExecuteReader();
+                   query  = new SqlCommand("SELECT Code_workshop FROM Workshop WHERE name_shop like '" + CodeWorkshop + "%'", conn);
+                   var reader = query.ExecuteReader();
 
                     while (reader.Read())
                     {
@@ -106,8 +99,8 @@ namespace ais.ViewModels.AddingRowsVM
                     }
                     reader.Close();
                 }
-                query = new SqlCommand("Select ID FROM Customer WHERE last_name = '" + ID.Split(' ')[1]+"'", conn);
-                reader1 = query.ExecuteReader();
+                query = new SqlCommand("Select ID FROM Customer WHERE last_name like '" + ID.Split(' ')[1]+"%'", conn);
+                var reader1 = query.ExecuteReader();
                 while (reader1.Read())
                 {
                     id = reader1["ID"].ToString();
@@ -115,8 +108,8 @@ namespace ais.ViewModels.AddingRowsVM
                 reader1.Close();
                 if (Ipn!=null)
                 {
-                    query = new SqlCommand("SELECT Ipn FROM Cornices WHERE last_name = '" + Ipn.Split(' ')[1] + "'", conn);
-                    reader2 = query.ExecuteReader();
+                    query = new SqlCommand("SELECT Ipn FROM Cornices WHERE last_name like '" + Ipn.Split(' ')[1] + "%'", conn);
+                    var reader2 = query.ExecuteReader();
                     while (reader2.Read())
                     {
                         ipn = reader2["Ipn"].ToString();

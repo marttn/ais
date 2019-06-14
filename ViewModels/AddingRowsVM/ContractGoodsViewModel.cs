@@ -1,7 +1,6 @@
 ﻿using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using ais.Tools.Navigation;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -114,8 +113,7 @@ namespace ais.ViewModels.AddingRowsVM
                 conn.Open();
                 if (!string.IsNullOrWhiteSpace(NameCurtain))
                 {
-                    query1 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = @name_g", conn);
-                    query1.Parameters.AddWithValue("@name_g", NameCurtain);
+                    query1 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g like '"+ NameCurtain+"%'", conn);
                     reader1 = query1.ExecuteReader();
 
                     while (reader1.Read())
@@ -129,8 +127,7 @@ namespace ais.ViewModels.AddingRowsVM
                 }
                 if (!string.IsNullOrWhiteSpace(NameCornice))
                 {
-                    query2 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = @name_g", conn);
-                    query2.Parameters.AddWithValue("@name_g", NameCornice);
+                    query2 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g like '"+ NameCornice+"%'", conn);
                     reader2 = query2.ExecuteReader();
 
                     while (reader2.Read())
@@ -144,8 +141,7 @@ namespace ais.ViewModels.AddingRowsVM
                 }
                 if (!string.IsNullOrWhiteSpace(NameAccessories))
                 {
-                    query3 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = @name_g", conn);
-                    query3.Parameters.AddWithValue("@name_g", NameAccessories);
+                    query3 = new SqlCommand("SELECT Articul FROM Goods WHERE name_g like '"+ NameAccessories +"%'", conn);
                     reader3 = query3.ExecuteReader();
 
                     while (reader3.Read())
@@ -164,7 +160,7 @@ namespace ais.ViewModels.AddingRowsVM
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
             obj.Close();
         }
@@ -172,17 +168,17 @@ namespace ais.ViewModels.AddingRowsVM
         private bool CanAdd(object obj)
         {
             return !string.IsNullOrWhiteSpace(NumContract) &&
-                   (!string.IsNullOrWhiteSpace(NameCornice) ||
-                   !string.IsNullOrWhiteSpace(NameCurtain) ||
-                   !string.IsNullOrWhiteSpace(NameAccessories)) &&
-                   (!string.IsNullOrWhiteSpace(CurtAmount.ToString()) ||
-                   !string.IsNullOrWhiteSpace(CornAmount.ToString()) ||
-                   !string.IsNullOrWhiteSpace(AccAmount.ToString()));
+                   !string.IsNullOrWhiteSpace(NameCurtain) && !string.IsNullOrWhiteSpace(CurtAmount.ToString()) &&
+                   CurtAmount > 0 |
+                   (!string.IsNullOrWhiteSpace(NameCornice) && !string.IsNullOrWhiteSpace(CornAmount.ToString()) &&
+                    CornAmount > 0) |
+                   (!string.IsNullOrWhiteSpace(NameAccessories) && !string.IsNullOrWhiteSpace(AccAmount.ToString()) &&
+                    AccAmount > 0);
         }
 
 
 
-        #region INotifyPropertyChang
+        #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

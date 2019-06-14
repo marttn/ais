@@ -1,14 +1,14 @@
 ﻿using System.Windows;
 using ais.ViewModels.AddingRowsVM;
 
-namespace ais.Views.AddingRows
+namespace ais.Views
 {
     /// <summary>
-    /// Логика взаимодействия для NewOrderGoodsView.xaml
+    /// Логика взаимодействия для AddGoodsToOrder.xaml
     /// </summary>
-    public partial class NewOrderGoodsView : Window
+    public partial class AddGoodsToOrder
     {
-        public NewOrderGoodsView()
+        public AddGoodsToOrder()
         {
             InitializeComponent();
             DataContext = new OrderGoodsViewModel();

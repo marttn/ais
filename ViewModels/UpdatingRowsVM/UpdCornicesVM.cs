@@ -1,12 +1,9 @@
 ﻿using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using ais.Tools.Navigation;
 using System.Windows;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace ais.ViewModels.UpdatingRowsVM
 {
@@ -23,11 +20,15 @@ namespace ais.ViewModels.UpdatingRowsVM
 
         private bool CanUpd(Window obj)
         {
-            return !string.IsNullOrWhiteSpace(CurrentCornices.LastName) &&
-                   !string.IsNullOrWhiteSpace(CurrentCornices.Name) &&
-                   !string.IsNullOrWhiteSpace(CurrentCornices.AccountCornice) &&
-                   !string.IsNullOrWhiteSpace(CurrentCornices.TelNum) &&
-                   !string.IsNullOrWhiteSpace(CurrentCornices.PriceOneCornice.ToString()) && CurrentCornices.PriceOneCornice != 0.0;
+            return new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentCornices.LastName) &&
+                new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentCornices.Name) &&
+                (CurrentCornices.Building == null || CurrentCornices.Building.Length <= 4) &&
+                (CurrentCornices.Building == null || new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentCornices.MiddleName)) &&
+                (CurrentCornices.City == null || new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentCornices.City)) &&
+                (CurrentCornices.Street == null || new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentCornices.Street)) &&
+                new Regex("^\\d{16}").IsMatch(CurrentCornices.AccountCornice) &&
+                new Regex("^\\d{10}").IsMatch(CurrentCornices.TelNum) &&
+                !string.IsNullOrWhiteSpace(CurrentCornices.PriceOneCornice.ToString(CultureInfo.InvariantCulture)) && CurrentCornices.PriceOneCornice > 0;
         }
 
         private void UpdImpl(Window obj)

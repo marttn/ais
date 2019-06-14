@@ -1,12 +1,7 @@
 ﻿using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using ais.Tools.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace ais.ViewModels.AddingRowsVM
@@ -28,8 +23,8 @@ namespace ais.ViewModels.AddingRowsVM
         {
             return !string.IsNullOrWhiteSpace(CurrentGoods.Name) &&
                    !string.IsNullOrWhiteSpace(CurrentGoods.Type) &&
-                   !string.IsNullOrWhiteSpace(CurrentGoods.Material) &&
-                   !string.IsNullOrWhiteSpace(CurrentGoods.Characteristics) 
+                   new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentGoods.Material) &&
+                   new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentGoods.Characteristics) 
                    && CurrentGoods.Characteristics.Length <= 255;
         }
 

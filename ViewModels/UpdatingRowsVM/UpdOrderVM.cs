@@ -12,13 +12,13 @@ namespace ais.ViewModels.UpdatingRowsVM
 {
     class UpdOrderVM
     {
-        private RelayCommand<Window> updateOrder;
+        private RelayCommand<Window> _updateOrder;
 
         private string _id;
         private string _codeWorkshop = "";
         private string _ipn = "";
 
-        SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
+        readonly SqlConnection _conn = new SqlConnection(Properties.Settings.Default.ais);
 
         public UpdOrderVM()
         {
@@ -31,7 +31,7 @@ namespace ais.ViewModels.UpdatingRowsVM
 
         public RelayCommand<Window> UpdateOrder
         {
-            get => updateOrder ?? (updateOrder = new RelayCommand<Window>(UpdImpl, CanUpd));
+            get => _updateOrder ?? (_updateOrder = new RelayCommand<Window>(UpdImpl, CanUpd));
         }
 
         private bool CanUpd(Window obj)
@@ -42,18 +42,17 @@ namespace ais.ViewModels.UpdatingRowsVM
         private void UpdImpl(Window obj)
         {
             string code = null, ipn = null;
-            SqlDataReader reader, reader2;
             SqlCommand query;
-            if (conn == null)
+            if (_conn == null)
             {
                 throw new Exception("Connection String is Null");
             }
-            conn.Open();
+            _conn.Open();
 
             if (!CodeWorkshop.Equals(""))
             {
-                query = new SqlCommand("SELECT Code_workshop FROM Workshop WHERE name_shop = '" + CodeWorkshop + "'", conn);
-                reader = query.ExecuteReader();
+                query = new SqlCommand("SELECT Code_workshop FROM Workshop WHERE name_shop like '" + CodeWorkshop + "%'", _conn);
+                var reader = query.ExecuteReader();
 
                 while (reader.Read())
                 {
@@ -64,8 +63,8 @@ namespace ais.ViewModels.UpdatingRowsVM
             
             if (!Ipn.Equals(""))
             {
-                query = new SqlCommand("SELECT Ipn FROM Cornices WHERE last_name = '" + Ipn.Split(' ')[1] + "'", conn);
-                reader2 = query.ExecuteReader();
+                query = new SqlCommand("SELECT Ipn FROM Cornices WHERE last_name like '" + Ipn.Split(' ')[1] + "%'", _conn);
+                var reader2 = query.ExecuteReader();
                 while (reader2.Read())
                 {
                     ipn = reader2["Ipn"].ToString();
@@ -112,13 +111,13 @@ namespace ais.ViewModels.UpdatingRowsVM
         {
             try
             {
-                if (conn == null)
+                if (_conn == null)
                 {
                     throw new Exception("Connection String is Null");
                 }
-                conn.Open();
+                _conn.Open();
 
-                SqlCommand query = new SqlCommand("SELECT name_shop FROM Workshop", conn);
+                SqlCommand query = new SqlCommand("SELECT name_shop FROM Workshop", _conn);
                 SqlDataReader select = query.ExecuteReader();
                 while (select.Read())
                 {
@@ -128,7 +127,7 @@ namespace ais.ViewModels.UpdatingRowsVM
 
                
 
-                SqlCommand query2 = new SqlCommand("SELECT last_name, name_c FROM Cornices", conn);
+                SqlCommand query2 = new SqlCommand("SELECT last_name, name_c FROM Cornices", _conn);
                 SqlDataReader select2 = query2.ExecuteReader();
                 while (select2.Read())
                 {
@@ -138,7 +137,7 @@ namespace ais.ViewModels.UpdatingRowsVM
 
                 //id, ipn, code
 
-                SqlCommand query1 = new SqlCommand("SELECT last_name, name_cust FROM Customer WHERE ID = '" + CurrentOrder.ID + "'", conn);
+                SqlCommand query1 = new SqlCommand("SELECT last_name, name_cust FROM Customer WHERE ID = '" + CurrentOrder.ID + "'", _conn);
                 SqlDataReader select1 = query1.ExecuteReader();
                 while (select1.Read())
                 {
@@ -146,7 +145,7 @@ namespace ais.ViewModels.UpdatingRowsVM
                 }
                 select1.Close();
 
-                SqlCommand query3 = new SqlCommand("SELECT name_shop FROM Workshop WHERE Code_workshop = '" + CurrentOrder.CodeWorkshop + "'", conn);
+                SqlCommand query3 = new SqlCommand("SELECT name_shop FROM Workshop WHERE Code_workshop = '" + CurrentOrder.CodeWorkshop + "'", _conn);
                 SqlDataReader select3 = query3.ExecuteReader();
                 while (select3.Read())
                 {
@@ -156,7 +155,7 @@ namespace ais.ViewModels.UpdatingRowsVM
                 }
                 select3.Close();
 
-                SqlCommand query4 = new SqlCommand("SELECT last_name, name_c FROM Cornices WHERE Ipn = '" + CurrentOrder.Ipn + "'", conn);
+                SqlCommand query4 = new SqlCommand("SELECT last_name, name_c FROM Cornices WHERE Ipn = '" + CurrentOrder.Ipn + "'", _conn);
                 SqlDataReader select4 = query4.ExecuteReader();
                 while (select4.Read())
                 {
@@ -172,7 +171,7 @@ namespace ais.ViewModels.UpdatingRowsVM
             }
             finally
             {
-                conn.Close();
+                _conn?.Close();
             }
         }
 

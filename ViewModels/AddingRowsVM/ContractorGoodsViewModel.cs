@@ -102,13 +102,14 @@ namespace ais.ViewModels.AddingRowsVM
 
         private bool CanAdd(Window obj)
         {
-            return (!string.IsNullOrWhiteSpace(NameAccessories) ||
-                   !string.IsNullOrWhiteSpace(NameCurtain) ||
-                   !string.IsNullOrWhiteSpace(NameCornice)) &&
-                   !string.IsNullOrWhiteSpace(NameContractor) &&
-                   ((!string.IsNullOrWhiteSpace(CornPrice.ToString()) && CornPrice > 0) ||
-                   (!string.IsNullOrWhiteSpace(CurtPrice.ToString()) && CurtPrice > 0) ||
-                   (!string.IsNullOrWhiteSpace(AccPrice.ToString()) && AccPrice > 0));
+            return
+                !string.IsNullOrWhiteSpace(NameContractor) &
+                (!string.IsNullOrWhiteSpace(NameCurtain) && !string.IsNullOrWhiteSpace(CurtPrice.ToString()) &&
+                 CurtPrice > 0 |
+                 (!string.IsNullOrWhiteSpace(NameCornice) && !string.IsNullOrWhiteSpace(CornPrice.ToString()) &&
+                  CornPrice > 0) |
+                 (!string.IsNullOrWhiteSpace(NameAccessories) && !string.IsNullOrWhiteSpace(AccPrice.ToString()) &&
+                  AccPrice > 0));
         }
 
         private void AddImpl(Window obj)
@@ -124,7 +125,7 @@ namespace ais.ViewModels.AddingRowsVM
                 }
                 conn.Open();
                 //contractor
-                query = new SqlCommand("SELECT Code_contractor FROM Contractor WHERE Name_contr = '" + NameContractor + "'", conn);
+                query = new SqlCommand("SELECT Code_contractor FROM Contractor WHERE Name_contr like '" + NameContractor + "%'", conn);
                 reader4 = query.ExecuteReader();
                 while (reader4.Read())
                 {
@@ -134,7 +135,7 @@ namespace ais.ViewModels.AddingRowsVM
                 //curtain
                 if (!string.IsNullOrWhiteSpace(NameCurtain))
                 {
-                    query = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameCurtain + "'", conn);
+                    query = new SqlCommand("SELECT Articul FROM Goods WHERE name_g like '" + NameCurtain + "%'", conn);
                     reader1 = query.ExecuteReader();
 
                     while (reader1.Read())
@@ -158,7 +159,7 @@ namespace ais.ViewModels.AddingRowsVM
                 //cornices
                 if (!string.IsNullOrWhiteSpace(NameCornice))
                 {
-                    query = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameCornice + "'", conn);
+                    query = new SqlCommand("SELECT Articul FROM Goods WHERE name_g like '" + NameCornice + "%'", conn);
                     reader2 = query.ExecuteReader();
 
                     while (reader2.Read())
@@ -181,7 +182,7 @@ namespace ais.ViewModels.AddingRowsVM
                 //accessories
                 if (!string.IsNullOrWhiteSpace(NameAccessories))
                 {
-                    query = new SqlCommand("SELECT Articul FROM Goods WHERE name_g = '" + NameAccessories + "'", conn);
+                    query = new SqlCommand("SELECT Articul FROM Goods WHERE name_g like '" + NameAccessories + "%'", conn);
                     reader3 = query.ExecuteReader();
 
                     while (reader3.Read())

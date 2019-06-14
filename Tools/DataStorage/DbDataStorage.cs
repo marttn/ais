@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using ais.Models;
@@ -61,13 +62,77 @@ namespace ais.Tools.DataStorage
                 }
                 finally
                 {
-                    conn.Close();
+                    conn?.Close();
                 }
 
                 return nameList;
         }
 
-        
+        public void UpdateOrdersList()
+        {
+            OrdersList.Clear();
+            try
+            {
+                conn.Open();
+                SqlCommand cmd5 = new SqlCommand($"select * from [upd_order]", conn);
+                SqlDataAdapter da5 = new SqlDataAdapter(cmd5);
+                DataTable dataTable5 = new DataTable();
+                da5.Fill(dataTable5);
+                for (int i = 0; i < dataTable5.Rows.Count; ++i)
+                {
+                    OrdersList.Add(new Order(
+                        dataTable5.Rows[i][0].ToString() ?? "",
+                        (DateTime)dataTable5.Rows[i][1],
+                        dataTable5.Rows[i][2].ToString() ?? "",
+                        dataTable5.Rows[i][3].ToString() ?? "",
+                        dataTable5.Rows[i][4].ToString() ?? "",
+                        dataTable5.Rows[i][5] == DBNull.Value ? 0 : Convert.ToDouble(dataTable5.Rows[i][5]),
+                        dataTable5.Rows[i][6] == DBNull.Value ? 0 : Convert.ToDouble(dataTable5.Rows[i][6]),
+                        dataTable5.Rows[i][7] == DBNull.Value ? 0 : Convert.ToDouble(dataTable5.Rows[i][7]),
+                        dataTable5.Rows[i][8] == DBNull.Value ? 0 : Convert.ToDouble(dataTable5.Rows[i][8])));
+                }
+                StationManager.NumOrder = int.Parse(dataTable5.Rows[dataTable5.Rows.Count - 1][0].ToString());
+                StationManager.CurrentOrder = OrdersList[dataTable5.Rows.Count - 1];
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
+            finally
+            {
+                conn?.Close();
+            }
+        }
+
+        public void UpdateContractGoodsList()
+        {
+            ContractGoodsList.Clear();
+            try
+            {
+                conn.Open();
+                SqlCommand cmd12 = new SqlCommand($"select * from upd_contract_Goods", conn);
+                SqlDataAdapter da12 = new SqlDataAdapter(cmd12);
+                DataTable dataTable12 = new DataTable();
+                da12.Fill(dataTable12);
+                for (int i = 0; i < dataTable12.Rows.Count; ++i)
+                {
+                    ContractGoodsList.Add(new Contract_Goods(
+                        dataTable12.Rows[i][0].ToString() ?? "",
+                        dataTable12.Rows[i][1].ToString() ?? "",
+                        dataTable12.Rows[i][2] == DBNull.Value ? 0 : Convert.ToInt32(dataTable12.Rows[i][2]),
+                        dataTable12.Rows[i][3] == DBNull.Value ? 0 : Convert.ToDouble(dataTable12.Rows[i][3])));
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message + "\n" + exc.Source + "\n" + exc.StackTrace);
+            }
+            finally
+            {
+                conn?.Close();
+            }
+        }
+
 
         public List<Users> UsersList { get; } = new List<Users>
         {
@@ -95,7 +160,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
             return curtains;
         }
@@ -120,7 +185,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
             return cornices;
         }
@@ -145,7 +210,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
             return accs;
         }
@@ -170,7 +235,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
             return nums;
         }
@@ -199,7 +264,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
 
             return custs;
@@ -225,7 +290,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
 
             return nums;
@@ -251,7 +316,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
 
             return cornices;
@@ -277,7 +342,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
 
             return shops;
@@ -314,20 +379,20 @@ namespace ais.Tools.DataStorage
                     for (int i = 0; i < dataTable1.Rows.Count; ++i)
                     {
                         var customer = new Customer(
-                            dataTable1.Rows[i][0].ToString() ?? "",
-                            dataTable1.Rows[i][1].ToString() ?? "",
-                            dataTable1.Rows[i][2].ToString() ?? "",
-                            dataTable1.Rows[i][3].ToString() ?? "",
-                            dataTable1.Rows[i][4].ToString() ?? "",
-                            dataTable1.Rows[i][5].ToString() ?? "",
-                            dataTable1.Rows[i][6].ToString() ?? "",
+                            dataTable1.Rows[i][0].ToString(),
+                            dataTable1.Rows[i][1].ToString() ,
+                            dataTable1.Rows[i][2].ToString() ,
+                            dataTable1.Rows[i][3].ToString() ,
+                            dataTable1.Rows[i][4].ToString() ,
+                            dataTable1.Rows[i][5].ToString() ,
+                            dataTable1.Rows[i][6].ToString() ,
                             Convert.ToInt32(dataTable1.Rows[i][7]),
                             Convert.ToInt32(dataTable1.Rows[i][8]),
-                            dataTable1.Rows[i][9].ToString() ?? "");
+                            dataTable1.Rows[i][9].ToString() );
                         customersList.Add(customer);
                     }
 
-                SqlCommand cmd2 = new SqlCommand($"select * from Cust_Tel", conn);
+                var cmd2 = new SqlCommand($"select * from Cust_Tel", conn);
                 SqlDataAdapter da2 = new SqlDataAdapter(cmd2);
                 DataTable dataTable2 = new DataTable();
                 da2.Fill(dataTable2);
@@ -335,8 +400,8 @@ namespace ais.Tools.DataStorage
                 for (int i = 0; i < dataTable2.Rows.Count; ++i)
                     {
                         custTelsList.Add(new Cust_Tel
-                            (dataTable2.Rows[i][0].ToString() ?? "",
-                             dataTable2.Rows[i][1].ToString() ?? ""));
+                            (dataTable2.Rows[i][0].ToString(),
+                             dataTable2.Rows[i][1].ToString()));
                     }
 
                 SqlCommand cmd3 = new SqlCommand($"select * from Cornices", conn);
@@ -495,7 +560,7 @@ namespace ais.Tools.DataStorage
                         contractGoodsList.Add(new Contract_Goods(
                             dataTable12.Rows[i][0].ToString() ?? "",
                             dataTable12.Rows[i][1].ToString() ?? "",
-                            Convert.ToInt32(dataTable12.Rows[i][2]),
+                            dataTable12.Rows[i][2] == DBNull.Value ? 0 : Convert.ToInt32(dataTable12.Rows[i][2]),
                             dataTable12.Rows[i][3] == DBNull.Value ? 0 : Convert.ToDouble(dataTable12.Rows[i][3])));
                 }
             }
@@ -505,7 +570,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
     
@@ -539,7 +604,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -557,7 +622,7 @@ namespace ais.Tools.DataStorage
                     throw new Exception("Connection String is Null");
                 }
                 conn.Open();
-                SqlCommand query = new SqlCommand("INSERT INTO Contract VALUES (@Num_contract, @Articul, @quantity_contract)", conn);
+                SqlCommand query = new SqlCommand("INSERT INTO Contract_Goods VALUES (@Num_contract, @Articul, @quantity_contract)", conn);
                 query.Parameters.AddWithValue("@Num_contract", contrgoods.NumContract);
                 query.Parameters.AddWithValue("@Articul", contrgoods.Articul);
                 query.Parameters.AddWithValue("@quantity_contract", contrgoods.Quantity);
@@ -570,7 +635,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -607,7 +672,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -637,7 +702,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -676,7 +741,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
 
             return list;
@@ -712,7 +777,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
 
             return list;
@@ -740,7 +805,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
 
             return res;
@@ -763,7 +828,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
 
             return res;
@@ -786,7 +851,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
             return res;
         }
@@ -809,7 +874,7 @@ namespace ais.Tools.DataStorage
                 Console.WriteLine(@"'{0}' or '{1}' is outside the range of a Double.", profit, expenses);
             }
 
-            return res.ToString();
+            return res.ToString(CultureInfo.InvariantCulture);
         }
 
         public void AddOrder(Order order)
@@ -842,7 +907,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -855,7 +920,7 @@ namespace ais.Tools.DataStorage
                     throw new Exception("Connection String is Null");
                 }
                 conn.Open();
-                SqlCommand query = new SqlCommand("DELETE FROM Contract WHERE Num_contract = '" + contract.NumContract + "'", conn);
+                SqlCommand query = new SqlCommand("DELETE FROM Contract WHERE Num_contract like '" + contract.NumContract + "%'", conn);
                 query.ExecuteNonQuery();
                 ContractsList.Remove(contract);
                 ContractGoodsList.RemoveAll(x => x.NumContract.Contains(contract.NumContract));
@@ -866,7 +931,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -879,7 +944,7 @@ namespace ais.Tools.DataStorage
                     throw new Exception("Connection String is Null");
                 }
                 conn.Open();
-                SqlCommand query = new SqlCommand("DELETE FROM Contract_Goods WHERE Num_contract = '" + contrgoods.NumContract + "' AND Articul = '" + contrgoods.Articul + "'", conn);
+                SqlCommand query = new SqlCommand("DELETE FROM Contract_Goods WHERE Num_contract like '" + contrgoods.NumContract + "%' AND Articul like '" + contrgoods.Articul + "%'", conn);
                 query.ExecuteNonQuery();
                 ContractGoodsList.Remove(contrgoods);
             }
@@ -889,7 +954,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -902,7 +967,7 @@ namespace ais.Tools.DataStorage
                     throw new Exception("Connection String is Null");
                 }
                 conn.Open();
-                SqlCommand query = new SqlCommand("DELETE FROM Contractor WHERE Code_contractor = '" + contractor.CodeContractor + "'", conn);
+                SqlCommand query = new SqlCommand("DELETE FROM Contractor WHERE Code_contractor like '" + contractor.CodeContractor + "%'", conn);
                 query.ExecuteNonQuery();
                 ContractorsList.Remove(contractor);
                 ContractorTelList.RemoveAll(x => x.CodeContractor.Contains(contractor.CodeContractor));
@@ -915,7 +980,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -938,7 +1003,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -962,7 +1027,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -994,7 +1059,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1017,7 +1082,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1059,7 +1124,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1083,7 +1148,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1115,11 +1180,11 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
-        public void RemoveCustTel(Cust_Tel cust_Tel)
+        public void RemoveCustTel(Cust_Tel custTel)
         {
             try
             {
@@ -1128,9 +1193,9 @@ namespace ais.Tools.DataStorage
                     throw new Exception("Connection String is Null");
                 }
                 conn.Open();
-                SqlCommand query = new SqlCommand("DELETE FROM Cust_Tel WHERE Tel_num = '" + cust_Tel.TelNum + "'", conn);
+                SqlCommand query = new SqlCommand("DELETE FROM Cust_Tel WHERE Tel_num = '" + custTel.TelNum + "'", conn);
                 query.ExecuteNonQuery();
-                CustTelsList.Remove(cust_Tel);
+                CustTelsList.Remove(custTel);
             }
             catch (Exception exc)
             {
@@ -1138,7 +1203,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1146,11 +1211,6 @@ namespace ais.Tools.DataStorage
 
         public void AddCustomer(Customer customer)
         {
-            if (CustomersList.Any(x=>x.ID.Contains(customer.ID)))
-            {
-                MessageBox.Show("this item already exists");
-                return;
-            }
             try
             {
                 if (conn == null)
@@ -1185,7 +1245,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1210,7 +1270,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1218,11 +1278,6 @@ namespace ais.Tools.DataStorage
 
         public void AddGoods(Goods goods)
         {
-            if (GoodsList.Any(x=>x.Articul.Contains(goods.Articul)))
-            {
-                MessageBox.Show("this item already exists");
-                return;
-            }
             try
             {
                 if (conn == null)
@@ -1252,7 +1307,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1278,7 +1333,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1311,7 +1366,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1334,7 +1389,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1374,7 +1429,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1399,7 +1454,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
         
@@ -1436,9 +1491,12 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@Ipn", (object)newOrder.Ipn ?? DBNull.Value);
                 query.ExecuteNonQuery();
                 var obj = OrdersList.FirstOrDefault(x => x.NumOrd.Contains(order.NumOrd));
-                obj.DateOrd = newOrder.DateOrd;
-                obj.CodeWorkshop = newOrder.CodeWorkshop ?? "";
-                obj.Ipn= newOrder.Ipn ?? "";
+                if (obj != null)
+                {
+                    obj.DateOrd = newOrder.DateOrd;
+                    obj.CodeWorkshop = newOrder.CodeWorkshop ?? "";
+                    obj.Ipn = newOrder.Ipn ?? "";
+                }
             }
             catch (Exception exc)
             {
@@ -1446,7 +1504,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1463,7 +1521,7 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@date_contract", newContract.DateContract);
                 query.ExecuteNonQuery();
                 var obj = ContractsList.FirstOrDefault(x => x.NumContract.Contains(contract.NumContract));
-                obj.DateContract = newContract.DateContract;
+                if (obj != null) obj.DateContract = newContract.DateContract;
             }
             catch (Exception exc)
             {
@@ -1471,7 +1529,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1488,7 +1546,7 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@quantity_contract", newContract_Goods.Quantity);
                 query.ExecuteNonQuery(); 
                 var obj = ContractGoodsList.FirstOrDefault(x => x.Articul.Contains(contrgoods.Articul) && x.NumContract.Contains(contrgoods.NumContract));
-                obj.Quantity = newContract_Goods.Quantity;
+                if (obj != null) obj.Quantity = newContract_Goods.Quantity;
             }
             catch (Exception exc)
             {
@@ -1496,7 +1554,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1520,14 +1578,17 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@email", newContractor.Email);
                 query.ExecuteNonQuery();
                 var obj = ContractorsList.FirstOrDefault(x => x.CodeContractor.Contains(contractor.CodeContractor));
-                obj.NameContractor = newContractor.NameContractor;
-                obj.City = newContractor.City;
-                obj.Street = newContractor.Street;
-                obj.Building = newContractor.Building;
-                obj.Porch = newContractor.Porch;
-                obj.Office = newContractor.Office;
-                obj.Account = newContractor.Account;
-                obj.Email = newContractor.Email;
+                if (obj != null)
+                {
+                    obj.NameContractor = newContractor.NameContractor;
+                    obj.City = newContractor.City;
+                    obj.Street = newContractor.Street;
+                    obj.Building = newContractor.Building;
+                    obj.Porch = newContractor.Porch;
+                    obj.Office = newContractor.Office;
+                    obj.Account = newContractor.Account;
+                    obj.Email = newContractor.Email;
+                }
             }
             catch (Exception exc)
             {
@@ -1535,7 +1596,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1552,7 +1613,7 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@Tel_num", newContractor_Tel.TelNum);
                 query.ExecuteNonQuery();
                 var obj = ContractorTelList.FirstOrDefault(x => x.TelNum.Contains(contrtel.TelNum));
-                obj.TelNum = newContractor_Tel.TelNum;
+                if (obj != null) obj.TelNum = newContractor_Tel.TelNum;
             }
             catch (Exception exc)
             {
@@ -1560,7 +1621,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1577,7 +1638,7 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@price_1_product", newContractor_Goods.PriceOneProduct);
                 query.ExecuteNonQuery();
                 var obj = ContractorGoodsList.FirstOrDefault(x => x.Articul.Contains(contractorgoods.Articul) && x.CodeContractor.Contains(contractorgoods.CodeContractor));
-                obj.PriceOneProduct = newContractor_Goods.PriceOneProduct;
+                if (obj != null) obj.PriceOneProduct = newContractor_Goods.PriceOneProduct;
             }
             catch (Exception exc)
             {
@@ -1585,7 +1646,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1612,17 +1673,20 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@price_1_cornice", newCornices.PriceOneCornice);
                 query.ExecuteNonQuery();
                 var obj = CornicesList.FirstOrDefault(x => x.Ipn.Contains(cornices.Ipn));
-                obj.LastName = newCornices.LastName;
-                obj.Name = newCornices.Name;
-                obj.MiddleName = newCornices.MiddleName ?? "";
-                obj.City = newCornices.City ?? "";
-                obj.Street = newCornices.Street ?? "";
-                obj.Building = newCornices.Building ?? "";
-                obj.Porch = newCornices.Porch;// ?? ""
-                obj.Apartment = newCornices.Apartment;// ?? ""
-                obj.AccountCornice = newCornices.AccountCornice;
-                obj.TelNum = newCornices.TelNum;
-                obj.PriceOneCornice = newCornices.PriceOneCornice;
+                if (obj != null)
+                {
+                    obj.LastName = newCornices.LastName;
+                    obj.Name = newCornices.Name;
+                    obj.MiddleName = newCornices.MiddleName ?? "";
+                    obj.City = newCornices.City ?? "";
+                    obj.Street = newCornices.Street ?? "";
+                    obj.Building = newCornices.Building ?? "";
+                    obj.Porch = newCornices.Porch; 
+                    obj.Apartment = newCornices.Apartment; 
+                    obj.AccountCornice = newCornices.AccountCornice;
+                    obj.TelNum = newCornices.TelNum;
+                    obj.PriceOneCornice = newCornices.PriceOneCornice;
+                }
             }
             catch (Exception exc)
             {
@@ -1630,7 +1694,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1647,7 +1711,7 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@Tel_num", newCust_Tel.TelNum);
                 query.ExecuteNonQuery();
                 var obj = CustTelsList.FirstOrDefault(x => x.TelNum.Contains(cust_Tel.TelNum));
-                obj.TelNum = newCust_Tel.TelNum;
+                if (obj != null) obj.TelNum = newCust_Tel.TelNum;
             }
             catch (Exception exc)
             {
@@ -1655,7 +1719,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1680,15 +1744,18 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@email", newCustomer.Email);
                 query.ExecuteNonQuery();
                 var obj = CustomersList.FirstOrDefault(x => x.ID.Contains(customer.ID));
-                obj.LastName = newCustomer.LastName;
-                obj.Name = newCustomer.Name;
-                obj.MiddleName = newCustomer.MiddleName ?? "";
-                obj.City = newCustomer.City;
-                obj.Street = newCustomer.Street;
-                obj.Building = newCustomer.Building;
-                obj.Porch = newCustomer.Porch;
-                obj.Apartment = newCustomer.Apartment;
-                obj.Email = newCustomer.Email;
+                if (obj != null)
+                {
+                    obj.LastName = newCustomer.LastName;
+                    obj.Name = newCustomer.Name;
+                    obj.MiddleName = newCustomer.MiddleName ?? "";
+                    obj.City = newCustomer.City;
+                    obj.Street = newCustomer.Street;
+                    obj.Building = newCustomer.Building;
+                    obj.Porch = newCustomer.Porch;
+                    obj.Apartment = newCustomer.Apartment;
+                    obj.Email = newCustomer.Email;
+                }
             }
             catch (Exception exc)
             {
@@ -1696,7 +1763,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1714,8 +1781,11 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@characteristics", newGoods.Characteristics);
                 query.ExecuteNonQuery();
                 var obj = GoodsList.FirstOrDefault(x => x.Articul.Contains(goods.Articul));
-                obj.Name = newGoods.Name;
-                obj.Characteristics = newGoods.Characteristics;
+                if (obj != null)
+                {
+                    obj.Name = newGoods.Name;
+                    obj.Characteristics = newGoods.Characteristics;
+                }
             }
             catch (Exception exc)
             {
@@ -1723,7 +1793,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1740,7 +1810,7 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@quantity_goods", newOrder_Goods.QuantityGoods);
                 query.ExecuteNonQuery();
                 var obj = OrderGoodsList.FirstOrDefault(x => x.NumOrd.Contains(order_Goods.NumOrd) && x.Articul.Contains(order_Goods.Articul));
-                obj.QuantityGoods = newOrder_Goods.QuantityGoods;
+                if (obj != null) obj.QuantityGoods = newOrder_Goods.QuantityGoods;
             }
             catch (Exception exc)
             {
@@ -1748,7 +1818,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1773,15 +1843,18 @@ namespace ais.Tools.DataStorage
                 query.Parameters.AddWithValue("@price_1_curtain", newWorkshop.PriceOneCurtain);
                 query.ExecuteNonQuery();
                 var obj = WorkshopsList.FirstOrDefault(x => x.CodeWorkshop.Contains(workshop.CodeWorkshop));
-                obj.Name = newWorkshop.Name;
-                obj.TelNum = newWorkshop.TelNum;
-                obj.City = newWorkshop.City;
-                obj.Street = newWorkshop.Street;
-                obj.Building = newWorkshop.Building;
-                obj.Porch = newWorkshop.Porch;
-                obj.Office = newWorkshop.Office;
-                obj.AccountShop = newWorkshop.AccountShop;
-                obj.PriceOneCurtain = newWorkshop.PriceOneCurtain;
+                if (obj != null)
+                {
+                    obj.Name = newWorkshop.Name;
+                    obj.TelNum = newWorkshop.TelNum;
+                    obj.City = newWorkshop.City;
+                    obj.Street = newWorkshop.Street;
+                    obj.Building = newWorkshop.Building;
+                    obj.Porch = newWorkshop.Porch;
+                    obj.Office = newWorkshop.Office;
+                    obj.AccountShop = newWorkshop.AccountShop;
+                    obj.PriceOneCurtain = newWorkshop.PriceOneCurtain;
+                }
             }
             catch (Exception exc)
             {
@@ -1789,7 +1862,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1836,7 +1909,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
             return list;
         }
@@ -1894,7 +1967,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
         }
 
@@ -1921,7 +1994,7 @@ namespace ais.Tools.DataStorage
             }
             finally
             {
-                conn.Close();
+                conn?.Close();
             }
             return list;
         }

@@ -1,0 +1,38 @@
+﻿<Window x:Class="ais.Views.AddGoodsToOrder"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ais.Views"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Name="AddItems"
+        Height="350" Width="500">
+    <Grid Background="#0CCADCF9" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.3*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.35*"/>
+            <ColumnDefinition Width="0.65*"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Add items to an order" FontSize="35" FontFamily="Verdana"/>
+        <TextBlock Text="{Binding OrderDetails, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15, 0,0,0" FontSize="16" FontFamily="Verdana"/>
+        <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15, 0,0,0" Content="Curtains:" FontSize="20" FontFamily="Verdana"/>
+        <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15, 0,0,0" Content="Cornices:" FontSize="20" FontFamily="Verdana"/>
+        <Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15, 0,0,0" Content="Accessories" FontSize="20" FontFamily="Verdana"/>
+        
+        <ComboBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" Margin="15,0,0,0" Height="30" Width="200" IsReadOnly="False" IsEditable="False" ItemsSource="{Binding ListCurtains}" SelectedItem="{Binding NameCurtain, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"/>
+        <ComboBox Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" Margin="15,0,0,0" Height="30" Width="200" IsReadOnly="False" IsEditable="False" ItemsSource="{Binding ListCornices}" SelectedItem="{Binding NameCornice, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"/>
+        <ComboBox Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" Margin="15,0,0,0" Height="30" Width="200" IsReadOnly="False" IsEditable="False" ItemsSource="{Binding ListAccs}" SelectedItem="{Binding NameAccessories, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"/>
+        <xctk:IntegerUpDown Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Width="70" Height="30" Minimum="0" Margin="0,0,15,0" Value="{Binding CurtAmount}"/>
+        <xctk:IntegerUpDown Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Width="70" Height="30" Minimum="0" Margin="0,0,15,0" Value="{Binding CornAmount}"/>
+        <xctk:IntegerUpDown Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" Width="70" Height="30" Minimum="0" Margin="0,0,15,0" Value="{Binding AccAmount}"/>
+        <Button CommandParameter="{Binding ElementName=AddItems}" Grid.Row="5" Grid.ColumnSpan="2" Content="Add" Command="{Binding AddOrderDetails}" VerticalAlignment="Center" Width="95" Height="30" Background="#CC435DED" BorderBrush="{x:Null}" Foreground="White" FontSize="14" FontFamily="Verdana"/>
+    </Grid>
+</Window>

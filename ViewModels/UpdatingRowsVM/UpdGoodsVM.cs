@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
 using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
@@ -10,10 +11,7 @@ namespace ais.ViewModels.UpdatingRowsVM
         private RelayCommand<Window> _updateGoods;
         public Goods CurrentGoods { get; } = StationManager.CurrentGoods;
 
-        public RelayCommand<Window> UpdateGoods
-        {
-            get => _updateGoods ?? (_updateGoods = new RelayCommand<Window>(UpdImpl, CanUpd));
-        }
+        public RelayCommand<Window> UpdateGoods => _updateGoods ?? (_updateGoods = new RelayCommand<Window>(UpdImpl, CanUpd));
 
         private void UpdImpl(Window obj)
         {
@@ -25,7 +23,7 @@ namespace ais.ViewModels.UpdatingRowsVM
         private bool CanUpd(Window obj)
         {
             return !string.IsNullOrWhiteSpace(CurrentGoods.Name) &&
-                   !string.IsNullOrWhiteSpace(CurrentGoods.Characteristics)
+                   new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentGoods.Characteristics)
                    && CurrentGoods.Characteristics.Length <= 255;
         }
     }

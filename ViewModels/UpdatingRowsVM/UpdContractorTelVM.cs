@@ -4,12 +4,13 @@ using ais.Tools;
 using ais.Tools.Managers;
 using System.Windows;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace ais.ViewModels.UpdatingRowsVM
 {
     class UpdContractorTelVM
     {
-        SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
+        readonly SqlConnection _conn = new SqlConnection(Properties.Settings.Default.ais);
 
         private RelayCommand<Window> _updateContractorTel;
 
@@ -20,9 +21,9 @@ namespace ais.ViewModels.UpdatingRowsVM
         {
             try
             {
-                conn.Open();
+                _conn.Open();
 
-                SqlCommand query = new SqlCommand("SELECT Name_contr FROM Contractor WHERE Code_contractor = '" + CurrentContractorTel.CodeContractor+ "'", conn);
+                SqlCommand query = new SqlCommand("SELECT Name_contr FROM Contractor WHERE Code_contractor like '" + CurrentContractorTel.CodeContractor+ "%'", _conn);
                 SqlDataReader select = query.ExecuteReader();
                 while (select.Read())
                 {
@@ -37,19 +38,13 @@ namespace ais.ViewModels.UpdatingRowsVM
             }
             finally
             {
-                conn.Close();
+                _conn.Close();
             }
         }
 
-        public RelayCommand<Window> UpdateContractorTel
-        {
-            get => _updateContractorTel ?? (_updateContractorTel = new RelayCommand<Window>(UpdImpl, CanUpd));
-        }
+        public RelayCommand<Window> UpdateContractorTel => _updateContractorTel ?? (_updateContractorTel = new RelayCommand<Window>(UpdImpl, CanUpd));
 
-        private bool CanUpd(Window obj)
-        {
-            return CurrentContractorTel.TelNum.Length == 10;
-        }
+        private bool CanUpd(Window obj) => new Regex("\\d{10}").IsMatch(CurrentContractorTel.TelNum);
 
         private void UpdImpl(Window obj)
         {
@@ -58,6 +53,7 @@ namespace ais.ViewModels.UpdatingRowsVM
             obj.Close();
         }
 
+        
         
     }
 }

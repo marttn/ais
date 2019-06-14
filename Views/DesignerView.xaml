@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:ais"
              mc:Ignorable="d" 
               d:DesignHeight="450" d:DesignWidth="780">
-    <Grid HorizontalAlignment="Stretch" Height="420" VerticalAlignment="Center" Width="780" Margin="0,0,0,0">
+    <Grid HorizontalAlignment="Stretch" Height="420" VerticalAlignment="Center" Width="760" Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.25*"/>
             <ColumnDefinition Width="0.8*"/>
@@ -75,10 +75,10 @@
                         <DataGridTextColumn Header="Customer's ID" Binding="{Binding ID, Mode=TwoWay}"/>
                         <DataGridTextColumn Header="Workshop's code" Binding="{Binding CodeWorkshop, Mode=TwoWay}"/>
                         <DataGridTextColumn Header="Installer's code" Binding="{Binding Ipn, Mode=TwoWay}"/>
-                       <DataGridTextColumn Header="Charge for sewing"/>
-                       <DataGridTextColumn Header="Installation costs"/>
-                       <DataGridTextColumn Header="Price of goods"/>
-                       <DataGridTextColumn Header="Total cost"/>
+                        <DataGridTextColumn Header="Charge for sewing" Binding="{Binding CostCurtains, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Installation costs" Binding="{Binding CostCornices, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Price of goods" Binding="{Binding CostGoods, Mode=TwoWay}"/>
+                        <DataGridTextColumn Header="Total cost" Binding="{Binding TotalCost, Mode=TwoWay}"/>
                     </DataGrid.Columns>
                </DataGrid>
                <Grid Row="1">

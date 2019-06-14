@@ -3,7 +3,6 @@ using ais.Tools;
 using ais.Tools.Managers;
 using System.Windows;
 using System.Data.SqlClient;
-using ais.Tools.Navigation;
 using System;
 
 namespace ais.ViewModels.UpdatingRowsVM
@@ -12,14 +11,14 @@ namespace ais.ViewModels.UpdatingRowsVM
     {
         private RelayCommand<Window> _updateOrderGoods;
 
-        SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
+        readonly SqlConnection _conn = new SqlConnection(Properties.Settings.Default.ais);
 
         public UpdOrderGoodsVM()
         {
             try
             {
-                conn.Open();
-                SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE Articul = '" + CurrentOrderGoods.Articul + "'", conn);
+                _conn.Open();
+                SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE Articul like '" + CurrentOrderGoods.Articul + "%'", _conn);
                 SqlDataReader select = query.ExecuteReader();
                 while (select.Read())
                 {
@@ -33,7 +32,7 @@ namespace ais.ViewModels.UpdatingRowsVM
             }
             finally
             {
-                conn.Close();
+                _conn.Close();
             }
         }
 
@@ -54,6 +53,7 @@ namespace ais.ViewModels.UpdatingRowsVM
         {
             StationManager.DataStorage.UpdateOrderGoods(StationManager.CurrentOrderGoods, CurrentOrderGoods);
             StationManager.CurrentOrderGoods = CurrentOrderGoods;
+            StationManager.DataStorage.UpdateOrdersList();
             obj.Close();
         }
     }

@@ -1,8 +1,8 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
 using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using ais.Tools.Navigation;
 
 namespace ais.ViewModels.AddingRowsVM
 {
@@ -17,22 +17,19 @@ namespace ais.ViewModels.AddingRowsVM
             StationManager.CurrentContractor = CurrentContractor;
         }
 
-        public RelayCommand<Window> AddContractor
-        {
-            get => _addContractor ?? (_addContractor = new RelayCommand<Window>(AddContractorImpl, CanAdd));
-        }
+        public RelayCommand<Window> AddContractor => _addContractor ?? (_addContractor = new RelayCommand<Window>(AddContractorImpl, CanAdd));
 
         private bool CanAdd(object obj)
         {
-            return !string.IsNullOrWhiteSpace(CurrentContractor.CodeContractor) && CurrentContractor.CodeContractor.Length == 8 &&
-                   !string.IsNullOrWhiteSpace(CurrentContractor.NameContractor) &&
-                   !string.IsNullOrWhiteSpace(CurrentContractor.City) &&
-                   !string.IsNullOrWhiteSpace(CurrentContractor.Street) &&
-                   !string.IsNullOrWhiteSpace(CurrentContractor.Building) &&
+            return  new Regex("^\\d{8}").IsMatch(CurrentContractor.CodeContractor) &&
+                   new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentContractor.NameContractor) &&
+                   new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentContractor.City) &&
+                   new Regex("^[a-zA-ZА-Яа-я]+$").IsMatch(CurrentContractor.Street) &&
+                   new Regex("^\\d+[a-zA-ZА-Яа-я]*$").IsMatch(CurrentContractor.Building) &&
                    !string.IsNullOrWhiteSpace(CurrentContractor.Porch.ToString()) && CurrentContractor.Building.Length <= 4 &&
                    !string.IsNullOrWhiteSpace(CurrentContractor.Office.ToString()) &&
-                   !string.IsNullOrWhiteSpace(CurrentContractor.Account) && CurrentContractor.Account.Length == 16 &&
-                   !string.IsNullOrWhiteSpace(CurrentContractor.Email);
+                   new Regex("^\\d{16}").IsMatch(CurrentContractor.Account) &&
+                   new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$").IsMatch(CurrentContractor.Email);
         }
 
         private void AddContractorImpl(Window obj)

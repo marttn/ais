@@ -127,6 +127,9 @@
     <Compile Include="ViewModels\UpdatingRowsVM\UpdOrderGoodsVM.cs" />
     <Compile Include="ViewModels\UpdatingRowsVM\UpdOrderVM.cs" />
     <Compile Include="ViewModels\UpdatingRowsVM\UpdWorkshopVM.cs" />
+    <Compile Include="Views\AddGoodsToOrder.xaml.cs">
+      <DependentUpon>AddGoodsToOrder.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AddingRows\CustTelView.xaml.cs">
       <DependentUpon>CustTelView.xaml</DependentUpon>
     </Compile>
@@ -239,6 +242,10 @@
     <Compile Include="Views\UpdatingRows\UpdWorkshopView.xaml.cs">
       <DependentUpon>UpdWorkshopView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\AddGoodsToOrder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AddingRows\CustTelView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

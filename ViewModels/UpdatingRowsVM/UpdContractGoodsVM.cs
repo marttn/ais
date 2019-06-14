@@ -2,7 +2,6 @@
 using ais.Models;
 using ais.Tools;
 using ais.Tools.Managers;
-using ais.Tools.Navigation;
 using System.Windows;
 using System.Data.SqlClient;
 
@@ -14,13 +13,13 @@ namespace ais.ViewModels.UpdatingRowsVM
         {
             try
             {
-                if (conn == null)
+                if (_conn == null)
                 {
                     throw new Exception("Connection String is Null");
                 }
-                conn.Open();
+                _conn.Open();
 
-                SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE Articul = '" + CurrentContractGoods.Articul+ "'", conn);
+                SqlCommand query = new SqlCommand("SELECT name_g FROM Goods WHERE Articul like '" + CurrentContractGoods.Articul+ "%'", _conn);
                 SqlDataReader select = query.ExecuteReader();
                 while (select.Read())
                 {
@@ -34,11 +33,11 @@ namespace ais.ViewModels.UpdatingRowsVM
             }
             finally
             {
-                conn.Close();
+                _conn?.Close();
             }
         }
 
-        SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
+        readonly SqlConnection _conn = new SqlConnection(Properties.Settings.Default.ais);
 
         private RelayCommand<Window> _updateContractGoods;
 
@@ -51,6 +50,7 @@ namespace ais.ViewModels.UpdatingRowsVM
         {
             StationManager.DataStorage.UpdateContractGoods(StationManager.CurrentContractGoods, CurrentContractGoods);
             StationManager.CurrentContractGoods = CurrentContractGoods;
+            StationManager.DataStorage.UpdateContractGoodsList();
             obj.Close();
         }
 

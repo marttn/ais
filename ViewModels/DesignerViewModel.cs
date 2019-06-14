@@ -31,6 +31,7 @@ namespace ais.ViewModels
         private RelayCommand<object> _addCommand;
         private RelayCommand<object> _updateCommand;
         private RelayCommand<object> _deleteCommand;
+        private RelayCommand<object> _addGoodsCommand;
 
         private RelayCommand<object> _showOrders;
         private RelayCommand<object> _calcProfit;
@@ -50,7 +51,6 @@ namespace ais.ViewModels
         private ObservableCollection<Customer> _сustomers;
         private ObservableCollection<Cornices> _cornices;
         private ObservableCollection<Workshop> _workshops;
-        private ObservableCollection<ContractorsPrices> _contrPrices;
 
         public Users CurrentUser { get; } = StationManager.CurrentUser;
 
@@ -105,7 +105,7 @@ namespace ais.ViewModels
             set
             {
                 _selectedOrder = value;
-                OnPropertyChanged("SelectedOrder");
+                OnPropertyChanged();
             }
         }
         public Customer SelectedCustomer
@@ -114,7 +114,7 @@ namespace ais.ViewModels
             set
             {
                 _selectedCustomer = value;
-                OnPropertyChanged("SelectedCustomer");
+                OnPropertyChanged();
             }
         }
         public Cornices SelectedCornice
@@ -123,7 +123,7 @@ namespace ais.ViewModels
             set
             {
                 _selectedCornices = value;
-                OnPropertyChanged("SelectedCornice");
+                OnPropertyChanged();
             }
         }
         public Workshop SelectedWorkshop
@@ -132,7 +132,7 @@ namespace ais.ViewModels
             set
             {
                 _selectedWorkshop = value;
-                OnPropertyChanged("SelectedWorkshop");
+                OnPropertyChanged();
             }
         }
 
@@ -142,7 +142,7 @@ namespace ais.ViewModels
             set
             {
                 _orders = value;
-                OnPropertyChanged("Orders");
+                OnPropertyChanged();
             }
         }
         public ObservableCollection<Customer> Customers
@@ -151,7 +151,7 @@ namespace ais.ViewModels
             set
             {
                 _сustomers = value;
-                OnPropertyChanged("Customers");
+                OnPropertyChanged();
             }
         }
         public ObservableCollection<Cornices> Cornices
@@ -160,7 +160,7 @@ namespace ais.ViewModels
             set
             {
                 _cornices = value;
-                OnPropertyChanged("Cornices");
+                OnPropertyChanged();
             }
         }
         public ObservableCollection<Workshop> Workshops
@@ -169,7 +169,7 @@ namespace ais.ViewModels
             set
             {
                 _workshops = value;
-                OnPropertyChanged("Workshops");
+                OnPropertyChanged();
             }
         }
         
@@ -181,7 +181,7 @@ namespace ais.ViewModels
             set
             {
                 _startDate = value;
-                OnPropertyChanged("StartDate");
+                OnPropertyChanged();
             }
         }
         public DateTime EndDate
@@ -190,7 +190,7 @@ namespace ais.ViewModels
             set
             {
                 _endDate = value;
-                OnPropertyChanged("EndDate");
+                OnPropertyChanged();
             }
         }
 
@@ -200,7 +200,7 @@ namespace ais.ViewModels
             set
             {
                 _selectedPeriod = value;
-                OnPropertyChanged("SelectedPeriod");
+                OnPropertyChanged();
             }
         }
         public string SelectedTable
@@ -209,7 +209,7 @@ namespace ais.ViewModels
             set
             {
                 _selectedTable = value;
-                OnPropertyChanged("SelectedTable");
+                OnPropertyChanged();
             }
         }
         public string SelectedSortOrder
@@ -218,7 +218,7 @@ namespace ais.ViewModels
             set
             {
                 _selectedSortOrder = value;
-                OnPropertyChanged("SelectedSortOrder");
+                OnPropertyChanged();
             }
         }
         public RelayCommand<object> AddCommand => _addCommand ?? (_addCommand = new RelayCommand<object>(AddRowImplementation));
@@ -338,6 +338,21 @@ namespace ais.ViewModels
                     Workshops = new ObservableCollection<Workshop>(StationManager.DataStorage.WorkshopsList);
                     SelectedWorkshop= null;
                     break;
+            }
+        }
+
+        public RelayCommand<object> AddGoodsCommand =>
+            _addGoodsCommand ?? (_addGoodsCommand = new RelayCommand<object>(AddGoodsImpl, CanDeleteRow));
+
+        private void AddGoodsImpl(object obj)
+        {
+            StationManager.CurrentOrder = SelectedOrder;
+            AddGoodsToOrder order = new AddGoodsToOrder();
+            order.ShowDialog();
+            if (!order.IsActive)
+            {
+                StationManager.DataStorage.UpdateOrdersList();
+                Orders = new ObservableCollection<Order>(StationManager.DataStorage.OrdersList);
             }
         }
 

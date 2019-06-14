@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace ais.ViewModels.AddingRowsVM
@@ -80,7 +81,7 @@ namespace ais.ViewModels.AddingRowsVM
                 conn.Open();
                 string code = "";
                 SqlCommand query =
-                    new SqlCommand("SELECT Code_contractor FROM Contractor WHERE Name_contr = '" + Name.Trim(' ') + "'",
+                    new SqlCommand("SELECT Code_contractor FROM Contractor WHERE Name_contr like '" + Name.Trim(' ') + "%'",
                         conn);
                 SqlDataReader select = query.ExecuteReader();
                 while (select.Read())
@@ -138,13 +139,10 @@ namespace ais.ViewModels.AddingRowsVM
             obj.Close();
         }
 
-        private bool CanAdd(object obj)
-        {
-            return !string.IsNullOrWhiteSpace(Tel) && (Tel.Length == 10);
-        }
+        private bool CanAdd(object obj) => new Regex("\\d{10}").IsMatch(Tel);
         private bool CanAddSelected(object obj)
         {
-            return !string.IsNullOrWhiteSpace(Tel) && (Tel.Length == 10) &&
+            return new Regex("\\d{10}").IsMatch(Tel) && 
                    !string.IsNullOrWhiteSpace(SelectedName);
         }
 

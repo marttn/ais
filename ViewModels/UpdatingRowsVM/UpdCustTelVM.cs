@@ -4,6 +4,7 @@ using ais.Tools;
 using ais.Tools.Managers;
 using System.Windows;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace ais.ViewModels.UpdatingRowsVM
 {
@@ -15,13 +16,13 @@ namespace ais.ViewModels.UpdatingRowsVM
         {
             try
             {
-                if (conn == null)
+                if (_conn == null)
                 {
                     throw new Exception("Connection String is Null");
                 }
-                conn.Open();
+                _conn.Open();
 
-                SqlCommand query = new SqlCommand("SELECT last_name, name_cust FROM Customer WHERE ID = '" + CurrentCustTel.ID + "'", conn);
+                SqlCommand query = new SqlCommand("SELECT last_name, name_cust FROM Customer WHERE ID like '" + CurrentCustTel.ID + "%'", _conn);
                 SqlDataReader select = query.ExecuteReader();
                 while (select.Read())
                 {
@@ -35,11 +36,11 @@ namespace ais.ViewModels.UpdatingRowsVM
             }
             finally
             {
-                conn.Close();
+                _conn?.Close();
             }
         }
 
-        SqlConnection conn = new SqlConnection(Properties.Settings.Default.ais);
+        readonly SqlConnection _conn = new SqlConnection(Properties.Settings.Default.ais);
 
         public Cust_Tel CurrentCustTel { get; } = StationManager.CurrentCustTel;
         public string Name { get; set; }
@@ -48,8 +49,7 @@ namespace ais.ViewModels.UpdatingRowsVM
 
         private bool CanUpd(Window obj)
         {
-            return CurrentCustTel.TelNum.Length == 10 &&
-                   !string.IsNullOrWhiteSpace(CurrentCustTel.TelNum);
+            return new Regex("^\\d{10}").IsMatch(CurrentCustTel.TelNum);
         }
 
         private void UpdImpl(Window obj)

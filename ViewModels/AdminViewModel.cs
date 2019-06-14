@@ -324,11 +324,13 @@ namespace ais.ViewModels
                     break;
                 case "Contract_Goods":
                     StationManager.CurrentContractGoods = (Contract_Goods)SelectedRow;
+                    StationManager.DataStorage.RemoveContractGoods(StationManager.CurrentContractGoods);
                     Table = new ObservableCollection<object>(StationManager.DataStorage.ContractGoodsList);
                     SelectedRow = null;
                     break;
             }
-            
+
+            OnPropertyChanged("Table");
         }
 
         private void UpdateRowImplementation(object obj)
@@ -420,6 +422,8 @@ namespace ais.ViewModels
                     SelectedRow = null;
                     break;
             }
+
+            OnPropertyChanged("Table");
         }
 
         private void AddRowImplementation(object obj)
@@ -430,7 +434,6 @@ namespace ais.ViewModels
                     NewOrderView order = new NewOrderView();
                     order.ShowDialog();
                     Table = new ObservableCollection<object>(StationManager.DataStorage.OrdersList);
-                    OnPropertyChanged("Table");
                     break;
                 case "Customer":
                     NewCustomerView customer = new NewCustomerView();
@@ -488,6 +491,8 @@ namespace ais.ViewModels
                     Table = new ObservableCollection<object>(StationManager.DataStorage.ContractGoodsList);
                     break;
             }
+
+            OnPropertyChanged("Table");
         }
 
 
